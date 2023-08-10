@@ -1,15 +1,12 @@
 import logo from './logo.svg';
 import './App.css';
+import OpenNewAccount from './components/OpenNewAccount';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <h3>Testing</h3>
-      </header>
+<OpenNewAccount/>
     </div>
   );
 }
-
 export default App;
