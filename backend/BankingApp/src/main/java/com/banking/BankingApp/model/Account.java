@@ -1,7 +1,5 @@
 package com.banking.BankingApp.model;
 
-import java.sql.Date;
-import java.sql.Timestamp;
 import java.util.List;
 
 import jakarta.persistence.Column;
