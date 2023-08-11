@@ -8,8 +8,8 @@ import com.banking.BankingApp.model.Customer;
 
 @Service
 public class CustomerService {
-	@Autowired 
 	
+	@Autowired 
 	CustomerRepository custRepo;
 	public Customer saveCustomer(Customer cust)
 	{

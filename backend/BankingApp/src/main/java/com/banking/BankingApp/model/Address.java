@@ -20,6 +20,19 @@ public class Address {
 	private Integer aid;
 	@Column(name="Address 1",length=40)
 	private String addressLine1;
+	@Column(name="Address 2",length=40)
+	private String addressLine2;
+	@Column(name="State",length=20)
+	private String state;
+	@Column(name="City",length=20)
+	private String city;
+	@Column(name="Pincode")
+	private Integer pincode;
+	@Column(name="Type")
+	private String addressType;
+	@ManyToOne
+	private Customer customer;
+	
 	public String getAddressLine1() {
 		return addressLine1;
 	}
@@ -62,16 +75,5 @@ public class Address {
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
 	}
-	@Column(name="Address 2",length=40)
-	private String addressLine2;
-	@Column(name="State",length=20)
-	private String state;
-	@Column(name="City",length=20)
-	private String city;
-	@Column(name="Pincode")
-	private Integer pincode;
-	@Column(name="Type")
-	private String addressType;
-	@ManyToOne
-	private Customer customer;
+	
 }

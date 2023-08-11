@@ -1,5 +1,6 @@
 package com.banking.BankingApp.model;
 
+import java.math.BigInteger;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
@@ -9,6 +10,10 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 //import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
@@ -28,12 +33,15 @@ public class Customer {
 	private String lastName;
 	@Column(name="mname",length=20)
 	private String middleName;
+	@Email
 	@Column(name="email",length=20)
 	private String emailId;
 	@Column(name="contact")
 	private Long phoneNumber;
+	@NotNull
+	@Size(min=12,max=12)
 	@Column(name="aadhar",nullable=false)
-	private Long aadharNumber;
+	private String aadharNumber;
 	@Column(name="DOB")
 	private Date dateOfBirth;
 	@Column(name="father",length=20)
@@ -42,6 +50,32 @@ public class Customer {
 	private String pasword;
 	@Column(name="last_logged")
 	private Timestamp lastLoggedIn;
+	@Column(name="Occupation Type",length=20)
+	private String occupationType;
+	@Column(name="Source of Income",length=10)
+	private String sourceOfIncome;
+	@Min(0)
+	@Column(name = "Annual Income")
+	private Float grossAnnualIncome;
+	
+	public String getOccupationType() {
+		return occupationType;
+	}
+	public void setOccupationType(String occupationType) {
+		this.occupationType = occupationType;
+	}
+	public String getSourceOfIncome() {
+		return sourceOfIncome;
+	}
+	public void setSourceOfIncome(String sourceOfIncome) {
+		this.sourceOfIncome = sourceOfIncome;
+	}
+	public Float getGrossAnnualIncome() {
+		return grossAnnualIncome;
+	}
+	public void setGrossAnnualIncome(Float grossAnnualIncome) {
+		this.grossAnnualIncome = grossAnnualIncome;
+	}
 	public List<Address> getAddress() {
 		return address;
 	}
@@ -93,10 +127,10 @@ public class Customer {
 	public void setPhoneNumber(Long phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-	public Long getAadharNumber() {
+	public String getAadharNumber() {
 		return aadharNumber;
 	}
-	public void setAadharNumber(Long aadharNumber) {
+	public void setAadharNumber(String aadharNumber) {
 		this.aadharNumber = aadharNumber;
 	}
 	public Date getDateOfBirth() {
