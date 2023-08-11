@@ -24,7 +24,7 @@ import jakarta.persistence.OneToMany;
 public class Customer {
 	@Id
 	@Column(name="cid")
-	private Integer customerId;
+	private String customerId;
 	@OneToMany(mappedBy="customer",cascade=CascadeType.ALL)
 	private List<Account> accountList;
 	@Column(name="fname",length=20)
@@ -37,7 +37,7 @@ public class Customer {
 	@Column(name="email",length=20)
 	private String emailId;
 	@Column(name="contact")
-	private Long phoneNumber;
+	private String phoneNumber;
 	@NotNull
 	@Size(min=12,max=12)
 	@Column(name="aadhar",nullable=false)
@@ -47,7 +47,7 @@ public class Customer {
 	@Column(name="father",length=20)
 	private String fatherName;
 	@Column(name="password",length=20)
-	private String pasword;
+	private String password;
 	@Column(name="last_logged")
 	private Timestamp lastLoggedIn;
 	@Column(name="Occupation Type",length=20)
@@ -91,10 +91,10 @@ public class Customer {
 	public void setAccountList(List<Account> accountList) {
 		this.accountList = accountList;
 	}
-	public Integer getCustomerId() {
+	public String getCustomerId() {
 		return customerId;
 	}
-	public void setCustomerId(Integer customerId) {
+	public void setCustomerId(String customerId) {
 		this.customerId = customerId;
 	}
 	public String getFirstName() {
@@ -121,10 +121,10 @@ public class Customer {
 	public void setEmailId(String emailId) {
 		this.emailId = emailId;
 	}
-	public Long getPhoneNumber() {
+	public String getPhoneNumber() {
 		return phoneNumber;
 	}
-	public void setPhoneNumber(Long phoneNumber) {
+	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
 	public String getAadharNumber() {
@@ -145,11 +145,11 @@ public class Customer {
 	public void setFatherName(String fatherName) {
 		this.fatherName = fatherName;
 	}
-	public String getPasword() {
-		return pasword;
+	public String getPassword() {
+		return password;
 	}
-	public void setPasword(String pasword) {
-		this.pasword = pasword;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	public Timestamp getLastLoggedIn() {
 		return lastLoggedIn;

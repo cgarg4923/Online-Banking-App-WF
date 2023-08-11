@@ -17,7 +17,7 @@ public class Address {
 	@Id
 	@Column(name = "addressID")
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Integer aid;
+	private Integer addressId;
 	@Column(name="Address 1",length=40)
 	private String addressLine1;
 	@Column(name="Address 2",length=40)
