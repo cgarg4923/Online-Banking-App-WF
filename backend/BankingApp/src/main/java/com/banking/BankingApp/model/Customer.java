@@ -36,6 +36,7 @@ public class Customer {
 	@Email
 	@Column(name="email",length=20)
 	private String emailId;
+	@Size(min=10,max=10)
 	@Column(name="contact")
 	private String phoneNumber;
 	@NotNull

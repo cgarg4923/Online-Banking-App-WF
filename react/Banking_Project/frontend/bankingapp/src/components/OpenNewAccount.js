@@ -13,6 +13,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
+import { toUnitless } from "@mui/material/styles/cssUtils";
 
 // function Copyright(props) {
 //   return (
@@ -33,13 +34,36 @@ const defaultTheme = createTheme();
 
 export default function OpenNewAccount() {
   const [checked, setChecked] = useState(false);
+  const [mob,setMob] = useState('');
   const baseURL = "http://localhost:9080/saveCustomerData";
+ const onMobChange = (event) => {
+  setMob(event.target.value)
+ }
+ //getSQL equivalentDatTime
+ function getSQLEquivalentTime(){
+  let date = new Date();
+  date.toISOString().slice(0,19).replace('T','');
+  console.log(date);
+  return date;
+ }
+
+ //get Date of Birth
+ function getDateOfBirth(date){
+  var parts = date.split('-');
+  return new Date(parts[0],parts[1]-1,parts[2]);
+ }
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    var cid = mob+'';
+    var accno = cid+Math.floor(1000+Math.random()*9000).toString();
+    // console.log(accno);
+    cid = "U"+cid.split("").reverse().join("");
+
     axios
       .post(baseURL, {
-        customerId: 3,
+        customerId: cid,
         firstName: data.get("firstName"),
         middleName: data.get("middleName"),
         lastName: data.get("lastName"),
@@ -47,9 +71,13 @@ export default function OpenNewAccount() {
         phoneNumber: data.get("phoneNumber"),
         aadharNumber: data.get("aadhar"),
         fatherName: data.get("fatherName"),
+        lastLogged: getSQLEquivalentTime(),
+        dateOfBirth: getDateOfBirth(data.get("dateOfBirth")),
+        password:data.get("password")
       })
       .then((response) => {
-        alert("Bank Account Added");
+        // alert("Bank Account Added\n");
+        alert("Bank Account Added\n"+"Customer ID: "+cid+"\nAccount No.: "+accno);
       });
   };
 
@@ -92,7 +120,6 @@ export default function OpenNewAccount() {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  autoComplete="given-name"
                   name="middleName"
                   fullWidth
                   id="middleName"
@@ -110,6 +137,16 @@ export default function OpenNewAccount() {
                   autoComplete="family-name"
                 />
               </Grid>
+              <Grid item xs={12} >
+                <TextField
+                  required
+                  fullWidth
+                  id="dateOfBirth"
+                  label="D.O.B (YYYY-MM-DD)"
+                  name="dateOfBirth"
+                  
+                />
+              </Grid>
               <Grid item xs={12}>
                 <TextField
                   fullWidth
@@ -119,17 +156,7 @@ export default function OpenNewAccount() {
                   autoComplete="email"
                 />
               </Grid>
-              {/* <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                />
-              </Grid> */}
+              
               <Grid item xs={12}>
                 <TextField
                   required
@@ -152,9 +179,32 @@ export default function OpenNewAccount() {
                 <TextField
                   required
                   fullWidth
-                  name="mobileNumber"
+                  name="phoneNumber"
                   label="Contact Number"
-                  id="mobileNumber"
+                  id="phoneNumber"
+                  onChange={onMobChange}
+                  value={mob}
+                />
+              </Grid>
+              
+              <Grid item xs={12}><div><b>Set New Login Password</b></div><br/>
+                <TextField
+                  required
+                  fullWidth
+                  name="password"
+                  label="New Password"
+                  type="password"
+                  id="password"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="confirmPassword"
+                  label="Confirm New Password"
+                  type="password"
+                  id="confirmPassword"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -175,7 +225,7 @@ export default function OpenNewAccount() {
                   name="addressLine2"
                   label="Address Line 2"
                   id="addressLine2"
-                />
+                />  
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
