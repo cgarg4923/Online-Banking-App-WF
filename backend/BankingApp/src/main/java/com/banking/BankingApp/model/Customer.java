@@ -5,6 +5,8 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
+import org.hibernate.validator.constraints.Length;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,6 +14,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.persistence.Id;
@@ -21,40 +24,67 @@ import jakarta.persistence.OneToMany;
 
 @Entity
 @Table(name="Customer_Data")
-public class Customer {
+public class Customer 
+{
 	@Id
 	@Column(name="cid")
 	private String customerId;
-	@OneToMany(mappedBy="customer",cascade=CascadeType.ALL)
+	
+	@OneToMany(mappedBy="customer", cascade=CascadeType.ALL)
 	private List<Account> accountList;
-	@Column(name="fname",length=20)
+
+
+	@Column(name="fname", length=20, nullable = false)
+	@NotBlank(message = "First Name cannot be blank")
 	private String firstName;
+	
 	@Column(name="lname",length=20)
 	private String lastName;
+	
 	@Column(name="mname",length=20)
 	private String middleName;
+	
+	
+	
 	@Email
 	@Column(name="email",length=20)
 	private String emailId;
+<<<<<<< HEAD
+	
+=======
 	@Size(min=10,max=10)
+>>>>>>> a895a2274bdab06d172c6017f9590df2fae10fb8
 	@Column(name="contact")
+	@Length(min=10, max=10, message = "Enter Valid 10 digit Mobile Number")
 	private String phoneNumber;
-	@NotNull
-	@Size(min=12,max=12)
+	
+	
+	@NotNull(message = "Aadhar Number cannot be empty")
+	@Length(min=12, max=12, message = "Enter valid 12 digit Aadhar Number")
 	@Column(name="aadhar",nullable=false)
 	private String aadharNumber;
+	
+	@NotNull(message = "Enter your Date Of Birth in YYYY-MM-DD format")
 	@Column(name="DOB")
 	private Date dateOfBirth;
+	
+	@NotNull(message = "Father's Name cannot be empty")
 	@Column(name="father",length=20)
 	private String fatherName;
+	
+	@Length(min=8, max=16, message = "Password Length must be between 8 and 16 characters")
 	@Column(name="password",length=20)
 	private String password;
+	
 	@Column(name="last_logged")
 	private Timestamp lastLoggedIn;
+	
 	@Column(name="Occupation Type",length=20)
 	private String occupationType;
-	@Column(name="Source of Income",length=10)
+	
+	@Column(name="Source of Income",length=30)
 	private String sourceOfIncome;
+	
 	@Min(0)
 	@Column(name = "Annual Income")
 	private Float grossAnnualIncome;
