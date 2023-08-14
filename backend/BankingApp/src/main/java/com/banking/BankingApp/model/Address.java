@@ -30,8 +30,6 @@ public class Address {
 	private Integer pincode;
 	@Column(name="Type")
 	private String addressType;
-	@ManyToOne
-	private Customer customer;
 	
 	public String getAddressLine1() {
 		return addressLine1;
@@ -68,12 +66,6 @@ public class Address {
 	}
 	public void setAddressType(String addressType) {
 		this.addressType = addressType;
-	}
-	public Customer getCustomer() {
-		return customer;
-	}
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
 	}
 	
 }
