@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
@@ -17,17 +18,24 @@ public class Account {
 	@Id
 	@Column(name="accno")
 	private Integer accountNo;
+	
 	@Column(name="type",length=20)
 	private String accountType;
+	
 	@Min(0)
 	@Column(name="balance")
 	private Float balance;
+	
 	@Column(name="IFSC",length=20)
 	private String ifscCode;
+	
 	@ManyToOne
+	@JoinColumn(name="customerId")
 	private Customer customer;
+	
 	@OneToMany(mappedBy="sourceAccount")
 	private List<Transaction> transaction;
+	
 	public Customer getCustomer() {
 		return customer;
 	}

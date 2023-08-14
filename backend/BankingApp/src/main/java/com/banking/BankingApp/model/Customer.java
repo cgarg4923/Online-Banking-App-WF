@@ -10,6 +10,7 @@ import org.hibernate.validator.constraints.Length;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 //import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
@@ -30,7 +31,7 @@ public class Customer
 	@Column(name="cid")
 	private String customerId;
 	
-	@OneToMany(mappedBy="customer", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="customer", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<Account> accountList;
 
 
@@ -43,7 +44,6 @@ public class Customer
 	
 	@Column(name="mname",length=20)
 	private String middleName;
-	
 	
 	
 	@Email
