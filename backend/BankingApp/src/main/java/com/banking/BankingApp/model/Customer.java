@@ -49,11 +49,8 @@ public class Customer
 	@Email
 	@Column(name="email",length=20)
 	private String emailId;
-<<<<<<< HEAD
-	
-=======
+
 	@Size(min=10,max=10)
->>>>>>> a895a2274bdab06d172c6017f9590df2fae10fb8
 	@Column(name="contact")
 	@Length(min=10, max=10, message = "Enter Valid 10 digit Mobile Number")
 	private String phoneNumber;
