@@ -17,7 +17,7 @@ import jakarta.persistence.OneToMany;
 public class Account {
 	@Id
 	@Column(name="accno")
-	private Integer accountNo;
+	private String accountNo;
 	
 	@Column(name="type",length=20)
 	private String accountType;
@@ -48,10 +48,10 @@ public class Account {
 	public void setTransaction(List<Transaction> transaction) {
 		this.transaction = transaction;
 	}
-	public Integer getAccountNo() {
+	public String getAccountNo() {
 		return accountNo;
 	}
-	public void setAccountNo(Integer accountNo) {
+	public void setAccountNo(String accountNo) {
 		this.accountNo = accountNo;
 	}
 	public String getAccountType() {

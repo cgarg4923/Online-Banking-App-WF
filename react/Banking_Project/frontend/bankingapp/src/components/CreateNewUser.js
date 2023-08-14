@@ -36,7 +36,7 @@ export default function CreateNewUser() {
   const [checked, setChecked] = useState(false);
   const navigate = useNavigate();
   const [mob, setMob] = useState('');
-  const baseURL = "http://localhost:9080/saveCustomerData";
+  const baseURL = "http://localhost:9080/customer/saveCustomerData";
   const onMobChange = (event) => {
     setMob(event.target.value)
   }
@@ -88,8 +88,12 @@ export default function CreateNewUser() {
         
       })
       .then((response) => {
-        // alert("Bank Account Added\n");
         alert("Bank Account Added\n" + "Customer ID: " + cid);
+        var item={
+          "customerId":cid,
+          "phoneNumber":data.get("phoneNumber")
+        };
+        window.sessionStorage.setItem("userCredentials",JSON.stringify(item));
         navigate("/OpenNewAccount");
       });
   };
@@ -156,9 +160,9 @@ export default function CreateNewUser() {
                   fullWidth
                   id="dateOfBirth"
                   type="date"
-                  label="D.O.B (YYYY-MM-DD)"
+                  label="D.O.B"
                   name="dateOfBirth"
-                  inputProps={{shrink:true}}
+                  inputLabelProps={{shrink:true}}
                 />
               </Grid>
               <Grid item xs={12}>
