@@ -10,7 +10,7 @@ import org.hibernate.validator.constraints.Length;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-//import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
@@ -19,7 +19,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -30,7 +29,7 @@ public class Customer
 	@Column(name="cid")
 	private String customerId;
 	
-	@OneToMany(mappedBy="customer", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="customer", cascade=CascadeType.ALL,fetch=FetchType.EAGER)
 	private List<Account> accountList;
 
 
@@ -44,16 +43,11 @@ public class Customer
 	@Column(name="mname",length=20)
 	private String middleName;
 	
-	
-	
 	@Email
 	@Column(name="email",length=20)
 	private String emailId;
-<<<<<<< HEAD
-	
-=======
+
 	@Size(min=10,max=10)
->>>>>>> a895a2274bdab06d172c6017f9590df2fae10fb8
 	@Column(name="contact")
 	@Length(min=10, max=10, message = "Enter Valid 10 digit Mobile Number")
 	private String phoneNumber;
@@ -76,9 +70,6 @@ public class Customer
 	@Column(name="password",length=20)
 	private String password;
 	
-	@Column(name="last_logged")
-	private Timestamp lastLoggedIn;
-	
 	@Column(name="Occupation Type",length=20)
 	private String occupationType;
 	
@@ -88,6 +79,10 @@ public class Customer
 	@Min(0)
 	@Column(name = "Annual Income")
 	private Float grossAnnualIncome;
+
+	@OneToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+	@JoinColumn(name="customerId",referencedColumnName="cid")
+	private List<Address> address;
 	
 	public String getOccupationType() {
 		return occupationType;
@@ -112,10 +107,7 @@ public class Customer
 	}
 	public void setAddress(List<Address> address) {
 		this.address = address;
-	}
-	@OneToMany(mappedBy="customer")
-	private List<Address> address;
-	
+	}	
 	public List<Account> getAccountList() {
 		return accountList;
 	}
@@ -181,12 +173,6 @@ public class Customer
 	}
 	public void setPassword(String password) {
 		this.password = password;
-	}
-	public Timestamp getLastLoggedIn() {
-		return lastLoggedIn;
-	}
-	public void setLastLoggedIn(Timestamp lastLoggedIn) {
-		this.lastLoggedIn = lastLoggedIn;
 	}
 	
 }
