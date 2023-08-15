@@ -10,7 +10,15 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Link from "@mui/material/Link";
 import MenuItem from "@mui/material/MenuItem";
 
-const defaultTheme = createTheme();
+const defaultTheme = createTheme(
+  {
+    palette: {
+      primary: {
+        main: "#B04040",
+      },
+    },
+  }
+);
 
 export default function OpenNewAccount() {
     const [accountType, setAccountType] = useState("Savings");

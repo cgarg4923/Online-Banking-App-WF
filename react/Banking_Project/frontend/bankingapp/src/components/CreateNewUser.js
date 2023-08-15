@@ -8,49 +8,40 @@ import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import PersonAddAltRoundedIcon from "@mui/icons-material/PersonAddAltRounded";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-// function Copyright(props) {
-//   return (
-//     <Typography variant="body2" color="text.secondary" align="center" {...props}>
-//       {'Copyright © '}
-//       <Link color="inherit" href="https://mui.com/">
-//         Your Website
-//       </Link>{' '}
-//       {new Date().getFullYear()}
-//       {'.'}
-//     </Typography>
-//   );
-// }
-
-// TODO remove, this demo shouldn't need to reset the theme.
-
-const defaultTheme = createTheme();
+const defaultTheme = createTheme({
+  palette: {
+    primary: {
+      main: "#B04040",
+    },
+  },
+});
 
 export default function CreateNewUser() {
   const [checked, setChecked] = useState(false);
   const navigate = useNavigate();
-  const [mob, setMob] = useState('');
+  const [mob, setMob] = useState("");
   const baseURL = "http://localhost:9080/customer/saveCustomerData";
   const onMobChange = (event) => {
-    setMob(event.target.value)
-  }
+    setMob(event.target.value);
+  };
 
   //get Date of Birth
   function getDateOfBirth(date) {
-    var parts = date.split('-');
+    var parts = date.split("-");
     return new Date(parts[0], parts[1] - 1, parts[2]);
   }
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    var cid = mob + '';
+    var cid = mob + "";
     cid = "U" + cid.split("").reverse().join("");
 
     axios
@@ -65,35 +56,43 @@ export default function CreateNewUser() {
         fatherName: data.get("fatherName"),
         dateOfBirth: getDateOfBirth(data.get("dateOfBirth")),
         password: data.get("password"),
-        address: [{
-          addressLine1: data.get("currentAddressLine1"),
-          addressLine2: data.get("currentAddressLine2"),
-          state: data.get("currentState"),
-          city: data.get("currentCity"),
-          pincode: data.get("currentPincode"),
-          addressType: "current"
-        },
-        {
-          addressLine1: checked ? data.get("permanantAddressLine1") : data.get("currentAddressLine1"),
-          addressLine2: checked ? data.get("permanantAddressLine2") : data.get("currentAddressLine2"),
-          state: checked ? data.get("permanantState") : data.get("currentState"),
-          city: checked ? data.get("permanantCity") : data.get("currentCity"),
-          pincode: checked ? data.get("permanantPincode") : data.get("currentPincode"),
-          addressType: "permenant"
-        }
+        address: [
+          {
+            addressLine1: data.get("currentAddressLine1"),
+            addressLine2: data.get("currentAddressLine2"),
+            state: data.get("currentState"),
+            city: data.get("currentCity"),
+            pincode: data.get("currentPincode"),
+            addressType: "current",
+          },
+          {
+            addressLine1: checked
+              ? data.get("permanantAddressLine1")
+              : data.get("currentAddressLine1"),
+            addressLine2: checked
+              ? data.get("permanantAddressLine2")
+              : data.get("currentAddressLine2"),
+            state: checked
+              ? data.get("permanantState")
+              : data.get("currentState"),
+            city: checked ? data.get("permanantCity") : data.get("currentCity"),
+            pincode: checked
+              ? data.get("permanantPincode")
+              : data.get("currentPincode"),
+            addressType: "permenant",
+          },
         ],
         grossAnnualIncome: data.get("grossAnnualIncome"),
-        sourceOfIncome:data.get("sourceOfIncome"),
+        sourceOfIncome: data.get("sourceOfIncome"),
         occupationType: data.get("occupationType"),
-        
       })
       .then((response) => {
         alert("Bank Account Added\n" + "Customer ID: " + cid);
-        var item={
-          "customerId":cid,
-          "phoneNumber":data.get("phoneNumber")
+        var item = {
+          customerId: cid,
+          phoneNumber: data.get("phoneNumber"),
         };
-        window.sessionStorage.setItem("userCredentials",JSON.stringify(item));
+        window.sessionStorage.setItem("userCredentials", JSON.stringify(item));
         navigate("/OpenNewAccount");
       });
   };
@@ -110,13 +109,18 @@ export default function CreateNewUser() {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
+          <Avatar
+            alt="Travis Howard"
+            src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+            sx={{ width: 100, height: 100, m:1 }}
+          />
           <Typography component="h1" variant="h5">
             Create Profile
           </Typography>
-          <br /><div><b>Personal Details</b></div>
+          <br />
+          <div>
+            <b>Personal Details</b>
+          </div>
           <Box
             component="form"
             noValidate
@@ -141,7 +145,6 @@ export default function CreateNewUser() {
                   fullWidth
                   id="middleName"
                   label="Middle Name"
-
                 />
               </Grid>
               <Grid item xs={12}>
@@ -154,7 +157,7 @@ export default function CreateNewUser() {
                   autoComplete="family-name"
                 />
               </Grid>
-              <Grid item xs={12} >
+              <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
@@ -162,7 +165,7 @@ export default function CreateNewUser() {
                   type="date"
                   label="D.O.B"
                   name="dateOfBirth"
-                  inputLabelProps={{shrink:true}}
+                  InputLabelProps={{ shrink: true }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -205,7 +208,11 @@ export default function CreateNewUser() {
                 />
               </Grid>
 
-              <Grid item xs={12}><div><b>Set New Login Password</b></div><br />
+              <Grid item xs={12}>
+                <div>
+                  <b>Set New Login Password</b>
+                </div>
+                <br />
                 <TextField
                   required
                   fullWidth
@@ -226,7 +233,9 @@ export default function CreateNewUser() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <div><b>Residential Address</b></div>
+                <div>
+                  <b>Residential Address</b>
+                </div>
                 <br />
                 <TextField
                   required
@@ -252,7 +261,6 @@ export default function CreateNewUser() {
                   fullWidth
                   id="currentState"
                   label="State"
-
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -262,7 +270,6 @@ export default function CreateNewUser() {
                   fullWidth
                   id="currentCity"
                   label="City"
-
                 />
               </Grid>
               <Grid item xs={12}>
@@ -291,7 +298,11 @@ export default function CreateNewUser() {
               </Grid>
               {checked && (
                 <>
-                  <Grid item xs={12}><div><b>Permanent Address</b></div><br />
+                  <Grid item xs={12}>
+                    <div>
+                      <b>Permanent Address</b>
+                    </div>
+                    <br />
                     <TextField
                       required
                       fullWidth
@@ -316,7 +327,6 @@ export default function CreateNewUser() {
                       fullWidth
                       id="permamantstate"
                       label="State"
-
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -326,7 +336,6 @@ export default function CreateNewUser() {
                       fullWidth
                       id="permanantCity"
                       label="City"
-
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -340,14 +349,12 @@ export default function CreateNewUser() {
                   </Grid>
                 </>
               )}
-              {/* <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
-              </Grid> */}
 
-              <Grid item xs={12}><div><b>Occupation Details</b></div><br />
+              <Grid item xs={12}>
+                <div>
+                  <b>Occupation Details</b>
+                </div>
+                <br />
                 <TextField
                   required
                   fullWidth
@@ -392,7 +399,6 @@ export default function CreateNewUser() {
             </Grid>
           </Box>
         </Box>
-        {/* <Copyright sx={{ mt: 5 }} /> */}
       </Container>
     </ThemeProvider>
   );
