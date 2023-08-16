@@ -1,7 +1,11 @@
 package com.banking.BankingApp.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,4 +37,13 @@ public class CustomerController {
 		String output = custService.validateCustomerCredentials(checkCust);
 		return output;
 	}
+	
+	@GetMapping("/fetchCustomerAccounts/{customerId}")
+	public List<String> fetchAccount(@PathVariable("customerId") String custId)
+	
+	{
+		List<String> accountList = custService.fetchAccount(custId);
+		return accountList;
+	}
+		
 }

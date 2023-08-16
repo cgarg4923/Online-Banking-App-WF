@@ -1,10 +1,12 @@
 package com.banking.BankingApp.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.banking.BankingApp.dao.AccountRepository;
 import com.banking.BankingApp.dao.CustomerRepository;
 import com.banking.BankingApp.model.Customer;
 import com.banking.BankingApp.model.LoginModel;
@@ -14,6 +16,10 @@ public class CustomerService {
 	
 	@Autowired 
 	CustomerRepository custRepo;
+	
+	@Autowired 
+	AccountRepository accRepo;
+	
 	public Customer saveCustomer(Customer cust)
 	{
 		Customer obj = custRepo.save(cust);
@@ -51,6 +57,11 @@ public class CustomerService {
 		
 		return result;
 	}
+	
+	public List<String> fetchAccount(String custId)
+	{
+		return accRepo.findByAccount(custId)
+;	}
 
 
 }
