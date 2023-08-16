@@ -77,8 +77,8 @@ const Withdraw = () => {
                         padding: "20px",
                     }}
                 >
-                    <Typography variant="h5" align="center" gutterBottom>
-                        Withdraw
+                    <Typography variant="h5" align="center" gutterBottom style={{"fontFamily": "Nanum Myeongjo, serif"}}>
+                        <b>Withdraw</b>
                     </Typography>
                     <form onSubmit={handleSubmit} style={{ width: "80%", marginTop: 20 }}>
                         <TextField fullWidth value={selectedAccount} onChange={handleSelectAccount} label="Choose Account" select helperText="Choose an account for transaction" style={{ padding: "10px" }}>

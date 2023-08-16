@@ -15,6 +15,8 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+// import "./wells.png"
+import mainLogo from'./wells.png';
 
 function Copyright() {
   return (
@@ -46,10 +48,7 @@ export default function HomePage() {
       <CssBaseline />
       <AppBar position="relative">
         <Toolbar>
-          <AccountBalanceIcon sx={{ mr: 3 }} />
-          <Typography variant="h6" color="inherit" noWrap>
-            Bank of India
-          </Typography>
+          <img src={mainLogo} style={{width:"70px",padding:"2px"}}/>
         </Toolbar>
       </AppBar>
       <main>
@@ -72,13 +71,16 @@ export default function HomePage() {
                 "fontFamily": "Bitter, serif",
               }}
             >
-              Welcome Back!
+              <b>Welcome Back!</b>
             </Typography>
             <Typography
               variant="h5"
               align="center"
               color="text.secondary"
               paragraph
+              style={{
+                "fontFamily": "Nanum Myeongjo, serif"
+              }}
             >
               Welcome to our premier online banking platform! Explore our
               user-friendly interface designed to empower you with easy access

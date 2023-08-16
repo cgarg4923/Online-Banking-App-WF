@@ -13,6 +13,7 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const defaultTheme = createTheme({
   palette: {
@@ -29,6 +30,8 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
+  const navigate = useNavigate();
+
   function validateForm() {
     if (name.length == 0) {
       alert("Name Field Cannot be Empty");
@@ -57,6 +60,7 @@ export default function Login() {
           password: password,
         };
         window.sessionStorage.setItem("userCredentials", JSON.stringify(item));
+        navigate("/Dashboard");
       });
   };
 

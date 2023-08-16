@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import AppDrawer from "./Drawer";
 
 const defaultTheme = createTheme(
   {
@@ -56,6 +57,7 @@ const FundTransferComponent = () => {
 
   return (
     <ThemeProvider theme={defaultTheme}>
+    <AppDrawer/>
     <Container maxWidth="sm">
       <Paper elevation={3} style={{ padding: "20px", marginTop: "20%" }}>
         <Box
@@ -67,8 +69,8 @@ const FundTransferComponent = () => {
             padding: "20px",
           }}
         >
-          <Typography variant="h5" align="center" gutterBottom>
-            Initiate Payment
+          <Typography variant="h5" align="center" gutterBottom style={{"fontFamily": "Nanum Myeongjo, serif"}}>
+            <b>Initiate Payment</b>
           </Typography>
           <form onSubmit={handleSubmit} style={{ width: "80%", marginTop: 20 }}>
             <TextField

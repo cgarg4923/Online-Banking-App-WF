@@ -9,6 +9,7 @@ import Avatar from "@mui/material/Avatar";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Link from "@mui/material/Link";
 import MenuItem from "@mui/material/MenuItem";
+import { useNavigate } from "react-router-dom";
 
 const defaultTheme = createTheme(
   {
@@ -28,6 +29,7 @@ export default function OpenNewAccount() {
     const baseURL = 'http://localhost:9080/account/saveAccountData/' + data["customerId"];
     const [isFormInvalid, setIsFormInvalid] = useState(false);
     const [accountBalance, setAccountBalance] = useState("");
+    const navigate = useNavigate();
 
     function validateForm() {
         return true;
@@ -62,6 +64,7 @@ export default function OpenNewAccount() {
                 balance:accountBalance
             }).then((e)=>{
                 alert("Successful!\nAccount Number: "+pno);
+                navigate("/Dashboard");
             }).catch((e) => console.error(e))
         }
 

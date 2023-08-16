@@ -39,6 +39,10 @@ function App() {
     {
       path:"/FundTransfer",
       element:<FundTransferComponent/>
+    },
+    {
+      path:"AccountStatement",
+      element:<AccountStatement/>
     }
   ]);
   return (
