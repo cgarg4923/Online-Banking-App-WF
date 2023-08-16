@@ -7,22 +7,46 @@ import {
   Container,
   Paper,
 } from "@mui/material";
+import MenuItem from "@mui/material/MenuItem";
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+
+const defaultTheme = createTheme(
+  {
+    palette: {
+      primary: {
+        main: "#B04040",
+      },
+    },
+  }
+);
 
 const FundTransferComponent = () => {
+  const [paymentMode, setPaymentMode] = useState("");
   const [fromAccount, setFromAccount] = useState("");
   const [toAccount, setToAccount] = useState("");
   const [amount, setAmount] = useState("");
   const [remark, setRemark] = useState("");
 
+  function getSqlDate() {
+    var pad = function(num){return ('00'+num).slice(-2)};
+    var date = new Date();
+    return date.getUTCFullYear() + '-' + pad((date.getUTCMonth()+1)) + '-' + pad(date.getUTCDate());
+  }
+
+  const handlePaymentMode = (e) => {
+    setPaymentMode(e.target.value);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const transactionTime = new Date().toLocaleString();
+    const transactionTime = getSqlDate();
 
     const transferInfo = {
       fromAccount,
       toAccount,
       amount,
+      paymentMode,
       remark,
       transactionTime,
     };
@@ -31,6 +55,7 @@ const FundTransferComponent = () => {
   };
 
   return (
+    <ThemeProvider theme={defaultTheme}>
     <Container maxWidth="sm">
       <Paper elevation={3} style={{ padding: "20px", marginTop: "20%" }}>
         <Box
@@ -70,6 +95,11 @@ const FundTransferComponent = () => {
               required
               style={{ padding: "10px" }}
             />
+            <TextField fullWidth value={paymentMode} onChange={handlePaymentMode} label="Payment Mode" select helperText="Please select payment mode" style={{ padding: "10px" }}>
+              <MenuItem value={"NEFT"}>NEFT</MenuItem>
+              <MenuItem value={"RTGS"}>RTGS</MenuItem>
+              <MenuItem value={"IMPS"}>IMPS</MenuItem>
+            </TextField>
             <TextField
               label="Remark"
               value={remark}
@@ -79,7 +109,7 @@ const FundTransferComponent = () => {
             />
             <Box sx={{ mt: 2 }}>
               <Typography>
-                Transaction Time: {new Date().toLocaleString()}
+                Transaction Time: {new Date().toLocaleDateString()}
               </Typography>
             </Box>
             <Button
@@ -96,6 +126,7 @@ const FundTransferComponent = () => {
         </Box>
       </Paper>
     </Container>
+    </ThemeProvider>
   );
 };
 
