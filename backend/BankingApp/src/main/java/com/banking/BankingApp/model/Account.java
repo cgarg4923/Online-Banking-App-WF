@@ -26,9 +26,6 @@ public class Account {
 	@Column(name="balance")
 	private Float balance;
 	
-	@Column(name="IFSC",length=20)
-	private String ifscCode;
-	
 	@ManyToOne
 	@JoinColumn(name="customerId")
 	private Customer customer;
@@ -66,12 +63,5 @@ public class Account {
 	public void setBalance(Float balance) {
 		this.balance = balance;
 	}
-	public String getIfscCode() {
-		return ifscCode;
-	}
-	public void setIfscCode(String ifscCode) {
-		this.ifscCode = ifscCode;
-	}
-	
-	
+
 }

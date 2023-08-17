@@ -14,6 +14,7 @@ public interface AccountRepository extends JpaRepository<Account,String> {
 	
 	@Query("select account.accountNo from Account account where account.customer.customerId=?1")
 	public List<String> findByAccount(String custId);
+	
 	@Modifying
 	@Query("update Account acc set acc.balance=acc.balance-?2 where acc.accountNo=?1 ")
 	public int updateBalance(String accNo,Float amount);

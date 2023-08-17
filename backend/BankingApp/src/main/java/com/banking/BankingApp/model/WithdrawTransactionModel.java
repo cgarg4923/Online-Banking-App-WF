@@ -1,15 +1,32 @@
 package com.banking.BankingApp.model;
 
-public class WithdrawTransactionModel {
-    String accountNumber ;
+import java.sql.Date;
+
+public class WithdrawTransactionModel 
+{
+    String senderAccountNo;
+    String receiverAccountNo;
+    Date transactionDate;
     String transactionType;
     Float transactionAmount;
     
-    public String getAccountNumber() {
-        return accountNumber;
+    public String getSenderAccountNo() {
+        return senderAccountNo;
     }
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
+    public void setSenderAccountNo(String senderAccountNo) {
+        this.senderAccountNo = senderAccountNo;
+    }
+    public String getReceiverAccountNo() {
+        return receiverAccountNo;
+    }
+    public void setReceiverAccountNo(String receiverAccountNo) {
+        this.receiverAccountNo = receiverAccountNo;
+    }
+    public Date getTransactionDate() {
+        return transactionDate;
+    }
+    public void setTransactionDate(Date transactionDate) {
+        this.transactionDate = transactionDate;
     }
     public String getTransactionType() {
         return transactionType;
