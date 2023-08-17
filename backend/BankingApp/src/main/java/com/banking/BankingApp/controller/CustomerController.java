@@ -7,12 +7,14 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.banking.BankingApp.model.Customer;
 import com.banking.BankingApp.model.LoginModel;
+import com.banking.BankingApp.model.WithdrawTransactionModel;
 import com.banking.BankingApp.services.CustomerService;
 
 @RestController
@@ -40,10 +42,16 @@ public class CustomerController {
 	
 	@GetMapping("/fetchCustomerAccounts/{customerId}")
 	public List<String> fetchAccount(@PathVariable("customerId") String custId)
-	
 	{
 		List<String> accountList = custService.fetchAccount(custId);
 		return accountList;
+	}
+
+	@PutMapping("/withdraw")
+	public String withdrawTransaction(@RequestBody WithdrawTransactionModel transInstance)
+	{
+		String result = custService.withdrawTransaction(transInstance);
+		return result;
 	}
 		
 }
