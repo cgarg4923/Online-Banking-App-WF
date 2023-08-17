@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState ,useEffect} from "react";
 import Button from '@mui/material/Button'
 import { Container, FormControl, Grid, InputLabel, TextField, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -12,20 +12,27 @@ import MenuItem from "@mui/material/MenuItem";
 import { useNavigate } from "react-router-dom";
 
 const defaultTheme = createTheme(
-  {
-    palette: {
-      primary: {
-        main: "#B04040",
-      },
-    },
-  }
+    {
+        palette: {
+            primary: {
+                main: "#B04040",
+            },
+        },
+    }
 );
 
 export default function OpenNewAccount() {
     const [accountType, setAccountType] = useState("Savings");
-    var data = JSON.parse(window.sessionStorage.getItem("userCredentials"));
-    var customerId = data["customerId"];
-    var phoneNumber = data["phoneNumber"];
+    var phoneNumber;
+    var customerId;
+    var data; 
+
+    useEffect(() => {
+        data = JSON.parse(window.sessionStorage.getItem("userCredentials"));
+        customerId = data["customerId"];
+        phoneNumber = data["phoneNumber"];
+    }, [])
+
     const baseURL = 'http://localhost:9080/account/saveAccountData/' + data["customerId"];
     const [isFormInvalid, setIsFormInvalid] = useState(false);
     const [accountBalance, setAccountBalance] = useState("");
@@ -34,14 +41,14 @@ export default function OpenNewAccount() {
     function validateForm() {
         return true;
     };
-    
-    function generateAccountNumber(){
-        return (phoneNumber+(Math.floor(1000+Math.random()*9000).toString())+typeOfAccount(accountType)).toString()
+
+    function generateAccountNumber() {
+        return (phoneNumber + (Math.floor(1000 + Math.random() * 9000).toString()) + typeOfAccount(accountType)).toString()
     }
 
-    function typeOfAccount(value){
-        if(value == 'Savings') return 0;
-        if(value == 'Current') return 1;
+    function typeOfAccount(value) {
+        if (value == 'Savings') return 0;
+        if (value == 'Current') return 1;
         return 2;
     }
     const handleAccountBalance = (e) => {
@@ -58,12 +65,12 @@ export default function OpenNewAccount() {
         else {
             console.log(phoneNumber);
             var pno = generateAccountNumber();
-            axios.post(baseURL,{
+            axios.post(baseURL, {
                 accountNo: pno,
-                accountType:accountType,
-                balance:accountBalance
-            }).then((e)=>{
-                alert("Successful!\nAccount Number: "+pno);
+                accountType: accountType,
+                balance: accountBalance
+            }).then((e) => {
+                alert("Successful!\nAccount Number: " + pno);
                 navigate("/Dashboard");
             }).catch((e) => console.error(e))
         }

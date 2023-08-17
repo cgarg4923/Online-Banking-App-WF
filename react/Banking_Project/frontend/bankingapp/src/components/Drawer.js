@@ -76,7 +76,7 @@ export default function AppDrawer() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  
+
   const handleLogout = () => {
     // Perform logout action and redirect to login page
     //history.push('/login');
@@ -86,7 +86,7 @@ export default function AppDrawer() {
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
-        <Toolbar style={{justifyContent:"space-between"}}>
+        <Toolbar style={{ justifyContent: "space-between" }}>
           <div>
             <IconButton
               color="inherit"
@@ -97,12 +97,12 @@ export default function AppDrawer() {
             >
               <MenuIcon />
             </IconButton>
-            <img src={source} style={{ width: "70px", objectFit:"contain", position:"relative", top:"8px"}}></img>
+            <img src={source} style={{ width: "70px", objectFit: "contain", position: "relative", top: "8px" }}></img>
           </div>
           <div>
-          <IconButton color="inherit" onClick={handleLogout}>
-            <LogoutIcon />
-          </IconButton>
+            <IconButton color="inherit" onClick={handleLogout}>
+              <LogoutIcon />
+            </IconButton>
           </div>
         </Toolbar>
       </AppBar>
@@ -119,7 +119,8 @@ export default function AppDrawer() {
         anchor="left"
         open={open}
       >
-        <DrawerHeader>
+        <DrawerHeader style={{justifyContent:"space-between"}}>
+          <Typography style={{marginLeft:"7px"}}><b>Dashboard</b></Typography>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "ltr" ? (
               <ChevronLeftIcon />
@@ -136,11 +137,15 @@ export default function AppDrawer() {
           <ListItemButton button>
             <ListItemText primary="Account Salary" />
           </ListItemButton>
-          <ListItemButton button href="/FundTransfer">
-            <ListItemText primary="Funds Transfer" href="/FundTransfer" />
-          </ListItemButton>
           <ListItemButton button href="/AccountStatement">
             <ListItemText primary="Account Statement" />
+          </ListItemButton>
+          <ListItemButton button href="/OpenNewAccount">
+            <ListItemText primary="Open New Account" />
+          </ListItemButton>
+          <Divider />
+          <ListItemButton button href="/FundTransfer">
+            <ListItemText primary="Funds Transfer" href="/FundTransfer" />
           </ListItemButton>
           <ListItemButton button href="/Withdraw">
             <ListItemText primary="Withdraw" />

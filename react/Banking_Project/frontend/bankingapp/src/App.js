@@ -9,6 +9,7 @@ import AccountStatement from './components/AccountStatement';
 import Dashboard from './components/Dashboard';
 import Withdraw from './components/Withdraw';
 import FundTransferComponent from './components/FundTransfer';
+import AccountStatementTest from './components/testfile';
 
 function App() {
   const router = createBrowserRouter([
@@ -43,6 +44,10 @@ function App() {
     {
       path:"AccountStatement",
       element:<AccountStatement/>
+    },
+    {
+      path:"/Acctest",
+      element:<AccountStatementTest/>
     }
   ]);
   return (
