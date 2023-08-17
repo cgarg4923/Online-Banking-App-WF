@@ -8,7 +8,6 @@ import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import PersonAddAltRoundedIcon from "@mui/icons-material/PersonAddAltRounded";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -26,11 +25,41 @@ const defaultTheme = createTheme({
 export default function CreateNewUser() {
   const [checked, setChecked] = useState(false);
   const navigate = useNavigate();
-  const [mob, setMob] = useState("");
   const baseURL = "http://localhost:9080/customer/saveCustomerData";
-  const onMobChange = (event) => {
-    setMob(event.target.value);
-  };
+
+  const [details, setDetails] = useState({
+    firstName: "",
+    middleName: "",
+    lastName: "",
+    email: "",
+    phoneNumber: "",
+    dateOfBirth: "",
+    fatherName: "",
+    password: "",
+    confirmPassword: "",
+    currentAddressLine1: "",
+    currentAddressLine2: "",
+    currentCity: "",
+    currentState: "",
+    currentPincode: "",
+    permanantAddressLine1: "",
+    permanantAddressLine2: "",
+    permanantCity: "",
+    permanantState: "",
+    permanantPincode: "",
+    aadhar: "",
+    grossAnnualIncome: 0,
+    sourceOfIncome: "",
+    occupationType: "",
+  });
+
+  function handleDetails(e) {
+    const { name, value } = e.target;
+    console.log(details);
+    setDetails((prev) => {
+      return { ...prev, [name]: value };
+    });
+  }
 
   //get Date of Birth
   function getDateOfBirth(date) {
@@ -38,59 +67,70 @@ export default function CreateNewUser() {
     return new Date(parts[0], parts[1] - 1, parts[2]);
   }
 
+  function validateForm() {
+    if(details.password.length() < 8){
+      alert("Password must be 8 characters long");
+      return false;
+    }
+    if (details.password != details.confirmPassword) {
+      alert("Password does not match!");
+      return false;
+    }
+    return true;
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    var cid = mob + "";
+    if(!validateForm()){return;}
+    var cid = details.phoneNumber + "";
     cid = "U" + cid.split("").reverse().join("");
-
     axios
       .post(baseURL, {
         customerId: cid,
-        firstName: data.get("firstName"),
-        middleName: data.get("middleName"),
-        lastName: data.get("lastName"),
-        emailId: data.get("email"),
-        phoneNumber: data.get("phoneNumber"),
-        aadharNumber: data.get("aadhar"),
-        fatherName: data.get("fatherName"),
-        dateOfBirth: getDateOfBirth(data.get("dateOfBirth")),
-        password: data.get("password"),
+        firstName: details.firstName,
+        middleName: details.middleName,
+        lastName: details.lastName,
+        emailId: details.email,
+        phoneNumber: details.phoneNumber,
+        aadharNumber:details.aadhar,
+        fatherName: details.fatherName,
+        dateOfBirth: getDateOfBirth(details.dateOfBirth),
+        password: details.password,
         address: [
           {
-            addressLine1: data.get("currentAddressLine1"),
-            addressLine2: data.get("currentAddressLine2"),
-            state: data.get("currentState"),
-            city: data.get("currentCity"),
-            pincode: data.get("currentPincode"),
+            addressLine1: details.currentAddressLine1,
+            addressLine2: details.currentAddressLine2,
+            state: details.currentState,
+            city: details.currentCity,
+            pincode: details.currentPincode,
             addressType: "current",
           },
           {
             addressLine1: checked
-              ? data.get("permanantAddressLine1")
-              : data.get("currentAddressLine1"),
+              ? details.permanantAddressLine1
+              : details.currentAddressLine1,
             addressLine2: checked
-              ? data.get("permanantAddressLine2")
-              : data.get("currentAddressLine2"),
+              ? details.permanantAddressLine2
+              : details.currentAddressLine2,
             state: checked
-              ? data.get("permanantState")
-              : data.get("currentState"),
-            city: checked ? data.get("permanantCity") : data.get("currentCity"),
+              ? details.permanantState
+              : details.currentState,
+            city: checked ? details.permanantCity : details.currentCity,
             pincode: checked
-              ? data.get("permanantPincode")
-              : data.get("currentPincode"),
+              ? details.permanantPincode
+              : details.currentPincode,
             addressType: "permenant",
           },
         ],
-        grossAnnualIncome: data.get("grossAnnualIncome"),
-        sourceOfIncome: data.get("sourceOfIncome"),
-        occupationType: data.get("occupationType"),
+        grossAnnualIncome: details.grossAnnualIncome,
+        sourceOfIncome: details.sourceOfIncome,
+        occupationType: details.occupationType,
       })
       .then((response) => {
         alert("Bank Account Added\n" + "Customer ID: " + cid);
         var item = {
           customerId: cid,
-          phoneNumber: data.get("phoneNumber"),
+          phoneNumber: details.phoneNumber,
         };
         window.sessionStorage.setItem("userCredentials", JSON.stringify(item));
         navigate("/OpenNewAccount");
@@ -112,7 +152,7 @@ export default function CreateNewUser() {
           <Avatar
             alt="Travis Howard"
             src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-            sx={{ width: 100, height: 100, m:1 }}
+            sx={{ width: 100, height: 100, m: 1 }}
           />
           <Typography component="h1" variant="h5">
             Create Profile
@@ -123,7 +163,6 @@ export default function CreateNewUser() {
           </div>
           <Box
             component="form"
-            noValidate
             onSubmit={handleSubmit}
             sx={{ mt: 3 }}
           >
@@ -137,6 +176,8 @@ export default function CreateNewUser() {
                   id="firstName"
                   label="First Name"
                   autoFocus
+                  onChange={handleDetails}
+                  value={details.firstName}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -145,6 +186,8 @@ export default function CreateNewUser() {
                   fullWidth
                   id="middleName"
                   label="Middle Name"
+                  onChange={handleDetails}
+                  value={details.middleName}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -155,6 +198,8 @@ export default function CreateNewUser() {
                   label="Last Name"
                   name="lastName"
                   autoComplete="family-name"
+                  onChange={handleDetails}
+                  value={details.lastName}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -166,6 +211,8 @@ export default function CreateNewUser() {
                   label="D.O.B"
                   name="dateOfBirth"
                   InputLabelProps={{ shrink: true }}
+                  onChange={handleDetails}
+                  value={details.dateOfBirth}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -175,6 +222,8 @@ export default function CreateNewUser() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  onChange={handleDetails}
+                  value={details.email}
                 />
               </Grid>
 
@@ -185,6 +234,8 @@ export default function CreateNewUser() {
                   name="fatherName"
                   label="Father's Name"
                   id="fatherName"
+                  onChange={handleDetails}
+                  value={details.fatherName}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -194,6 +245,8 @@ export default function CreateNewUser() {
                   name="aadhar"
                   label="Aadhar Card"
                   id="aadhar"
+                  onChange={handleDetails}
+                  value={details.aadhar}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -203,8 +256,8 @@ export default function CreateNewUser() {
                   name="phoneNumber"
                   label="Contact Number"
                   id="phoneNumber"
-                  onChange={onMobChange}
-                  value={mob}
+                  onChange={handleDetails}
+                  value={details.phoneNumber}
                 />
               </Grid>
 
@@ -220,6 +273,8 @@ export default function CreateNewUser() {
                   label="New Password"
                   type="password"
                   id="password"
+                  onChange={handleDetails}
+                  value={details.password}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -230,6 +285,8 @@ export default function CreateNewUser() {
                   label="Confirm New Password"
                   type="password"
                   id="confirmPassword"
+                  onChange={handleDetails}
+                  value={details.confirmPassword}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -243,6 +300,8 @@ export default function CreateNewUser() {
                   name="currentAddressLine1"
                   label="Address Line 1"
                   id="currentAddressLine1"
+                  onChange={handleDetails}
+                  value={details.currentAddressLine1}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -252,6 +311,8 @@ export default function CreateNewUser() {
                   name="currentAddressLine2"
                   label="Address Line 2"
                   id="curentAddressLine2"
+                  onChange={handleDetails}
+                  value={details.currentAddressLine2}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -261,6 +322,8 @@ export default function CreateNewUser() {
                   fullWidth
                   id="currentState"
                   label="State"
+                  onChange={handleDetails}
+                  value={details.currentState}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -270,6 +333,8 @@ export default function CreateNewUser() {
                   fullWidth
                   id="currentCity"
                   label="City"
+                  onChange={handleDetails}
+                  value={details.currentCity}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -279,6 +344,8 @@ export default function CreateNewUser() {
                   name="currentPincode"
                   label="Pincode"
                   id="currentPincode"
+                  onChange={handleDetails}
+                  value={details.currentPincode}
                 />
               </Grid>
 
@@ -309,6 +376,8 @@ export default function CreateNewUser() {
                       name="permanantAddressLine1"
                       label="Address Line 1"
                       id="permanantAddressLine1"
+                      onChange={handleDetails}
+                      value={details.permanantAddressLine1}
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -318,6 +387,8 @@ export default function CreateNewUser() {
                       name="permanantAddressLine2"
                       label="Address Line 2"
                       id="permanantAddressLine2"
+                      onChange={handleDetails}
+                      value={details.permanantAddressLine2}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -325,8 +396,10 @@ export default function CreateNewUser() {
                       name="permanantState"
                       required
                       fullWidth
-                      id="permamantstate"
+                      id="permamantState"
                       label="State"
+                      onChange={handleDetails}
+                      value={details.permanantState}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -336,6 +409,8 @@ export default function CreateNewUser() {
                       fullWidth
                       id="permanantCity"
                       label="City"
+                      onChange={handleDetails}
+                      value={details.permanantCity}
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -345,6 +420,8 @@ export default function CreateNewUser() {
                       name="permanantPincode"
                       label="Pincode"
                       id="permanantPincode"
+                      onChange={handleDetails}
+                      value={details.permanantPincode}
                     />
                   </Grid>
                 </>
@@ -361,6 +438,8 @@ export default function CreateNewUser() {
                   name="occupationType"
                   label="Occupation Type"
                   id="occupationType"
+                  onChange={handleDetails}
+                  value={details.occupationType}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -370,6 +449,8 @@ export default function CreateNewUser() {
                   name="sourceOfIncome"
                   label="Source Of Income"
                   id="sourceOfIncome"
+                  onChange={handleDetails}
+                  value={details.sourceOfIncome}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -379,6 +460,8 @@ export default function CreateNewUser() {
                   name="grossAnnualIncome"
                   label="Gross Annual Income"
                   id="grossAnnualIncome"
+                  onChange={handleDetails}
+                  value={details.grossAnnualIncome}
                 />
               </Grid>
             </Grid>

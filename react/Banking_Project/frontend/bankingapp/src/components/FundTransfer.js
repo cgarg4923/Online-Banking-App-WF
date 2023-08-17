@@ -8,19 +8,17 @@ import {
   Paper,
 } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import AppDrawer from "./Drawer";
 import axios from "axios";
 
-const defaultTheme = createTheme(
-  {
-    palette: {
-      primary: {
-        main: "#B04040",
-      },
+const defaultTheme = createTheme({
+  palette: {
+    primary: {
+      main: "#B04040",
     },
-  }
-);
+  },
+});
 
 const FundTransferComponent = () => {
   const [paymentMode, setPaymentMode] = useState("");
@@ -30,25 +28,44 @@ const FundTransferComponent = () => {
   const [accounts, setAccounts] = useState([]);
   const [selectedAccount, setSelectedAccount] = useState("");
 
-  const [beneficiaryAccounts, setBeneficiaryAccounts] = useState(["123", "234"]);
-  const [selectedBeneficiaryAccount, setSelectedBeneficiaryAccount] = useState("");
+  const [beneficiaryAccounts, setBeneficiaryAccounts] = useState([
+    "123",
+    "234",
+  ]);
+  const [selectedBeneficiaryAccount, setSelectedBeneficiaryAccount] =
+    useState("");
 
   var customerId;
   useEffect(() => {
     var dat = window.sessionStorage.getItem("userCredentials");
     var data = JSON.parse(dat);
     customerId = data["customerId"];
-    const baseURL1 = 'http://localhost:9080/customer/fetchCustomerAccounts/' + customerId;
-    axios.get(baseURL1).then((response) => { setAccounts(response.data) }).catch((error) => { console.error(error) });
+    const baseURL1 =
+      "http://localhost:9080/customer/fetchCustomerAccounts/" + customerId;
+    axios
+      .get(baseURL1)
+      .then((response) => {
+        setAccounts(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
     // const baseURL2 = 'http://localhost:9080/customer/fetchCustomerAccounts/' + customerId;
     // axios.get(baseURL2).then((response) => { setBeneficiaryAccounts(response.data) }).catch((error) => { console.error(error) });
-
-  }, [])
+  }, []);
 
   function getSqlDate() {
-    var pad = function (num) { return ('00' + num).slice(-2) };
+    var pad = function (num) {
+      return ("00" + num).slice(-2);
+    };
     var date = new Date();
-    return date.getUTCFullYear() + '-' + pad((date.getUTCMonth() + 1)) + '-' + pad(date.getUTCDate());
+    return (
+      date.getUTCFullYear() +
+      "-" +
+      pad(date.getUTCMonth() + 1) +
+      "-" +
+      pad(date.getUTCDate())
+    );
   }
 
   const handlePaymentMode = (e) => {
@@ -94,25 +111,43 @@ const FundTransferComponent = () => {
               padding: "20px",
             }}
           >
-            <Typography variant="h5" align="center" gutterBottom style={{ "fontFamily": "Nanum Myeongjo, serif" }}>
+            <Typography
+              variant="h5"
+              align="center"
+              gutterBottom
+              style={{ fontFamily: "Nanum Myeongjo, serif" }}
+            >
               <b>Initiate Payment</b>
             </Typography>
-            <form onSubmit={handleSubmit} style={{ width: "80%", marginTop: 20 }}>
-              <TextField fullWidth value={selectedAccount} onChange={handleSelectAccount} label="Choose Account" select helperText="Choose an account for transaction" style={{ padding: "10px" }}>
-                {
-                  accounts.map((account, index) => (
-                    <MenuItem value={account}>{account}</MenuItem>
-                  )
-                  )
-                }
+            <form
+              onSubmit={handleSubmit}
+              style={{ width: "80%", marginTop: 20 }}
+            >
+              <TextField
+                fullWidth
+                value={selectedAccount}
+                onChange={handleSelectAccount}
+                label="Choose Account"
+                select
+                helperText="Choose an account for transaction"
+                style={{ padding: "10px" }}
+              >
+                {accounts.map((account, index) => (
+                  <MenuItem value={account}>{account}</MenuItem>
+                ))}
               </TextField>
-              <TextField fullWidth value={selectedBeneficiaryAccount} onChange={handleSelectBeneficiaryAccount} label="Choose Beneficiary Account" select helperText="Choose a Beneficiary" style={{ padding: "10px" }}>
-                {
-                  beneficiaryAccounts.map((account, index) => (
-                    <MenuItem value={account}>{account}</MenuItem>
-                  )
-                  )
-                }
+              <TextField
+                fullWidth
+                value={selectedBeneficiaryAccount}
+                onChange={handleSelectBeneficiaryAccount}
+                label="Choose Beneficiary Account"
+                select
+                helperText="Choose a Beneficiary"
+                style={{ padding: "10px" }}
+              >
+                {beneficiaryAccounts.map((account, index) => (
+                  <MenuItem value={account}>{account}</MenuItem>
+                ))}
               </TextField>
               <TextField
                 label="Amount"
@@ -122,7 +157,15 @@ const FundTransferComponent = () => {
                 required
                 style={{ padding: "10px" }}
               />
-              <TextField fullWidth value={paymentMode} onChange={handlePaymentMode} label="Payment Mode" select helperText="Please select payment mode" style={{ padding: "10px" }}>
+              <TextField
+                fullWidth
+                value={paymentMode}
+                onChange={handlePaymentMode}
+                label="Payment Mode"
+                select
+                helperText="Please select payment mode"
+                style={{ padding: "10px" }}
+              >
                 <MenuItem value={"NEFT"}>NEFT</MenuItem>
                 <MenuItem value={"RTGS"}>RTGS</MenuItem>
                 <MenuItem value={"IMPS"}>IMPS</MenuItem>

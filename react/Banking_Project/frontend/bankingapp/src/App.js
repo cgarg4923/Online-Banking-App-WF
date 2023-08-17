@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import OpenNewAccount from './components/OpenNewAccount';
 import { createBrowserRouter, Router, RouterProvider } from "react-router-dom";
@@ -10,6 +9,7 @@ import Dashboard from './components/Dashboard';
 import Withdraw from './components/Withdraw';
 import FundTransferComponent from './components/FundTransfer';
 import AccountStatementTest from './components/testfile';
+import UserProfile from './components/UserProfile';
 
 function App() {
   const router = createBrowserRouter([
@@ -48,6 +48,10 @@ function App() {
     {
       path:"/Acctest",
       element:<AccountStatementTest/>
+    },
+    {
+      path:"/profile",
+      element:<UserProfile/>
     }
   ]);
   return (

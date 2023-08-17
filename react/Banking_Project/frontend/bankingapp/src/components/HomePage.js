@@ -1,13 +1,7 @@
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Button from "@mui/material/Button";
-import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
 import CssBaseline from "@mui/material/CssBaseline";
-import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -16,7 +10,7 @@ import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 // import "./wells.png"
-import mainLogo from'./wells.png';
+import mainLogo from "./wells.png";
 
 function Copyright() {
   return (
@@ -48,7 +42,7 @@ export default function HomePage() {
       <CssBaseline />
       <AppBar position="relative">
         <Toolbar>
-          <img src={mainLogo} style={{width:"70px",padding:"2px"}}/>
+          <img src={mainLogo} style={{ width: "70px", padding: "2px" }} />
         </Toolbar>
       </AppBar>
       <main>
@@ -68,7 +62,7 @@ export default function HomePage() {
               color="text.primary"
               gutterBottom
               style={{
-                "fontFamily": "Bitter, serif",
+                fontFamily: "Bitter, serif",
               }}
             >
               <b>Welcome Back!</b>
@@ -79,7 +73,7 @@ export default function HomePage() {
               color="text.secondary"
               paragraph
               style={{
-                "fontFamily": "Nanum Myeongjo, serif"
+                fontFamily: "Nanum Myeongjo, serif",
               }}
             >
               Welcome to our premier online banking platform! Explore our
@@ -96,14 +90,19 @@ export default function HomePage() {
               spacing={2}
               justifyContent="center"
             >
-              <Button variant="contained" href="/SignUp">Create Profile</Button>
-              <Button variant="outlined" style={{ padding: "10px" }} href="/login">
+              <Button variant="contained" href="/SignUp">
+                Create Profile
+              </Button>
+              <Button
+                variant="outlined"
+                style={{ padding: "10px" }}
+                href="/login"
+              >
                 Login
               </Button>
             </Stack>
           </Container>
         </Box>
-      
       </main>
       {/* Footer */}
       <Box sx={{ bgcolor: "background.paper", p: 6 }} component="footer">

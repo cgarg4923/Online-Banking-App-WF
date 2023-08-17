@@ -12,11 +12,11 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import LogoutIcon from "@mui/icons-material/Logout";
 import source from "./wells.png";
+import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -68,6 +68,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 export default function AppDrawer() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const navigate = useNavigate();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -80,6 +81,10 @@ export default function AppDrawer() {
   const handleLogout = () => {
     // Perform logout action and redirect to login page
     //history.push('/login');
+  };
+
+  const handleImageClick = () => {
+    navigate("/");
   };
 
   return (
@@ -97,7 +102,16 @@ export default function AppDrawer() {
             >
               <MenuIcon />
             </IconButton>
-            <img src={source} style={{ width: "70px", objectFit: "contain", position: "relative", top: "8px" }}></img>
+            <img
+              src={source}
+              onClick={handleImageClick}
+              style={{
+                width: "70px",
+                objectFit: "contain",
+                position: "relative",
+                top: "8px",
+              }}
+            ></img>
           </div>
           <div>
             <IconButton color="inherit" onClick={handleLogout}>
@@ -119,8 +133,13 @@ export default function AppDrawer() {
         anchor="left"
         open={open}
       >
-        <DrawerHeader style={{justifyContent:"space-between"}}>
-          <Typography style={{marginLeft:"7px"}}><b>Dashboard</b></Typography>
+        <DrawerHeader style={{ justifyContent: "space-between" }}>
+          <Typography
+            variant="h6"
+            style={{ marginLeft: "7px", fontFamily: "Nanum Myeongjo, serif" }}
+          >
+            <b>Dashboard</b>
+          </Typography>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "ltr" ? (
               <ChevronLeftIcon />
@@ -135,7 +154,7 @@ export default function AppDrawer() {
             <ListItemText primary="Account Details" />
           </ListItemButton>
           <ListItemButton button>
-            <ListItemText primary="Account Salary" />
+            <ListItemText primary="Account Summary" />
           </ListItemButton>
           <ListItemButton button href="/AccountStatement">
             <ListItemText primary="Account Statement" />
@@ -143,12 +162,22 @@ export default function AppDrawer() {
           <ListItemButton button href="/OpenNewAccount">
             <ListItemText primary="Open New Account" />
           </ListItemButton>
+          <ListItemButton button href="#">
+            <ListItemText primary="Register For Netbanking" />
+          </ListItemButton>
           <Divider />
           <ListItemButton button href="/FundTransfer">
-            <ListItemText primary="Funds Transfer" href="/FundTransfer" />
+            <ListItemText primary="Funds Transfer" />
           </ListItemButton>
           <ListItemButton button href="/Withdraw">
             <ListItemText primary="Withdraw" />
+          </ListItemButton>
+          <Divider />
+          <ListItemButton button href="/profile">
+            <ListItemText primary="User Profile" />
+          </ListItemButton>
+          <ListItemButton button href="#">
+            <ListItemText primary="Change Password" />
           </ListItemButton>
         </List>
         <Divider />

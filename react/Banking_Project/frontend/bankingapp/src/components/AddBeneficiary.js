@@ -81,7 +81,7 @@ const AddBeneficiaryMaterialUI = () => {
                 variant="contained"
                 color="primary"
                 fullWidth
-                style={{width:"100px"}}
+                style={{ width: "100px" }}
               >
                 Submit
               </Button>
