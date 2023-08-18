@@ -205,6 +205,7 @@ export default function AccountSummary() {
             <TableCell>From</TableCell>
             <TableCell>Payment Method</TableCell>
             <TableCell align="right">Amount</TableCell>
+            <TableCell align="center">Type</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -215,6 +216,7 @@ export default function AccountSummary() {
               <TableCell>{row.shipTo}</TableCell>
               <TableCell>{row.paymentMethod}</TableCell>
               <TableCell align="right">{`$${row.amount}`}</TableCell>
+              <TableCell>"Debit"</TableCell>
             </TableRow>
           ))}
         </TableBody>
