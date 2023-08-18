@@ -10,6 +10,7 @@ import Withdraw from './components/Withdraw';
 import FundTransferComponent from './components/FundTransfer';
 import AccountStatementTest from './components/testfile';
 import UserProfile from './components/UserProfile';
+import NetBankingRegistration from './components/NetBanking';
 
 function App() {
   const router = createBrowserRouter([
@@ -46,12 +47,12 @@ function App() {
       element:<AccountStatement/>
     },
     {
-      path:"/Acctest",
-      element:<AccountStatementTest/>
-    },
-    {
       path:"/profile",
       element:<UserProfile/>
+    },
+    {
+      path:"/NetBanking",
+      element:<NetBankingRegistration/>
     }
   ]);
   return (

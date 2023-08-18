@@ -69,7 +69,7 @@ export default function CreateNewUser() {
 
   function validateForm() {
     if(details.password.length() < 8){
-      alert("Password must be 8 characters long");
+      alert("Password must be atleast 8 characters long");
       return false;
     }
     if (details.password != details.confirmPassword) {

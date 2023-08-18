@@ -44,6 +44,7 @@ export default function AccountStatementTest() {
   const [transactions, setTransactions] = useState([]);
   const [accounts, setAccounts] = useState([]);
   const [selectedAccount, setSelectedAccount] = useState("");
+  var rows = [];
 
   var customerId;
   useEffect(() => {
@@ -60,7 +61,6 @@ export default function AccountStatementTest() {
       .catch((error) => {
         console.error(error);
       });
-    console.log(accounts);
   }, []);
 
   const handleSelectAccount = (e) => {
@@ -72,16 +72,19 @@ export default function AccountStatementTest() {
     axios
       .get(baseURLTransaction)
       .then((response) => {
-        setTransactions(response.data);
+       
+        if(typeof(response.data) == "string"){}
+        else setTransactions(response.data);
       })
       .catch((error) => {
         console.error(error);
       });
+      rows = [];
   }, [selectedAccount]);
-  const rows = [];
+
   transactions.map((transaction) => {
     console.log("Executed");
-    if (transaction.senderAccount in accounts) {
+    if (accounts.includes(transaction.senderAccount)) {
       rows.push(
         createData(
           transaction.transactionType,
@@ -157,14 +160,6 @@ export default function AccountStatementTest() {
                 </TextField>
               </Grid>
             </Grid>
-            <Button
-              //onClick={setIsPressed(true)}
-              variant="contained"
-              sx={{ mt: 2, mb: 2 }}
-              style={{ width: "30%" }}
-            >
-              Go
-            </Button>
           </div>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">

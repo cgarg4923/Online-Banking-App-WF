@@ -11,6 +11,7 @@ import Paper from "@mui/material/Paper";
 import AppDrawer from "./Drawer";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import profile from "./profile.png";
+import axios from "axios";
 
 const defaultTheme = createTheme({
   palette: {
@@ -21,26 +22,117 @@ const defaultTheme = createTheme({
 });
 
 export default function UserProfile({}) {
+
+  var baseURL = "http://localhost:9080/customer/fetchCustomerProfile/";
   const [details, setDetails] = useState({
     firstName: "",
     middleName: "",
     lastName: "",
     email: "",
     phoneNumber: "",
-    address1: "",
-    address2: "",
-    city: "",
-    state: "",
-    zip: "",
-    paddress1: "",
-    paddress2: "",
-    pcity: "",
-    pstate: "",
-    pzip: "",
-    aadhar: "",
-    occupation: "",
     dateOfBirth: "",
+    fatherName: "",
+    password: "",
+    confirmPassword: "",
+    currentAddressLine1: "",
+    currentAddressLine2: "",
+    currentCity: "",
+    currentState: "",
+    currentPincode: "",
+    permanantAddressLine1: "",
+    permanantAddressLine2: "",
+    permanantCity: "",
+    permanantState: "",
+    permanantPincode: "",
+    aadhar: "",
+    grossAnnualIncome: 0,
+    sourceOfIncome: "",
+    occupationType: "",
   });
+
+  
+
+  React.useEffect(()=>{
+    var data = window.sessionStorage.getItem("userCredentials");
+    var customerId = JSON.parse(data)["customerId"];
+    axios.get(baseURL+customerId).then((response)=>{
+     var data1 = response.data[0];
+     var address = data1["address"];
+     console.log(data1);
+      setDetails((prev) => {
+        return { ...prev, ["firstName"]: data1["firstName"] };
+      });
+      setDetails((prev) => {
+        return { ...prev, ["lastName"]: data1["lastName"] };
+      });
+      setDetails((prev) => {
+        return { ...prev, ["middleName"]: data1["middleName"] };
+      });
+      setDetails((prev) => {
+        return { ...prev, ["email"]: data1["emailId"] };
+      });
+      
+      setDetails((prev) => {
+        return { ...prev, ["occupationType"]: data1["occupationType"] };
+      });
+      
+      setDetails((prev) => {
+        return { ...prev, ["phoneNumber"]: data1["phoneNumber"] };
+      });
+      
+      setDetails((prev) => {
+        return { ...prev, ["aadhar"]: data1["aadharNumber"] };
+      });
+      
+      setDetails((prev) => {
+        return { ...prev, ["dateOfBirth"]: data1["dateOfBirth"] };
+      });
+      
+      setDetails((prev) => {
+        return { ...prev, ["currentAddressLine1"]: address[0]["addressLine1"] };
+      });
+      
+      setDetails((prev) => {
+        return { ...prev, ["currentAddressLine2"]: address[0]["addressLine2"] };
+      });
+      
+      setDetails((prev) => {
+        return { ...prev, ["currentState"]: address[0]["state"] };
+      });
+      
+      setDetails((prev) => {
+        return { ...prev, ["currentCity"]: address[0]["city"] };
+      });
+      
+      setDetails((prev) => {
+        return { ...prev, ["currentPincode"]: address[0]["pincode"] };
+      });
+
+      setDetails((prev) => {
+        return { ...prev, ["permanantAddressLine1"]: address[1]["addressLine1"] };
+      });
+      
+      setDetails((prev) => {
+        return { ...prev, ["permanantAddressLine2"]: address[1]["addressLine2"] };
+      });
+      
+      setDetails((prev) => {
+        return { ...prev, ["permanantState"]: address[1]["state"] };
+      });
+      
+      setDetails((prev) => {
+        return { ...prev, ["permanantCity"]: address[1]["city"] };
+      });
+      
+      setDetails((prev) => {
+        return { ...prev, ["permanantPincode"]: address[1]["pincode"] };
+      });
+      setDetails((prev) => {
+        return { ...prev, ["permanantPincode"]: address[1]["pincode"] };
+      });
+      
+    }).catch((error)=>{console.error(error)});
+  },[]);
 
   const products = [
     {
@@ -62,7 +154,7 @@ export default function UserProfile({}) {
     },
     {
       name: "Occupation",
-      price: details.occupation,
+      price: details.occupationType,
     },
     {
       name: "Date of Birth",
@@ -71,20 +163,19 @@ export default function UserProfile({}) {
   ];
 
   const addresses = [
-    details.address1,
-    details.address2,
-    details.city,
-    details.state,
-    details.zip,
-    details.country,
+    details.currentAddressLine1,
+    details.currentAddressLine2,
+    details.currentCity,
+    details.currentState,
+    details.currentPincode,
   ];
   const paddresses = [
-    details.paddress1 === "" ? details.address1 : details.paddress1,
-    details.paddress2 === "" ? details.address2 : details.paddress2,
-    details.pcity === "" ? details.city : details.pcity,
-    details.pstate === "" ? details.state : details.pstate,
-    details.pzip === "" ? details.zip : details.pzip,
-    details.pcountry === "" ? details.country : details.pcountry,
+    details.permanantAddressLine1,
+    details.permanantAddressLine2 ,
+    details.permanantCity,
+    details.permanantState,
+    details.permanantPincode,
+   
   ];
 
   return (
@@ -138,6 +229,7 @@ export default function UserProfile({}) {
                   <Typography gutterBottom>{paddresses.join(", ")}</Typography>
                 </Grid>
               </Grid>
+              
             </React.Fragment>
           </Box>
         </Paper>

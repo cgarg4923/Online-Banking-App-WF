@@ -3,6 +3,8 @@ package com.banking.BankingApp.model;
 import java.sql.Date;
 import java.sql.Timestamp;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,9 +23,11 @@ public class Transaction {
 	private Integer transactionId;
 
 	@ManyToOne
+	@JsonBackReference
 	private Account sourceAccount;
 
 	@ManyToOne
+	@JsonBackReference
 	private Account destinationAccount;
 
 	@Column(name="type",length=20)
@@ -61,7 +65,7 @@ public class Transaction {
 	public void setDestinationAccount(Account destinationAccount) {
 		this.destinationAccount = destinationAccount;
 	}
-
+	
 	public String getTransactionType() {
 		return transactionType;
 	}

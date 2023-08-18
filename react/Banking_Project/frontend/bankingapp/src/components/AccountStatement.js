@@ -1,54 +1,19 @@
 import * as React from "react";
-import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { Grid, TextField, Button } from "@mui/material";
-import AppDrawer from "./Drawer";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import Paper from "@mui/material/Paper";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import MenuItem from "@mui/material/MenuItem";
-
-const columns = [
-  { id: "name", label: "Name", minWidth: 170 },
-  { id: "code", label: "ISO\u00a0Code", minWidth: 100 },
-  {
-    id: "population",
-    label: "Population",
-    minWidth: 170,
-    align: "right",
-    format: (value) => value.toLocaleString("en-US"),
-  },
-  {
-    id: "size",
-    label: "Size\u00a0(km\u00b2)",
-    minWidth: 170,
-    align: "right",
-    format: (value) => value.toLocaleString("en-US"),
-  },
-  {
-    id: "density",
-    label: "Density",
-    minWidth: 170,
-    align: "right",
-    format: (value) => value.toFixed(2),
-  },
-];
-
-function createData(name, code, population, size) {
-  const density = population / size;
-  return { name, code, population, size, density };
-}
-
-const rows = [
-  createData("12345", "54321", 1324171354, 3287263),
-  createData("67890", "09876", 1403500365, 9596961),
-];
+import { Container, TextField, Grid, Button } from "@mui/material";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import AppDrawer from "./Drawer";
 
 const defaultTheme = createTheme({
   palette: {
@@ -57,13 +22,30 @@ const defaultTheme = createTheme({
     },
   },
 });
+function createData(
+  transactionType,
+  senderAccount,
+  receiverAccount,
+  amount,
+  transactionDate,
+  type
+) {
+  return {
+    transactionType,
+    senderAccount,
+    receiverAccount,
+    amount,
+    transactionDate,
+    type,
+  };
+}
 
 export default function AccountStatement() {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [isPressed, setIsPressed] = React.useState(false);
+  const [transactions, setTransactions] = useState([]);
   const [accounts, setAccounts] = useState([]);
   const [selectedAccount, setSelectedAccount] = useState("");
+  var rows = [];
+
   var customerId;
   useEffect(() => {
     var dat = window.sessionStorage.getItem("userCredentials");
@@ -79,141 +61,139 @@ export default function AccountStatement() {
       .catch((error) => {
         console.error(error);
       });
-    console.log(accounts);
   }, []);
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
 
   const handleSelectAccount = (e) => {
     setSelectedAccount(e.target.value);
   };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
+  React.useEffect(() => {
+    const baseURLTransaction = `http://localhost:3001/${selectedAccount}`;
+    axios
+      .get(baseURLTransaction)
+      .then((response) => {
+       
+        if(typeof(response.data) == "string"){}
+        else setTransactions(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+      rows = [];
+  }, [selectedAccount]);
 
+  transactions.map((transaction) => {
+    console.log("Executed");
+    if (accounts.includes(transaction.senderAccount)) {
+      rows.push(
+        createData(
+          transaction.transactionType,
+          transaction.senderAccount,
+          transaction.receiverAccount,
+          transaction.amount,
+          transaction.transactionDate,
+          "DE"
+        )
+      );
+    } else {
+      rows.push(
+        createData(
+          transaction.transactionType,
+          transaction.senderAccount,
+          transaction.receiverAccount,
+          transaction.amount,
+          transaction.transactionDate,
+          "CR"
+        )
+      );
+    }
+  });
   return (
     <ThemeProvider theme={defaultTheme}>
-      <div>
-        <AppDrawer />
-        <div style={{ marginTop: "100px" }}>
-          <Grid container spacing={2}>
-            <Grid item xs={4}>
-              <TextField
-                label="From Date"
-                //value={fromAccount}
-                //onChange={(e) => setFromAccount(e.target.value)}
-                fullWidth
-                type="date"
-                InputLabelProps={{ shrink: true }}
-                style={{ padding: "10px" }}
-              />
+      <Container component="main">
+        <CssBaseline />
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <AppDrawer />
+          <div style={{ marginTop: "100px" }}>
+            <Grid container spacing={2}>
+              <Grid item xs={4}>
+                <TextField
+                  label="From Date"
+                  //value={fromAccount}
+                  //onChange={(e) => setFromAccount(e.target.value)}
+                  fullWidth
+                  type="date"
+                  InputLabelProps={{ shrink: true }}
+                  style={{ padding: "10px" }}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <TextField
+                  label="To Date"
+                  //value={fromAccount}
+                  //onChange={(e) => setFromAccount(e.target.value)}
+                  fullWidth
+                  InputLabelProps={{ shrink: true }}
+                  type="date"
+                  style={{ padding: "10px" }}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <TextField
+                  fullWidth
+                  value={selectedAccount}
+                  onChange={handleSelectAccount}
+                  label="Choose Account"
+                  select
+                  helperText="Choose an account for transaction"
+                  style={{ padding: "10px" }}
+                >
+                  {accounts.map((account, index) => (
+                    <MenuItem value={account}>{account}</MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
             </Grid>
-            <Grid item xs={4}>
-              <TextField
-                label="To Date"
-                //value={fromAccount}
-                //onChange={(e) => setFromAccount(e.target.value)}
-                fullWidth
-                InputLabelProps={{ shrink: true }}
-                type="date"
-                style={{ padding: "10px" }}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                fullWidth
-                value={selectedAccount}
-                onChange={handleSelectAccount}
-                label="Choose Account"
-                select
-                helperText="Choose an account for transaction"
-                style={{ padding: "10px" }}
-              >
-                {accounts.map((account, index) => (
-                  <MenuItem value={account}>{account}</MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-          </Grid>
-          <Button
-            //onClick={setIsPressed(true)}
-            variant="contained"
-            sx={{ mt: 2, mb: 2 }}
-            style={{ width: "30%" }}
-          >
-            Go
-          </Button>
-          <Paper sx={{ width: "100%" }}>
-            <TableContainer
-              sx={{ maxHeight: "20%" }}
-              style={{
-                paddingLeft: "20px",
-                paddingRight: "20px",
-                paddingTop: "10px",
-              }}
-            >
-              <Table stickyHeader aria-label="sticky table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="center" colSpan={5}>
-                      <b>Transaction History</b>
+          </div>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Mode</TableCell>
+                  <TableCell align="right">From</TableCell>
+                  <TableCell align="right">To</TableCell>
+                  <TableCell align="right">Amount</TableCell>
+                  <TableCell align="right">Date</TableCell>
+                  <TableCell align="right">Method</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.map((row, index) => (
+                  <TableRow
+                    key={index}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {row.transactionType}
                     </TableCell>
+                    <TableCell align="right">{row.senderAccount}</TableCell>
+                    <TableCell align="right">{row.receiverAccount}</TableCell>
+                    <TableCell align="right">{row.amount}</TableCell>
+                    <TableCell align="right">{row.transactionDate}</TableCell>
+                    <TableCell align="right">{row.type}</TableCell>
                   </TableRow>
-                  <TableRow>
-                    {columns.map((column) => (
-                      <TableCell
-                        key={column.id}
-                        align={column.align}
-                        style={{ top: 57, minWidth: column.minWidth }}
-                      >
-                        {column.label}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {rows
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row) => {
-                      return (
-                        <TableRow
-                          hover
-                          role="checkbox"
-                          tabIndex={-1}
-                          key={row.code}
-                        >
-                          {columns.map((column) => {
-                            const value = row[column.id];
-                            return (
-                              <TableCell key={column.id} align={column.align}>
-                                {column.format && typeof value === "number"
-                                  ? column.format(value)
-                                  : value}
-                              </TableCell>
-                            );
-                          })}
-                        </TableRow>
-                      );
-                    })}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <TablePagination
-              rowsPerPageOptions={[10, 25, 100]}
-              component="div"
-              count={rows.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-          </Paper>
-        </div>
-      </div>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+      </Container>
     </ThemeProvider>
   );
 }

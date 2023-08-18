@@ -1,7 +1,7 @@
 {
   "976612879555392": [
     {
-      "transactionType": "withdraw",
+      "transactionType": "Withdraw",
       "senderAccount": "976612879555392",
       "receiverAccount": "976612879555392",
       "amount": 123,

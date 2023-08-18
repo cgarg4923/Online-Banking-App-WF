@@ -162,7 +162,7 @@ export default function AppDrawer() {
           <ListItemButton button href="/OpenNewAccount">
             <ListItemText primary="Open New Account" />
           </ListItemButton>
-          <ListItemButton button href="#">
+          <ListItemButton button href="/NetBanking">
             <ListItemText primary="Register For Netbanking" />
           </ListItemButton>
           <Divider />
