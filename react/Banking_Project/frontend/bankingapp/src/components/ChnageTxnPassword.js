@@ -1,13 +1,13 @@
+import React from "react";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import { Container, Grid, TextField, Typography } from "@mui/material";
-import Box from "@mui/material/Box";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import axios from "axios";
-import Link from "@mui/material/Link";
-import MenuItem from "@mui/material/MenuItem";
 import AppDrawer from "./Drawer";
+import axios from "axios";
+import MenuItem from "@mui/material/MenuItem";
+import Box from "@mui/material/Box";
 
 const defaultTheme = createTheme({
   palette: {
@@ -17,49 +17,36 @@ const defaultTheme = createTheme({
   },
 });
 
-export default function NetBankingRegistration() {
+export default function ChangeTxnPassword() {
   const [isFormInvalid, setIsFormInvalid] = useState(false);
+  const [txnPassword, setTxnPassword] = useState("");
+  const [confirmTxnPassword, setConfirmTxnPassword] = useState("");
   const [accounts, setAccounts] = useState([]);
   const [selectedAccount, setSelectedAccount] = useState("");
-  const [transactionPassword, setTransactionPassword] = useState("");
-  const [confirmTransactionPassword, setConfirmTransactionPassword] =
-    useState("");
+
+  var customerId = "123";
+
+  const handleConfirmTxnPassword = (e) => {
+    setConfirmTxnPassword(e.target.value);
+  };
+
+  const handleTxnPassword = (e) => {
+    setTxnPassword(e.target.value);
+  };
+
+  const handleSelectAccount = (e) => {
+    setSelectedAccount(e.target.value);
+  };
+
   function validateForm() {
-    if (transactionPassword != confirmTransactionPassword) {
+    if (txnPassword != confirmTxnPassword) {
       setIsFormInvalid(true);
       return false;
     } else {
       return true;
     }
   }
-  const handleTransactionPassword = (e) => {
-    setTransactionPassword(e.target.value);
-  };
-  const handleConfirmTransactionPassword = (e) => {
-    setConfirmTransactionPassword(e.target.value);
-  };
-  const handleSelectAccount = (e) => {
-    setSelectedAccount(e.target.value);
-  };
-  const handlerSubmit = (e) => {
-    var baseURL = "";
-    if (!validateForm()) {
-    } else {
-      alert("Successful");
-      axios
-        .put(baseURL, {
-          accountNumber: selectedAccount,
-          transactionPassword: transactionPassword,
-        })
-        .then((e) => {
-          alert("Successfuly registered for Internet Banking.");
-        })
-        .catch((e) => console.error(e));
-    }
-    e.preventDefault();
-  };
 
-  var customerId;
   useEffect(() => {
     var dat = window.sessionStorage.getItem("userCredentials");
     var data = JSON.parse(dat);
@@ -76,6 +63,19 @@ export default function NetBankingRegistration() {
       });
   }, []);
 
+  function handleSubmit() {
+    const baseURL =
+      "http://localhost:9080/customer/fetchCustomerAccounts/" + customerId;
+    axios
+      .put(baseURL, { password: txnPassword })
+      .then((response) => {
+        alert("Password Changed Successfully");
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  }
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main">
@@ -83,7 +83,7 @@ export default function NetBankingRegistration() {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 12,
+            marginTop: 20,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -91,14 +91,12 @@ export default function NetBankingRegistration() {
         >
           <img
             style={{ width: "150px" }}
-            src={
-              "https://th.bing.com/th/id/OIP.4Ty8zc9haqp6mfe1jWlV1wHaGn?pid=ImgDet&rs=1"
-            }
+            src={"https://cdn-icons-png.flaticon.com/512/6357/6357048.png"}
           ></img>
           <Box
             component="form"
             sx={{ mt: 3, width: 500 }}
-            onSubmit={handlerSubmit}
+            onSubmit={handleSubmit}
           >
             <Typography
               component="h1"
@@ -108,7 +106,7 @@ export default function NetBankingRegistration() {
                 marginBottom: "15px",
               }}
             >
-              <b>Register for Internet Banking</b>
+              <b>Change Transaction Password</b>
             </Typography>
             <Grid>
               <Grid item sm={12}>
@@ -116,27 +114,25 @@ export default function NetBankingRegistration() {
                   fullWidth
                   value={selectedAccount}
                   onChange={handleSelectAccount}
-                  label=" Choose Account"
+                  label="Choose Account"
                   select
                   helperText="Choose an account for transaction"
-                  style={{ paddingLeft: "10px", paddingRight: "10px" }}
+                  style={{ padding: "10px" }}
                 >
                   {accounts.map((account, index) => (
                     <MenuItem value={account}>{account}</MenuItem>
                   ))}
                 </TextField>
               </Grid>
-            </Grid>
-            <Grid>
               <Grid item sm={12}>
                 <TextField
                   fullWidth
                   required
-                  label="Set Transaction Password"
+                  label="Transaction Password"
                   type="password"
-                  placeholder="Enter your Transaction Password"
-                  onChange={handleTransactionPassword}
-                  value={transactionPassword}
+                  placeholder="Enter New Transaction Password"
+                  onChange={handleTxnPassword}
+                  value={txnPassword}
                   margin="normal"
                   style={{ paddingLeft: "10px", paddingRight: "10px" }}
                 ></TextField>
@@ -149,16 +145,16 @@ export default function NetBankingRegistration() {
                   required
                   label="Confirm Transaction Password"
                   type="password"
-                  placeholder="Confirm Transaction Password"
-                  onChange={handleConfirmTransactionPassword}
-                  value={confirmTransactionPassword}
+                  placeholder="Confirm New Transaction Password"
+                  onChange={handleConfirmTxnPassword}
+                  value={confirmTxnPassword}
                   margin="normal"
                   helperText={
-                    transactionPassword != confirmTransactionPassword
+                    txnPassword != confirmTxnPassword
                       ? isFormInvalid && "Password Does Not Match"
                       : ""
                   }
-                  error={transactionPassword != confirmTransactionPassword}
+                  error={txnPassword != confirmTxnPassword}
                   style={{ paddingLeft: "10px", paddingRight: "10px" }}
                 ></TextField>
               </Grid>
@@ -174,13 +170,6 @@ export default function NetBankingRegistration() {
                 >
                   Submit
                 </Button>
-              </Grid>
-            </Grid>
-            <Grid container justifyContent="center" sx={{ mt: 2 }}>
-              <Grid item>
-                <Link href="/OpenNewAccount" variant="body2">
-                  First Time User? Create New Account
-                </Link>
               </Grid>
             </Grid>
           </Box>

@@ -207,7 +207,6 @@ export default function UserProfile({}) {
                   <ListItem key={product.name} sx={{ py: 1, px: 0 }}>
                     <ListItemText
                       primary={product.name}
-                      secondary={product.desc}
                     />
                     <Typography variant="body2">
                       {product.price === "" ? "-" : product.price}

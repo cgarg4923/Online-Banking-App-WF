@@ -18,7 +18,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import source from "./wells.png";
 import { useNavigate } from "react-router-dom";
 
-const drawerWidth = 240;
+const drawerWidth = 270;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
   ({ theme, open }) => ({
@@ -79,8 +79,8 @@ export default function AppDrawer() {
   };
 
   const handleLogout = () => {
-    // Perform logout action and redirect to login page
-    //history.push('/login');
+    window.sessionStorage.clear();
+    navigate("/");
   };
 
   const handleImageClick = () => {
@@ -150,10 +150,7 @@ export default function AppDrawer() {
         </DrawerHeader>
         <Divider />
         <List>
-          <ListItemButton button>
-            <ListItemText primary="Account Details" />
-          </ListItemButton>
-          <ListItemButton button>
+          <ListItemButton button href="/AccountSummary">
             <ListItemText primary="Account Summary" />
           </ListItemButton>
           <ListItemButton button href="/AccountStatement">
@@ -176,8 +173,11 @@ export default function AppDrawer() {
           <ListItemButton button href="/profile">
             <ListItemText primary="User Profile" />
           </ListItemButton>
-          <ListItemButton button href="#">
-            <ListItemText primary="Change Password" />
+          <ListItemButton button href="/ChangeLoginPassword">
+            <ListItemText primary="Change Login Password" />
+          </ListItemButton>
+          <ListItemButton button href="/ChangeTransactionPassword">
+            <ListItemText primary="Change Transaction Password" />
           </ListItemButton>
         </List>
         <Divider />

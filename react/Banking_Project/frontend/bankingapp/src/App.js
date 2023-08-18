@@ -11,6 +11,9 @@ import FundTransferComponent from './components/FundTransfer';
 import AccountStatementTest from './components/testfile';
 import UserProfile from './components/UserProfile';
 import NetBankingRegistration from './components/NetBanking';
+import ChangeLoginPassword from './components/ChangeLoginPassword';
+import ChangeTxnPassword from './components/ChnageTxnPassword';
+import AccountSummary from './components/AccountSummary';
 
 function App() {
   const router = createBrowserRouter([
@@ -53,6 +56,18 @@ function App() {
     {
       path:"/NetBanking",
       element:<NetBankingRegistration/>
+    },
+    {
+      path:"/ChangeLoginPassword",
+      element:<ChangeLoginPassword/>
+    },
+    {
+      path:"/ChangeTransactionPassword",
+      element:<ChangeTxnPassword/>
+    },
+    {
+      path:"/AccountSummary",
+      element:<AccountSummary/>
     }
   ]);
   return (
