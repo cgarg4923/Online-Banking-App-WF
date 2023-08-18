@@ -2,6 +2,8 @@ package com.banking.BankingApp.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 //import jakarta.persistence.GeneratedValue;
@@ -27,6 +29,7 @@ public class Account {
 	private Float balance;
 	
 	@ManyToOne
+	@JsonBackReference
 	@JoinColumn(name="customerId")
 	private Customer customer;
 	

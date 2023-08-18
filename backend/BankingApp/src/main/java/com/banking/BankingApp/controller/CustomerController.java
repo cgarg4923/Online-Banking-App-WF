@@ -41,9 +41,9 @@ public class CustomerController {
 	}
 	
 	@GetMapping("/fetchCustomerAccounts/{customerId}")
-	public List<String> fetchAccount(@PathVariable("customerId") String custId)
+	public List<String> fetchAccounts(@PathVariable("customerId") String custId)
 	{
-		List<String> accountList = custService.fetchAccount(custId);
+		List<String> accountList = custService.fetchAccounts(custId);
 		return accountList;
 	}
 
@@ -54,6 +54,12 @@ public class CustomerController {
 		return result;
 	}
 
+
+	@GetMapping("/fetchCustomerProfile/{customerId}")
+	public List<Customer> fetchProfileData(@PathVariable("customerId") String custId)
+	{
+		return custService.fetchProfileData(custId);
+	}
 	
 		
 }

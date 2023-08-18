@@ -13,7 +13,7 @@ import com.banking.BankingApp.model.Account;
 public interface AccountRepository extends JpaRepository<Account,String> {
 	
 	@Query("select account.accountNo from Account account where account.customer.customerId=?1")
-	public List<String> findByAccount(String custId);
+	public List<String> findByAccounts(String custId);
 	
 	@Modifying
 	@Query("update Account acc set acc.balance=acc.balance-?2 where acc.accountNo=?1 ")

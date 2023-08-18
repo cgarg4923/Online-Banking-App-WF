@@ -57,8 +57,13 @@ public class CustomerService {
 		return result;
 	}
 
-	public List<String> fetchAccount(String custId) {
-		return accRepo.findByAccount(custId);
+	public List<String> fetchAccounts(String custId) {
+		return accRepo.findByAccounts(custId);
+	}
+
+	public List<Customer> fetchProfileData(String custId)
+	{
+		return custRepo.findByProfileData(custId);
 	}
 
 	@Transactional

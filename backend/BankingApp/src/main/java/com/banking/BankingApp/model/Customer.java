@@ -89,6 +89,24 @@ public class Customer
 	@JoinColumn(name="customerId",referencedColumnName="cid")
 	private List<Address> address;
 	
+	
+	// public Customer(String customerId, String firstName, String lastName, String middleName,
+	// 		String emailId, String phoneNumber, String aadharNumber, Date dateOfBirth, String fatherName, String password,
+	// 		String occupationType, String sourceOfIncome, Float grossAnnualIncome) {
+	// 	this.customerId = customerId;
+	// 	this.firstName = firstName;
+	// 	this.lastName = lastName;
+	// 	this.middleName = middleName;
+	// 	this.emailId = emailId;
+	// 	this.phoneNumber = phoneNumber;
+	// 	this.aadharNumber = aadharNumber;
+	// 	this.dateOfBirth = dateOfBirth;
+	// 	this.fatherName = fatherName;
+	// 	this.password = password;
+	// 	this.occupationType = occupationType;
+	// 	this.sourceOfIncome = sourceOfIncome;
+	// 	this.grossAnnualIncome = grossAnnualIncome;
+	// }
 	public String getOccupationType() {
 		return occupationType;
 	}
