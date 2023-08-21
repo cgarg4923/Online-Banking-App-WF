@@ -61,6 +61,7 @@ export default function SearchCustomer() {
 
     const handleSearchClick = ()=>{
         console.log(searchText);
+        fetchUserData();
     };
 
     function fetchUserData(){
@@ -140,6 +141,12 @@ export default function SearchCustomer() {
              setDetails((prev) => {
                return { ...prev, ["permanantPincode"]: address[1]["pincode"] };
              });
+             setDetails((prev) => {
+              return { ...prev, ["sourceOfIncome"]: data1["sourceOfIncome"] };
+            });
+            setDetails((prev) => {
+              return { ...prev, ["grossAnnualIncome"]: data1["grossAnnualIncome"] };
+            });
              setIsClicked(true);
              
            }).catch((error)=>{console.error(error)});
@@ -177,7 +184,7 @@ export default function SearchCustomer() {
         },
         {
             name: "Gross Annual Income",
-            element: details.grossAnnualIncome,
+            price: details.grossAnnualIncome,
         }
       ];
     
@@ -199,11 +206,12 @@ export default function SearchCustomer() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-        <AdminAppDrawer/>
+      <AdminAppDrawer/>
+      <div style={{display:"flex",justifyContent:"center"}}>
       <Paper
         component="form"
         sx={{ p: "2px 4px", display: "flex", alignItems: "center", width: 400}}
-        style={{marginTop:"100px",marginLeft:"100px"}}
+        style={{marginTop:"100px"}}
       >
         <InputBase
           sx={{ ml: 1, flex: 1 }}
@@ -216,8 +224,9 @@ export default function SearchCustomer() {
           <SearchIcon />
         </IconButton>
       </Paper>
+      </div>
       {isClicked  &&
-      <Container component="main" maxWidth="sm" sx={{ mb: 4, mt: 15 }}>
+      <Container component="main" maxWidth="sm" sx={{ mb: 4, mt: 10 }}>
         <Paper
           variant="outlined"
           sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
@@ -251,19 +260,19 @@ export default function SearchCustomer() {
                 ))}
               </List>
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <Typography variant="h6" gutterBottom sx={{ mt: 2 }} style={{textAlign:"left"}}>
-                    Current Address
+                <Grid item container direction="column" xs={12} sm={6}>
+                  <Typography variant="h7" gutterBottom sx={{ mt: 2 }} style={{textAlign:"left"}}>
+                    <b>Current Address</b>
                   </Typography>
-                  <Typography gutterBottom style={{textAlign:"left"}}>{addresses.join(", ")}</Typography>
+                  <Typography gutterBottom style={{textAlign:"left",paddingRight:"4px"}}>{addresses.join(", ")}</Typography>
                 </Grid>
                 <Grid item container direction="column" xs={12} sm={6}>
-                  <Typography variant="h6" gutterBottom sx={{ mt: 2 }} style={{textAlign:"left"}}>
-                    Permanent Address
+                  <Typography variant="h7" gutterBottom sx={{ mt: 2 }} style={{textAlign:"right"}}>
+                    <b>Permanent Address</b>
                   </Typography>
-                  <Typography gutterBottom style={{textAlign:"left"}}>{paddresses.join(", ")}</Typography>
+                  <Typography gutterBottom style={{textAlign:"right",paddingLeft:"4px"}}>{paddresses.join(", ")}</Typography>
                 </Grid>
-              </Grid>     
+              </Grid>   
             </React.Fragment>
           </Box>
         </Paper>

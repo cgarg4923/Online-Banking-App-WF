@@ -215,17 +215,17 @@ export default function UserProfile({}) {
                 ))}
               </List>
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <Typography variant="h6" gutterBottom sx={{ mt: 2 }} style={{textAlign:"left"}}>
-                    Current Address
+                <Grid item container direction="column" xs={12} sm={6}>
+                  <Typography variant="h7" gutterBottom sx={{ mt: 2 }} style={{textAlign:"left"}}>
+                    <b>Current Address</b>
                   </Typography>
-                  <Typography gutterBottom style={{textAlign:"left"}}>{addresses.join(", ")}</Typography>
+                  <Typography gutterBottom style={{textAlign:"left",paddingRight:"4px"}}>{addresses.join(", ")}</Typography>
                 </Grid>
                 <Grid item container direction="column" xs={12} sm={6}>
-                  <Typography variant="h6" gutterBottom sx={{ mt: 2 }} style={{textAlign:"left"}}>
-                    Permanent Address
+                  <Typography variant="h7" gutterBottom sx={{ mt: 2 }} style={{textAlign:"right"}}>
+                    <b>Permanent Address</b>
                   </Typography>
-                  <Typography gutterBottom style={{textAlign:"left"}}>{paddresses.join(", ")}</Typography>
+                  <Typography gutterBottom style={{textAlign:"right",paddingLeft:"4px"}}>{paddresses.join(", ")}</Typography>
                 </Grid>
               </Grid>     
             </React.Fragment>
