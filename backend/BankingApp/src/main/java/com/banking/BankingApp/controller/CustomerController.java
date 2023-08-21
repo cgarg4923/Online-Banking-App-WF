@@ -54,6 +54,12 @@ public class CustomerController {
 		return result;
 	}
 
+	@PutMapping("/updatePassword/{customerId}/{password}")
+	public String updatePassword(@PathVariable("customerId") String custId,@PathVariable("password") String pass)
+	{
+		String result = custService.updatePassword(custId,pass);
+		return result;
+	}
 
 	@GetMapping("/fetchCustomerProfile/{customerId}")
 	public List<Customer> fetchProfileData(@PathVariable("customerId") String custId)

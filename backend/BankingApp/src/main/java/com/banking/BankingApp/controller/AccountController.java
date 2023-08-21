@@ -50,6 +50,11 @@ public class AccountController {
 		return result;
 	}
 
+	@GetMapping("/fetchAccountProfile/{accountNo}")
+	public List<Account> fetchProfileData(@PathVariable("accountNo") String accNo)
+	{
+		return accService.fetchProfileData(accNo);
+	}
 
 
 }

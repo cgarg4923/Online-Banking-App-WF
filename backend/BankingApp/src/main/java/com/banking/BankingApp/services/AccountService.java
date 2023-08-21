@@ -85,7 +85,7 @@ public class AccountService {
 			
 				Transaction transobj = new Transaction();
 				transobj.setAmount(transInstance.getTransactionAmount());
-				transobj.setDestinationAccount(senderAcc);
+				transobj.setDestinationAccount(receiverAcc);
 				transobj.setSourceAccount(senderAcc);
 				transobj.setTimeStamp(transInstance.getTransactionDate());
 				transobj.setTransactionType(transInstance.getTransactionType());
@@ -95,6 +95,11 @@ public class AccountService {
 			res = "Transaction successful  !!!";
 		}
 		return res;
+	}
+
+	public List<Account> fetchProfileData(String accNo)
+	{
+		return accRepo.findByProfileData(accNo);
 	}
 
 }
