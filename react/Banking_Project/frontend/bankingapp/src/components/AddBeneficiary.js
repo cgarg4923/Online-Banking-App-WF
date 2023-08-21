@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Paper,
@@ -7,15 +7,34 @@ import {
   Button,
   Grid,
 } from "@mui/material";
+import axios from "axios";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import AppDrawer from "./Drawer";
 
-const AddBeneficiaryMaterialUI = () => {
+const defaultTheme = createTheme({
+  palette: {
+    primary: {
+      main: "#B04040",
+    },
+  },
+});
+
+const AddBeneficiary = () => {
+  var customerId;
   const [beneficiaryName, setBeneficiaryName] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [reEnteredAccountNumber, setReEnteredAccountNumber] = useState("");
   const [nickName, setNickName] = useState("");
 
+  useEffect(()=>{
+    var data = window.sessionStorage.getItem("userCredentials");
+    customerId = JSON.parse(data)["customerId"];
+  },[]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const baseURL = "http://localhost:9080/benificiary/saveAccountData/"+customerId;
 
     if (accountNumber !== reEnteredAccountNumber) {
       alert("Account numbers don't match.");
@@ -27,15 +46,18 @@ const AddBeneficiaryMaterialUI = () => {
       accountNumber,
       nickName,
     };
-
+    axios.post(baseURL,{
+      accountNo:accountNumber
+    }).then((response)=>{alert("success"); console.log(response.data)}).catch((e)=>{console.error(e)});
     console.log("Beneficiary Information:", beneficiaryInfo);
   };
 
-  return (
-    <Container maxWidth="sm" style={{ marginTop: "10%" }}>
-      <Paper elevation={3} style={{ padding: "20px" }}>
-        <Typography variant="h4" align="center" gutterBottom>
-          Add New Beneficiary
+  return (<ThemeProvider theme={defaultTheme}>
+    <AppDrawer/>
+    <Container maxWidth="sm" style={{ marginTop: "13%" }}>
+      <Paper elevation={3} style={{ padding: "30px" }}>
+        <Typography variant="h4" align="center" gutterBottom style={{ fontFamily: "Nanum Myeongjo, serif" ,padding:"20px"}}>
+         <b>Add New Beneficiary</b>
         </Typography>
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
@@ -90,7 +112,8 @@ const AddBeneficiaryMaterialUI = () => {
         </form>
       </Paper>
     </Container>
+    </ThemeProvider>
   );
 };
 
-export default AddBeneficiaryMaterialUI;
+export default AddBeneficiary;

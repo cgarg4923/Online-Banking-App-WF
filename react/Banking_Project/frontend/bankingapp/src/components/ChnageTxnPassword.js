@@ -24,7 +24,7 @@ export default function ChangeTxnPassword() {
   const [accounts, setAccounts] = useState([]);
   const [selectedAccount, setSelectedAccount] = useState("");
 
-  var customerId = "123";
+  var customerId;
 
   const handleConfirmTxnPassword = (e) => {
     setConfirmTxnPassword(e.target.value);

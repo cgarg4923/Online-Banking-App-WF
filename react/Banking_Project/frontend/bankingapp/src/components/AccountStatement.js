@@ -24,19 +24,19 @@ const defaultTheme = createTheme({
 });
 function createData(
   transactionType,
-  senderAccount,
-  receiverAccount,
-  amount,
+  senderAccountNo,
+  receiverAccountNo,
+  transactionAmount,
   transactionDate,
   type
 ) {
   return {
     transactionType,
-    senderAccount,
-    receiverAccount,
-    amount,
+    senderAccountNo,
+    receiverAccountNo,
+    transactionAmount,
     transactionDate,
-    type,
+    type
   };
 }
 
@@ -68,7 +68,7 @@ export default function AccountStatement() {
   };
 
   React.useEffect(() => {
-    const baseURLTransaction = `http://localhost:3001/${selectedAccount}`;
+    const baseURLTransaction = `http://localhost:9080/account/fetchTransactions/${selectedAccount}`;
     axios
       .get(baseURLTransaction)
       .then((response) => {
@@ -84,13 +84,13 @@ export default function AccountStatement() {
 
   transactions.map((transaction) => {
     console.log("Executed");
-    if (accounts.includes(transaction.senderAccount)) {
+    if (transaction.senderAccountNo === selectedAccount) {
       rows.push(
         createData(
           transaction.transactionType,
-          transaction.senderAccount,
-          transaction.receiverAccount,
-          transaction.amount,
+          transaction.senderAccountNo,
+          transaction.receiverAccountNo,
+          transaction.transactionAmount,
           transaction.transactionDate,
           "DE"
         )
@@ -98,11 +98,11 @@ export default function AccountStatement() {
     } else {
       rows.push(
         createData(
-          transaction.transactionType,
-          transaction.senderAccount,
-          transaction.receiverAccount,
-          transaction.amount,
-          transaction.transactionDate,
+            transaction.transactionType,
+            transaction.senderAccountNo,
+            transaction.receiverAccountNo,
+            transaction.transactionAmount,
+            transaction.transactionDate,
           "CR"
         )
       );
@@ -182,9 +182,9 @@ export default function AccountStatement() {
                     <TableCell component="th" scope="row">
                       {row.transactionType}
                     </TableCell>
-                    <TableCell align="right">{row.senderAccount}</TableCell>
-                    <TableCell align="right">{row.receiverAccount}</TableCell>
-                    <TableCell align="right">{row.amount}</TableCell>
+                    <TableCell align="right">{row.senderAccountNo}</TableCell>
+                    <TableCell align="right">{row.receiverAccountNo}</TableCell>
+                    <TableCell align="right">{row.transactionAmount}</TableCell>
                     <TableCell align="right">{row.transactionDate}</TableCell>
                     <TableCell align="right">{row.type}</TableCell>
                   </TableRow>

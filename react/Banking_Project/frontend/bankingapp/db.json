@@ -1,11 +1,191 @@
 {
-  "976612879555392": [
+  "senderAccounts": [
+    "account0",
+    "account1",
+    "account2"
+  ],
+  "posts": [
     {
-      "transactionType": "Withdraw",
-      "senderAccount": "976612879555392",
-      "receiverAccount": "976612879555392",
-      "amount": 123,
-      "transactionDate": "2023-08-17"
+      "transactionType": "Withdrawal",
+      "senderAccount": "account1",
+      "receiverAccount": "account1",
+      "amount": "2000",
+      "transactionDate": "2023-08-16",
+      "remarks": "",
+      "id": 1
+    },
+    {
+      "transactionType": "RTGS",
+      "senderAccount": "account1",
+      "receiverAccount": "account4",
+      "amount": "2000",
+      "transactionDate": "2023-08-16",
+      "remarks": "",
+      "id": 2
+    },
+    {
+      "transactionType": "RTGS",
+      "senderAccount": "account1",
+      "receiverAccount": "account4",
+      "amount": 0,
+      "transactionDate": "2023-08-16",
+      "remarks": "Hello",
+      "id": 3
+    }
+  ],
+  "account1": [
+    {
+      "transactionType": "Withdrawal",
+      "senderAccount": "account1",
+      "receiverAccount": "account1",
+      "amount": 5000,
+      "transactionDate": "2023-08-17",
+      "remarks": "",
+      "id": 1
+    },
+    {
+      "transactionType": "IMPS",
+      "senderAccount": "account1",
+      "receiverAccount": "account4",
+      "amount": 1000,
+      "transactionDate": "2023-08-17",
+      "remarks": "",
+      "id": 2
+    },
+    {
+      "transactionType": "RTGS",
+      "senderAccount": "account4",
+      "receiverAccount": "account1",
+      "amount": 10000,
+      "transactionDate": "2023-08-16",
+      "remarks": "",
+      "id": 3
+    },
+    {
+      "transactionType": "RTGS",
+      "senderAccount": "account1",
+      "receiverAccount": "account3",
+      "amount": 7500,
+      "transactionDate": "2023-08-17",
+      "remarks": "",
+      "id": 4
+    },
+    {
+      "transactionType": "Withdrawal",
+      "senderAccount": "account1",
+      "receiverAccount": "account1",
+      "amount": 100,
+      "transactionDate": "2023-08-17",
+      "remarks": "",
+      "id": 5
+    },
+    {
+      "transactionType": "RTGS",
+      "senderAccount": "account4",
+      "receiverAccount": "account1",
+      "amount": 100,
+      "transactionDate": "2023-08-18",
+      "remarks": "",
+      "id": 6
+    }
+  ],
+  "account2": [
+    {
+      "transactionType": "IMPS",
+      "senderAccount": "account2",
+      "receiverAccount": "account4",
+      "amount": 10000,
+      "transactionDate": "2023-08-17",
+      "remarks": "",
+      "id": 1
+    },
+    {
+      "transactionType": "Withdrawal",
+      "senderAccount": "account2",
+      "receiverAccount": "account2",
+      "amount": 999,
+      "transactionDate": "2023-08-17",
+      "remarks": "",
+      "id": 2
+    },
+    {
+      "transactionType": "NEFT",
+      "senderAccount": "account3",
+      "receiverAccount": "account2",
+      "amount": 9999,
+      "transactionDate": "2023-08-17",
+      "remarks": "",
+      "id": 3
+    },
+    {
+      "transactionType": "IMPS",
+      "senderAccount": "account2",
+      "receiverAccount": "account4",
+      "amount": 5000,
+      "transactionDate": "2023-08-17",
+      "remarks": "",
+      "id": 4
+    },
+    {
+      "transactionType": "IMPS",
+      "senderAccount": "account2",
+      "receiverAccount": "account4",
+      "amount": 50087,
+      "transactionDate": "2023-08-17",
+      "remarks": "",
+      "id": 5
+    },
+    {
+      "transactionType": "IMPS",
+      "senderAccount": "account2",
+      "receiverAccount": "account3",
+      "amount": 5000,
+      "transactionDate": "2023-08-17",
+      "remarks": "",
+      "id": 6
+    }
+  ],
+  "receiverAccounts": [
+    "account3",
+    "account4"
+  ],
+  "accounts":[
+    "account1",
+    "account2"
+  ],
+  "accountDetails": [
+    {
+      "accounts":[
+        {
+          "accountNo":"1",
+          "accountType":"Savings",
+          "accountBalance":10000
+        },
+        {
+          "accountNo":"2",
+          "accountType":"Current",
+          "accountBalance":5000
+        },
+        {
+          "accountNo":"3",
+          "accountType":"Salary",
+          "accountBalance":2500
+        }
+      ]
+    }
+  ],
+  "account1Details":[
+    {
+      "accountNo": "123",
+      "accountType": "Savings",
+      "accountBalance": 500
+    }
+  ],
+  "account2Details":[
+    {
+      "accountNo":"2",
+      "accountType":"Current",
+      "accountBalance":5000
     }
   ]
 }

@@ -11,6 +11,9 @@ import MenuItem from "@mui/material/MenuItem";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import AppDrawer from "./Drawer";
 import axios from "axios";
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
+import Grid from "@mui/material/Grid";
 
 const defaultTheme = createTheme({
   palette: {
@@ -31,6 +34,7 @@ const FundTransferComponent = () => {
   const [beneficiaryAccounts, setBeneficiaryAccounts] = useState([
     "123",
     "234",
+    "976612879588151",
   ]);
   const [selectedBeneficiaryAccount, setSelectedBeneficiaryAccount] =
     useState("");
@@ -93,8 +97,14 @@ const FundTransferComponent = () => {
       remark,
       transactionTime,
     };
-
-    console.log("Transfer Information:", transferInfo);
+    const baseURL = "http://localhost:9080/account/fundTransfer";
+    axios.put(baseURL, {
+      senderAccountNo: selectedAccount,
+      receiverAccountNo: selectedBeneficiaryAccount,
+      transactionDate: transactionTime,
+      transactionType: paymentMode,
+      transactionAmount: parseFloat(amount)
+    }).then((res) => { alert("success"+selectedBeneficiaryAccount); console.log(res); }).catch((error) => { console.error(error) });
   };
 
   return (
@@ -136,19 +146,28 @@ const FundTransferComponent = () => {
                   <MenuItem value={account}>{account}</MenuItem>
                 ))}
               </TextField>
-              <TextField
-                fullWidth
-                value={selectedBeneficiaryAccount}
-                onChange={handleSelectBeneficiaryAccount}
-                label="Choose Beneficiary Account"
-                select
-                helperText="Choose a Beneficiary"
-                style={{ padding: "10px" }}
-              >
-                {beneficiaryAccounts.map((account, index) => (
-                  <MenuItem value={account}>{account}</MenuItem>
-                ))}
-              </TextField>
+              <Grid container sm={12} alignItems="flex-start">
+                <Grid item>
+                  <TextField
+                    fullWidth
+                    value={selectedBeneficiaryAccount}
+                    onChange={handleSelectBeneficiaryAccount}
+                    label="Choose Beneficiary Account"
+                    select
+                    helperText="Choose a Beneficiary"
+                    style={{ padding: "10px", width: "320px" }}
+                  >
+                    {beneficiaryAccounts.map((account, index) => (
+                      <MenuItem value={account}>{account}</MenuItem>
+                    ))}
+                  </TextField>
+                </Grid>
+                <Grid item>
+                  <Fab size="small" color="primary" aria-label="add" href="/AddBeneficiary">
+                    <AddIcon />
+                  </Fab>
+                </Grid>
+              </Grid>
               <TextField
                 label="Amount"
                 value={amount}

@@ -14,6 +14,9 @@ import NetBankingRegistration from './components/NetBanking';
 import ChangeLoginPassword from './components/ChangeLoginPassword';
 import ChangeTxnPassword from './components/ChnageTxnPassword';
 import AccountSummary from './components/AccountSummary';
+import AddBeneficiary from './components/AddBeneficiary';
+import AdminLogin from './components/AdminLogin';
+import AdminDashboard from "./components/AdminDashboard";
 
 function App() {
   const router = createBrowserRouter([
@@ -68,6 +71,18 @@ function App() {
     {
       path:"/AccountSummary",
       element:<AccountSummary/>
+    },
+    {
+      path:"/AddBeneficiary",
+      element:<AddBeneficiary/>
+    },
+    {
+      path:"/AdminLogin",
+      element:<AdminLogin/>
+    },
+    {
+      path:"/AdminDashboard",
+      element:<AdminDashboard/>
     }
   ]);
   return (

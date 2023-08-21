@@ -1,21 +1,19 @@
-import React from "react";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { useState, useEffect } from "react";
-import { Container, Grid, TextField, Typography } from "@mui/material";
-import MenuItem from "@mui/material/MenuItem";
-import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
-import CssBaseline from "@mui/material/CssBaseline";
-import AppDrawer from "./Drawer";
-import axios from "axios";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
+import * as React from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import CssBaseline from '@mui/material/CssBaseline';
+import Paper from '@mui/material/Paper';
+import axios from 'axios';
+import { useState, useEffect } from "react";
+import MenuItem from "@mui/material/MenuItem";
+import { Container, TextField, Grid, Typography, TablePagination } from '@mui/material';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import Box from "@mui/material/Box";
+import AppDrawer from './Drawer';
 
 const defaultTheme = createTheme({
   palette: {
@@ -24,205 +22,160 @@ const defaultTheme = createTheme({
     },
   },
 });
+function createData(transactionType, senderAccountNo, receiverAccountNo, transactionAmount, transactionDate, type) {
+  return {transactionType, senderAccountNo, receiverAccountNo, transactionAmount, transactionDate, type };
+}
 
 export default function AccountSummary() {
+  const [transactions, setTransactions] = useState([]);
+  const [accounts, setAccounts] = useState([]);
+  const [selectedAccount, setSelectedAccount] = useState('');
+  const [accountDetails, setAccountDetails] = useState({})
+  const [pg, setpg] = React.useState(0);
+  const [rpg, setrpg] = React.useState(3);
 
-  const [accounts, setAccounts] = useState(["123", "234"]);
-  const [selectedAccount, setSelectedAccount] = useState("");
-
-  const handleSelectAccount = (e) => {
-    setSelectedAccount(e.target.value);
-  };
-
-  function createData(id, date, name, shipTo, paymentMethod, amount) {
-    return { id, date, name, shipTo, paymentMethod, amount };
+  function handleChangePage(event, newpage) {
+    setpg(newpage);
   }
 
-  const products = [
-    {
-      name: "User ID",
-      price: "10",
-    },
-    {
-      name: "Account Number",
-      price: "10",
-    },
-    {
-      name: "Balance",
-      price: "10",
-    },
-    {
-      name: "Account Type",
-      price: "10",
-    }
-  ];
+  function handleChangeRowsPerPage(event) {
+    setrpg(parseInt(event.target.value, 10));
+    setpg(0);
+  }
+  var customerId;
+  let rows = [];
+  useEffect(() => {
+    var dat = window.sessionStorage.getItem("userCredentials");
+    var data = JSON.parse(dat);
+    customerId = data["customerId"];
+    const baseURL = 'http://localhost:9080/customer/fetchCustomerAccounts/' + customerId;
+    //const baseURLGet = "http://localhost:3001/accounts"
+    axios.get(baseURL).then((response) => { setAccounts(response.data) }).catch((error) => { console.error(error) });
+  }, [])
 
-  const rows = [
-    createData(
-      0,
-      '16 Mar, 2019',
-      'Elvis Presley',
-      'Tupelo, MS',
-      'VISA ⠀•••• 3719',
-      312.44,
-    ),
-    createData(
-      1,
-      '16 Mar, 2019',
-      'Paul McCartney',
-      'London, UK',
-      'VISA ⠀•••• 2574',
-      866.99,
-    ),
-    createData(2, '16 Mar, 2019', 'Tom Scholz', 'Boston, MA', 'MC ⠀•••• 1253', 100.81),
-    createData(
-      3,
-      '16 Mar, 2019',
-      'Michael Jackson',
-      'Gary, IN',
-      'AMEX ⠀•••• 2000',
-      654.39,
-    ),
-    createData(
-      4,
-      '15 Mar, 2019',
-      'Bruce Springsteen',
-      'Long Branch, NJ',
-      'VISA ⠀•••• 5919',
-      212.79,
-    ),
-  ];
+  const handleSelectAccount = (e) => {
+    setSelectedAccount(e.target.value)
+  };
 
-//   .......commented to prevent error do not erase......
+  useEffect(() => {
+    rows = [];
+    setTransactions([]);
+    setAccountDetails({});
+    console.log(selectedAccount);
+    const baseURLTrans = `http://localhost:9080/account/fetchTransactions/${selectedAccount}`;
+    const baseURLDetails = `http://localhost:9080/account/fetchAccountProfile/${selectedAccount}`;
+    axios.get(baseURLTrans).then((response) => {
+      if (typeof (response.data) == "string") {
+      } else {
+        setTransactions(response.data)
+      }
+    }).catch((error) => { console.error(error) });
 
-  //   useEffect(() => {
-  //     var dat = window.sessionStorage.getItem("userCredentials");
-  //     var data = JSON.parse(dat);
-  //     customerId = data["customerId"];
-  //     const baseURL =
-  //       "http://localhost:9080/customer/fetchCustomerAccounts/" + customerId;
-  //     axios
-  //       .get(baseURL)
-  //       .then((response) => {
-  //         setAccounts(response.data);
-  //       })
-  //       .catch((error) => {
-  //         console.error(error);
-  //       });
-  //   }, []);
-
-  //   useEffect(()=>{
-  //     const baseURL = ""+selectedAccount;
-  //     axios.get(baseURL).then((response)=>{
-  //         console.log(response.data);
-  //     }).catch((e)=>{console.error(e)});
-  //   },[selectedAccount]);
-
+    axios.get(baseURLDetails).then((response) => {
+      if (typeof (response.data) == "string") {
+      } else {
+        setAccountDetails(response.data[0])
+      }
+    }).catch((error) => { console.error(error) });
+  }, [selectedAccount]);
+  transactions.map(
+    (transaction) => {
+      if (transaction.senderAccountNo === selectedAccount) {
+        rows.push(createData(transaction.transactionType, transaction.senderAccountNo, transaction.receiverAccountNo, transaction.transactionAmount, transaction.transactionDate, "DE"))
+      } else {
+        rows.push(createData(transaction.transactionType, transaction.senderAccountNo, transaction.receiverAccountNo, transaction.transactionAmount, transaction.transactionDate, "CR"))
+      };
+    });
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main">
-        <AppDrawer />
         <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 10,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <img
-            style={{ width: "100px" }}
-            src={
-              "https://png.pngtree.com/png-vector/20190810/ourlarge/pngtree-audit-accounting-banking-budget-business-calculation-finan-png-image_1654072.jpg"
-            }
-          ></img>
-          <Box
-            component="form"
-            sx={{ width: 500 }}
-            //onSubmit={handleSubmit}
-          >
-            <Typography
-              component="h1"
-              variant="h5"
-              style={{
-                fontFamily: "Nanum Myeongjo, serif",
-                marginBottom: "15px",
-              }}
-            >
-              <b>Account Summary</b>
-            </Typography>
-            <Grid>
-              <Grid item sm={12}>
-                <TextField
-                  fullWidth
-                  value={selectedAccount}
-                  onChange={handleSelectAccount}
-                  label="Choose Account"
-                  select
-                  helperText="Choose an account for transaction"
-                  style={{ padding: "10px" }}
-                >
-                  {accounts.map((account, index) => (
-                    <MenuItem value={account}>{account}</MenuItem>
-                  ))}
-                </TextField>
-              </Grid>
+        <Box sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          marginTop:"100px"
+        }}>
+          <AppDrawer />
+          <Grid container sx={{ marginBottom: 2 }}>
+            <Grid item xs={4}>
+              <TextField autoFocus fullWidth value={selectedAccount} onChange={handleSelectAccount} label="Choose Account" select helperText="Choose an account for transaction">
+                {
+                  accounts.map((account, index) => (
+                    <MenuItem value={account} key={index}>{account}</MenuItem>
+                  )
+                  )
+                }
+              </TextField>
             </Grid>
-          </Box>
-
-          <Container component="main" maxWidth="sm">
-        <Paper
-          variant="elevation"
-          sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
-        >
-          <Box component="form">
-            <React.Fragment>
-              
-              <List disablePadding>
-                {products.map((product) => (
-                  <ListItem key={product.name} sx={{ py: 1, px: 0 }}>
-                    <ListItemText
-                      primary={product.name}
-                    />
-                    <Typography variant="body2">
-                      {product.price === "" ? "-" : product.price}
-                    </Typography>
-                  </ListItem>
-                ))}
-              </List>
-            </React.Fragment>
-          </Box>
-        </Paper>
-      </Container>
-          <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-          <React.Fragment>
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell>Date</TableCell>
-            <TableCell>To</TableCell>
-            <TableCell>From</TableCell>
-            <TableCell>Payment Method</TableCell>
-            <TableCell align="right">Amount</TableCell>
-            <TableCell align="center">Type</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.date}</TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.shipTo}</TableCell>
-              <TableCell>{row.paymentMethod}</TableCell>
-              <TableCell align="right">{`$${row.amount}`}</TableCell>
-              <TableCell>"Debit"</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </React.Fragment>
-          </Paper>
+          </Grid>
+          <Grid sx={{ marginBottom: 2 }} container spacing={2}>
+            <Grid item sm={4}>
+              <Paper elevation={3} sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+                <Typography primary variant='h6' sx={{ padding: 2, paddingRight: 10, color: "primary.main" }}>Account Balance</Typography>
+                <Typography primary variant='h5' sx={{ paddingLeft: 2, paddingBottom: 2 }}>{accountDetails.balance}</Typography>
+              </Paper>
+            </Grid>
+            <Grid item sm={4}>
+              <Paper elevation={3} sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+                <Typography primary variant='h6' sx={{ padding: 2, paddingRight: 10, color: "primary.main" }}>Account Number</Typography>
+                <Typography primary variant='h5' sx={{ paddingLeft: 2, paddingBottom: 2 }}>{accountDetails.accountNo}</Typography>
+              </Paper>
+            </Grid>
+            <Grid item sm={4}>
+              <Paper elevation={3} sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+                <Typography primary variant='h6' sx={{ padding: 2, paddingRight: 10, color: "primary.main" }}>Account Type</Typography>
+                <Typography primary variant='h5' sx={{ paddingLeft: 2, paddingBottom: 2 }}>{accountDetails.accountType}</Typography>
+              </Paper>
+            </Grid>
+          </Grid>
+          <Grid container>
+            <Grid item sm={12}>
+              <Paper elevation={3}>
+                <Typography inline align="left" primary variant='h6' sx={{ padding: 2, color: "primary.main" }}>Recent Transactions</Typography>
+                <TableContainer sx={{ paddingLeft: 2, paddingRight: 2 }}>
+                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Mode</TableCell>
+                        <TableCell align="right">From</TableCell>
+                        <TableCell align="right">To</TableCell>
+                        <TableCell align="right">Amount</TableCell>
+                        <TableCell align="right">Date</TableCell>
+                        <TableCell align="right">Method</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {rows.slice(pg * rpg, pg *
+                        rpg + rpg).map((row, index) => (
+                          <TableRow
+                            key={index}
+                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                          >
+                            <TableCell component="th" scope="row">
+                              {row.transactionType}
+                            </TableCell>
+                            <TableCell align="right">{row.senderAccountNo}</TableCell>
+                            <TableCell align="right">{row.receiverAccountNo}</TableCell>
+                            <TableCell align="right">{row.transactionAmount}</TableCell>
+                            <TableCell align="right">{row.transactionDate}</TableCell>
+                            <TableCell align="right">{row.type}</TableCell>
+                          </TableRow>
+                        ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+                <TablePagination
+                  rowsPerPageOptions={[3, 6]}
+                  component="div"
+                  count={rows.length}
+                  rowsPerPage={rpg}
+                  page={pg}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}></TablePagination>
+              </Paper>
+            </Grid>
+          </Grid>
         </Box>
       </Container>
     </ThemeProvider>

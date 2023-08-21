@@ -17,10 +17,12 @@ const defaultTheme = createTheme({
 });
 
 export default function ChangeLoginPassword() {
-  const [isFormInvalid, setIsFormInvalid] = useState(false);
+  //const [isFormInvalid, setIsFormInvalid] = useState(false);
   const [loginPassword, setLoginPassword] = useState("");
   const [confirmLoginPassword, setConfirmLoginPassword] = useState("");
-  var customerId="123";
+  var customerId;
+  var baseURL =
+      "http://localhost:9080/customer/updatePassword/";
 
   const handleConfirmLoginPassword = (e) => {
     setConfirmLoginPassword(e.target.value);
@@ -30,26 +32,19 @@ export default function ChangeLoginPassword() {
     setLoginPassword(e.target.value);
   };
 
-  function validateForm() {
-    if (loginPassword != confirmLoginPassword) {
-      setIsFormInvalid(true);
-      return false;
-    } else {
-      return true;
-    }
-  }
 
-  // useEffect(() => {
-  //   var dat = window.sessionStorage.getItem("userCredentials");
-  //   var data = JSON.parse(dat);
-  //   customerId = data["customerId"];
-  // }, []);
+  
 
-  function handleSubmit() {
-    const baseURL =
-      "http://localhost:9080/customer/fetchCustomerAccounts/" + customerId;
+  const handleSubmit= (e) =>{
+    e.preventDefault();
+    var dat = window.sessionStorage.getItem("userCredentials");
+    var data = JSON.parse(dat);
+    customerId = data["customerId"];
+    baseURL = baseURL+customerId+"/";
+    baseURL = baseURL + loginPassword;
+      console.log(baseURL);
     axios
-      .put(baseURL, { password: loginPassword })
+      .put(baseURL)
       .then((response) => {
         alert("Password Changed Successfully");
       })
@@ -78,10 +73,11 @@ export default function ChangeLoginPassword() {
             }
           ></img>
           <Box
-            component="form"
+           
             sx={{ mt: 3, width: 500 }}
-            onSubmit={handleSubmit}
+           
           >
+            <form  onSubmit={handleSubmit}>
             <Typography
               component="h1"
               variant="h5"
@@ -120,7 +116,7 @@ export default function ChangeLoginPassword() {
                   margin="normal"
                   helperText={
                     loginPassword != confirmLoginPassword
-                      ? isFormInvalid && "Password Does Not Match"
+                      ?  "Password Does Not Match"
                       : ""
                   }
                   error={loginPassword != confirmLoginPassword}
@@ -141,6 +137,7 @@ export default function ChangeLoginPassword() {
                 </Button>
               </Grid>
             </Grid>
+            </form>
           </Box>
         </Box>
       </Container>

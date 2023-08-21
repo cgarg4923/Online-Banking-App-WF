@@ -9,8 +9,10 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import IconButton from "@mui/material/IconButton";
 // import "./wells.png"
 import mainLogo from "./wells.png";
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
 function Copyright() {
   return (
@@ -33,6 +35,9 @@ const defaultTheme = createTheme({
     primary: {
       main: "#B04040",
     },
+    secondary: {
+      main: "#FFFFFF"
+    },
   },
 });
 
@@ -41,8 +46,11 @@ export default function HomePage() {
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
       <AppBar position="relative">
-        <Toolbar>
+        <Toolbar style={{justifyContent:"space-between"}}>
           <img src={mainLogo} style={{ width: "70px", padding: "2px" }} />
+          <IconButton href="/AdminLogin" color="secondary">
+          <AdminPanelSettingsIcon ></AdminPanelSettingsIcon>
+          </IconButton>
         </Toolbar>
       </AppBar>
       <main>
