@@ -150,10 +150,10 @@ export default function AdminAppDrawer() {
         </DrawerHeader>
         <Divider />
         <List>
-          <ListItemButton button href="/AccountSummary">
-            <ListItemText primary="Account Summary" />
+          <ListItemButton button href="/SearchCustomer">
+            <ListItemText primary="Search Customer" />
           </ListItemButton>
-          <ListItemButton button href="/AccountStatement">
+          {/* <ListItemButton button href="/AccountStatement">
             <ListItemText primary="Account Statement" />
           </ListItemButton>
           <ListItemButton button href="/OpenNewAccount">
@@ -178,7 +178,7 @@ export default function AdminAppDrawer() {
           </ListItemButton>
           <ListItemButton button href="/ChangeTransactionPassword">
             <ListItemText primary="Change Transaction Password" />
-          </ListItemButton>
+          </ListItemButton> */}
         </List>
         <Divider />
       </Drawer>

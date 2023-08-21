@@ -18,7 +18,7 @@ const defaultTheme = createTheme({
 });
 
 export default function ChangeTxnPassword() {
-  const [isFormInvalid, setIsFormInvalid] = useState(false);
+
   const [txnPassword, setTxnPassword] = useState("");
   const [confirmTxnPassword, setConfirmTxnPassword] = useState("");
   const [accounts, setAccounts] = useState([]);
@@ -38,14 +38,6 @@ export default function ChangeTxnPassword() {
     setSelectedAccount(e.target.value);
   };
 
-  function validateForm() {
-    if (txnPassword != confirmTxnPassword) {
-      setIsFormInvalid(true);
-      return false;
-    } else {
-      return true;
-    }
-  }
 
   useEffect(() => {
     var dat = window.sessionStorage.getItem("userCredentials");
@@ -63,7 +55,8 @@ export default function ChangeTxnPassword() {
       });
   }, []);
 
-  function handleSubmit() {
+  const handleSubmit=(e)=> {
+    e.preventDefault();
     const baseURL =
       "http://localhost:9080/customer/fetchCustomerAccounts/" + customerId;
     axios
@@ -151,7 +144,7 @@ export default function ChangeTxnPassword() {
                   margin="normal"
                   helperText={
                     txnPassword != confirmTxnPassword
-                      ? isFormInvalid && "Password Does Not Match"
+                      ? "Password Does Not Match"
                       : ""
                   }
                   error={txnPassword != confirmTxnPassword}

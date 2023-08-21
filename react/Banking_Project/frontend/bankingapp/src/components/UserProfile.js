@@ -216,19 +216,18 @@ export default function UserProfile({}) {
               </List>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
-                  <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
+                  <Typography variant="h6" gutterBottom sx={{ mt: 2 }} style={{textAlign:"left"}}>
                     Current Address
                   </Typography>
-                  <Typography gutterBottom>{addresses.join(", ")}</Typography>
+                  <Typography gutterBottom style={{textAlign:"left"}}>{addresses.join(", ")}</Typography>
                 </Grid>
                 <Grid item container direction="column" xs={12} sm={6}>
-                  <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
+                  <Typography variant="h6" gutterBottom sx={{ mt: 2 }} style={{textAlign:"left"}}>
                     Permanent Address
                   </Typography>
-                  <Typography gutterBottom>{paddresses.join(", ")}</Typography>
+                  <Typography gutterBottom style={{textAlign:"left"}}>{paddresses.join(", ")}</Typography>
                 </Grid>
-              </Grid>
-              
+              </Grid>     
             </React.Fragment>
           </Box>
         </Paper>
