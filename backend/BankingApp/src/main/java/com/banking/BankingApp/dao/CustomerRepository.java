@@ -6,6 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 
 import com.banking.BankingApp.model.Customer;
+
+import jakarta.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -17,6 +20,7 @@ public interface CustomerRepository extends JpaRepository<Customer,String>{
         public List<Customer> findByProfileData(String custId);
 
         @Modifying
+        @Transactional 
 	@Query("update Customer cust set cust.password=?2 where cust.customerId=?1 ")
         public int updatePassword(String custId, String pass);
 }

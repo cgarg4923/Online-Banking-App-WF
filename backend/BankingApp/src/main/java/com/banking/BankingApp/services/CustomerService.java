@@ -117,14 +117,29 @@ public class CustomerService {
 	public String updatePassword(String custId, String pass) {
 		String res="";
 		Customer cust = custRepo.findById(custId).get();
-		int rowsAffected = custRepo.updatePassword(custId,pass);
-		if(rowsAffected>0)
+		if(cust==null)
 		{
-			res="Passsword updated Succewssfully";
+			res="Account doesn't exist";
 		}
 		else
 		{
-			res="Try again to change password";
+			if(cust.getPassword()==pass)
+			{
+				res="Password matches with old password";
+			}
+			else
+			{
+				cust.setPassword(pass);
+				int rowsAffected = custRepo.updatePassword(custId,pass);
+				if(rowsAffected>0)
+				{
+					res="Passsword updated Succewssfully";
+				}
+				else
+				{
+					res="Try again to change password";
+				}
+			}
 		}
 		return res;
 	}
