@@ -2,6 +2,8 @@ package com.banking.BankingApp.model;
 
 import java.util.List;
 
+import org.hibernate.validator.constraints.Length;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
@@ -36,6 +38,17 @@ public class Account {
 	@OneToMany(mappedBy="sourceAccount")
 	private List<Transaction> transaction;
 	
+
+	@Length(min=8, max=16, message = "Password Length must be between 8 and 16 characters")
+	@Column(name="password",length=20)
+	private String transactionPassword;
+	
+	public String getTransactionPassword() {
+		return transactionPassword;
+	}
+	public void setTransactionPassword(String transactionPassword) {
+		this.transactionPassword = transactionPassword;
+	}
 	public Customer getCustomer() {
 		return customer;
 	}

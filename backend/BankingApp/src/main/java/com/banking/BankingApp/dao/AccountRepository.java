@@ -18,4 +18,14 @@ public interface AccountRepository extends JpaRepository<Account,String> {
 	@Modifying
 	@Query("update Account acc set acc.balance=acc.balance-?2 where acc.accountNo=?1 ")
 	public int updateBalance(String accNo,Float amount);
+
+	
+	@Modifying
+	@Query("update Account acc set acc.balance=acc.balance-?2 where acc.accountNo=?1 ")
+	public int updateSenderBalance(String senderAccNo, Float transactionAmount);
+
+		
+	@Modifying
+	@Query("update Account acc set acc.balance=acc.balance+?2 where acc.accountNo=?1 ")
+    public int updateReceiverBalance(String receiverAccNo, Float transactionAmount);
 }

@@ -61,5 +61,11 @@ public class CustomerController {
 		return custService.fetchProfileData(custId);
 	}
 	
+	@GetMapping("/fetchBenificiary/{customerId}")
+	public List<String> fetchBenificiary(@PathVariable("customerId") String custId)
+	{
+		List<String> accountList = custService.fetchBenificiary(custId);
+		return accountList;
+	}
 		
 }

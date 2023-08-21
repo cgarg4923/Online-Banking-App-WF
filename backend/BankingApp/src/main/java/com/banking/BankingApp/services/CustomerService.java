@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.banking.BankingApp.dao.AccountRepository;
+import com.banking.BankingApp.dao.BenificiaryRepository;
 import com.banking.BankingApp.dao.CustomerRepository;
 import com.banking.BankingApp.dao.TransactionRepository;
 import com.banking.BankingApp.model.Account;
@@ -28,6 +29,9 @@ public class CustomerService {
 
 	@Autowired 
 	TransactionRepository transRepo;
+
+	@Autowired
+	BenificiaryRepository benRepo;
 
 	public Customer saveCustomer(Customer cust) {
 		Customer obj = custRepo.save(cust);
@@ -59,6 +63,11 @@ public class CustomerService {
 
 	public List<String> fetchAccounts(String custId) {
 		return accRepo.findByAccounts(custId);
+	}
+
+	
+	public List<String> fetchBenificiary(String custId) {
+		return benRepo.fetchBenificiary(custId);
 	}
 
 	public List<Customer> fetchProfileData(String custId)

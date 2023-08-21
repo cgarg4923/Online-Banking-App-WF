@@ -90,6 +90,15 @@ public class Customer
 	private List<Address> address;
 	
 	
+	@OneToMany(mappedBy="cust")
+	private List<Benificiary> benificiaryAccount;
+	
+	public List<Benificiary> getBenificiaryAccount() {
+		return benificiaryAccount;
+	}
+	public void setBenificiaryAccount(List<Benificiary> benificiaryAccount) {
+		this.benificiaryAccount = benificiaryAccount;
+	}
 	// public Customer(String customerId, String firstName, String lastName, String middleName,
 	// 		String emailId, String phoneNumber, String aadharNumber, Date dateOfBirth, String fatherName, String password,
 	// 		String occupationType, String sourceOfIncome, Float grossAnnualIncome) {

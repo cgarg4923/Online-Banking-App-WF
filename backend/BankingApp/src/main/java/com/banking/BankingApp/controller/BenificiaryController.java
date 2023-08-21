@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.banking.BankingApp.dto.TransactionProjection;
 import com.banking.BankingApp.model.Account;
+import com.banking.BankingApp.model.Benificiary;
 import com.banking.BankingApp.model.Customer;
 import com.banking.BankingApp.model.WithdrawTransactionModel;
 import com.banking.BankingApp.services.AccountService;
+import com.banking.BankingApp.services.BenificiaryService;
 
 import jakarta.validation.Valid;
 
@@ -24,32 +26,16 @@ import jakarta.validation.Valid;
 
 @RestController
 @CrossOrigin("http://localhost:3000")
-@RequestMapping("/account")
-public class AccountController {
-	
-	@Autowired
-	AccountService accService;
-	
-	@PostMapping("/saveAccountData/{custID}")
-	public String saveAccountData(@Valid @RequestBody Account acc,@PathVariable("custID") String customerId)
+@RequestMapping("/benificiary")
+public class BenificiaryController {
+
+    @Autowired
+    BenificiaryService benService;
+    @PostMapping("/saveAccountData/{customerId}" ) 
+	public String saveAccountData(@Valid @RequestBody Benificiary acc,@PathVariable("customerId") String  custId)
 	{
 
-		String c = accService.saveAccount(acc,customerId);
+		String c = benService.saveAccount(acc,custId);
 		return c;
 	}
-	@GetMapping("/fetchTransactions/{accountNo}")
-	public List<TransactionProjection> fetchTransactions(@PathVariable("accountNo") String accNo)
-	{
-		return accService.fetchTransactions(accNo);
-	}
-	
-	@PutMapping("/fundTransfer")
-	public String fundTransfer(@RequestBody WithdrawTransactionModel transInstance)
-	{
-		String result = accService.fundTransfer(transInstance);
-		return result;
-	}
-
-
-
 }
