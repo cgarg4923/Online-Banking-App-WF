@@ -119,7 +119,7 @@ public class CustomerService {
 		Customer cust = custRepo.findById(custId).get();
 		if(cust==null)
 		{
-			res="Account doesn't exist";
+			res="Customer doesn't exist";
 		}
 		else
 		{

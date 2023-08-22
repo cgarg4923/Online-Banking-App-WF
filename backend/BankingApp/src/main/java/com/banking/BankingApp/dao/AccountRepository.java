@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 import com.banking.BankingApp.model.Account;
 import com.banking.BankingApp.model.Customer;
 
+import jakarta.transaction.Transactional;
+
 @Repository
 
 public interface AccountRepository extends JpaRepository<Account,String> {
@@ -32,4 +34,9 @@ public interface AccountRepository extends JpaRepository<Account,String> {
 	@Modifying
 	@Query("update Account acc set acc.balance=acc.balance+?2 where acc.accountNo=?1 ")
     public int updateReceiverBalance(String receiverAccNo, Float transactionAmount);
+
+	@Modifying
+    @Transactional 
+	@Query("update Account acc set acc.transactionPassword=?2 where acc.accountNo=?1 ")
+    public int updatePassword(String accNo, String pass);
 }

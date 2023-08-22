@@ -29,10 +29,14 @@ public class Benificiary {
     private Integer id;
 
     private String accountNo;
+
+    private String name;
+
+    private String nickName;
     
     @ManyToOne
     @JoinColumn(name="customer_id")
-    @JsonBackReference
+    //@JsonBackReference
     private Customer cust;
 
     public Integer getId() {
@@ -58,5 +62,22 @@ public class Benificiary {
     public void setCust(Customer cust) {
         this.cust = cust;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+    
     
 }

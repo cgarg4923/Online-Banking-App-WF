@@ -32,7 +32,7 @@ public class BenificiaryController {
     @Autowired
     BenificiaryService benService;
     @PostMapping("/saveAccountData/{customerId}" ) 
-	public String saveAccountData(@Valid @RequestBody Benificiary acc,@PathVariable("customerId") String  custId)
+	public String saveAccountData( @RequestBody Benificiary acc,@PathVariable("customerId") String  custId)
 	{
 
 		String c = benService.saveAccount(acc,custId);

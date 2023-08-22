@@ -1,5 +1,6 @@
 package com.banking.BankingApp.controller;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,10 +38,10 @@ public class AccountController {
 		String c = accService.saveAccount(acc,customerId);
 		return c;
 	}
-	@GetMapping("/fetchTransactions/{accountNo}")
-	public List<TransactionProjection> fetchTransactions(@PathVariable("accountNo") String accNo)
+	@GetMapping("/fetchTransactions/{accountNo}/{from}/{to}")
+	public List<TransactionProjection> fetchTransactions(@PathVariable("accountNo") String accNo,@PathVariable("from") Date from,@PathVariable("to") Date to)
 	{
-		return accService.fetchTransactions(accNo);
+		return accService.fetchTransactions(accNo,from,to);
 	}
 	
 	@PutMapping("/fundTransfer")
@@ -56,5 +57,11 @@ public class AccountController {
 		return accService.fetchProfileData(accNo);
 	}
 
+	@PutMapping("/updatePassword/{accountNo}/{password}")
+	public String updatePassword(@PathVariable("accountNo") String accNo,@PathVariable("password") String pass)
+	{
+		String result = accService.updatePassword(accNo,pass);
+		return result;
+	}
 
 }

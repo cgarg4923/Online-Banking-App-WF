@@ -27,7 +27,7 @@ public class Transaction {
 	private Account sourceAccount;
 
 	@ManyToOne
-	@JsonBackReference
+	//@JsonBackReference
 	private Account destinationAccount;
 
 	@Column(name="type",length=20)

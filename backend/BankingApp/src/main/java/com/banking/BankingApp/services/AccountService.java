@@ -1,5 +1,6 @@
 package com.banking.BankingApp.services;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,8 +52,8 @@ public class AccountService {
 	}
 
 
-	public List<TransactionProjection> fetchTransactions(String accNo) {
-		return transRepo.findByTransactions(accNo);
+	public List<TransactionProjection> fetchTransactions(String accNo,Date from,Date to) {
+		return transRepo.findByTransactions(accNo,from,to);
 	}
 
 	@Transactional
@@ -102,4 +103,33 @@ public class AccountService {
 		return accRepo.findByProfileData(accNo);
 	}
 
+	public String updatePassword(String accNo, String pass) {
+		String res="";
+		Account acc = accRepo.findById(accNo).get();
+		if(acc==null)
+		{
+			res="Account doesn't exist";
+		}
+		else
+		{
+			if(acc.getTransactionPassword()==pass)
+			{
+				res="Password matches with old password";
+			}
+			else
+			{
+				acc.setTransactionPassword(pass);
+				int rowsAffected = accRepo.updatePassword(accNo,pass);
+				if(rowsAffected>0)
+				{
+					res="Passsword updated Succewssfully";
+				}
+				else
+				{
+					res="Try again to change password";
+				}
+			}
+		}
+		return res;
+	}
 }
