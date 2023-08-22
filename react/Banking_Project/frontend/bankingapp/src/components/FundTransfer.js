@@ -27,25 +27,19 @@ const FundTransferComponent = () => {
   const [paymentMode, setPaymentMode] = useState("");
   const [amount, setAmount] = useState("");
   const [remark, setRemark] = useState("");
+  const [customerId,setCustomerId] = useState("");
 
   const [accounts, setAccounts] = useState([]);
   const [selectedAccount, setSelectedAccount] = useState("");
 
-  const [beneficiaryAccounts, setBeneficiaryAccounts] = useState([
-    "123",
-    "234",
-    "976612879588151",
-  ]);
+  const [beneficiaryAccounts, setBeneficiaryAccounts] = useState([]);
   const [selectedBeneficiaryAccount, setSelectedBeneficiaryAccount] =
     useState("");
 
-  var customerId;
   useEffect(() => {
-    var dat = window.sessionStorage.getItem("userCredentials");
-    var data = JSON.parse(dat);
-    customerId = data["customerId"];
+    var data = JSON.parse(window.sessionStorage.getItem("userCredentials"));
     const baseURL1 =
-      "http://localhost:9080/customer/fetchCustomerAccounts/" + customerId;
+      "http://localhost:9080/customer/fetchCustomerAccounts/" + data["customerId"];
     axios
       .get(baseURL1)
       .then((response) => {
@@ -54,8 +48,8 @@ const FundTransferComponent = () => {
       .catch((error) => {
         console.error(error);
       });
-    // const baseURL2 = 'http://localhost:9080/customer/fetchCustomerAccounts/' + customerId;
-    // axios.get(baseURL2).then((response) => { setBeneficiaryAccounts(response.data) }).catch((error) => { console.error(error) });
+    const baseURL2 = 'http://localhost:9080/customer/fetchBenificiary/' + data["customerId"];
+    axios.get(baseURL2).then((response) => { setBeneficiaryAccounts(response.data) }).catch((error) => { console.error(error) });
   }, []);
 
   function getSqlDate() {
@@ -78,6 +72,7 @@ const FundTransferComponent = () => {
 
   const handleSelectAccount = (e) => {
     setSelectedAccount(e.target.value);
+    console.log("hello");
   };
 
   const handleSelectBeneficiaryAccount = (e) => {

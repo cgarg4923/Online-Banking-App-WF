@@ -20,21 +20,19 @@ const defaultTheme = createTheme({
 });
 
 const AddBeneficiary = () => {
-  var customerId;
+  const [customerId,setCustomerId] = useState("");
   const [beneficiaryName, setBeneficiaryName] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [reEnteredAccountNumber, setReEnteredAccountNumber] = useState("");
   const [nickName, setNickName] = useState("");
 
-  useEffect(()=>{
-    var data = window.sessionStorage.getItem("userCredentials");
-    customerId = JSON.parse(data)["customerId"];
-  },[]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    var data = JSON.parse(window.sessionStorage.getItem("userCredentials"));
+    setCustomerId(data["customerId"]);
 
-    const baseURL = "http://localhost:9080/benificiary/saveAccountData/"+customerId;
+    const baseURL = "http://localhost:9080/benificiary/saveAccountData/"+data["customerId"];
 
     if (accountNumber !== reEnteredAccountNumber) {
       alert("Account numbers don't match.");

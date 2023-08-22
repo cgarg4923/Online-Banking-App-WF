@@ -20,7 +20,7 @@ export default function ChangeLoginPassword() {
   //const [isFormInvalid, setIsFormInvalid] = useState(false);
   const [loginPassword, setLoginPassword] = useState("");
   const [confirmLoginPassword, setConfirmLoginPassword] = useState("");
-  var customerId;
+  const [customerId,setCustomerId] = useState("");
   var baseURL =
       "http://localhost:9080/customer/updatePassword/";
 
@@ -37,12 +37,9 @@ export default function ChangeLoginPassword() {
 
   const handleSubmit= (e) =>{
     e.preventDefault();
-    var dat = window.sessionStorage.getItem("userCredentials");
-    var data = JSON.parse(dat);
-    customerId = data["customerId"];
-    baseURL = baseURL+customerId+"/";
-    baseURL = baseURL + loginPassword;
-      console.log(baseURL);
+    var data = JSON.parse(window.sessionStorage.getItem("userCredentials"));
+    setCustomerId(data["customerId"]);
+    baseURL = baseURL+data["customerId"]+"/"+loginPassword;
     axios
       .put(baseURL)
       .then((response) => {

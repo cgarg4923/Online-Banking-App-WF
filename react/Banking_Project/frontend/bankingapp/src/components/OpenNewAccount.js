@@ -28,18 +28,19 @@ const defaultTheme = createTheme({
 
 export default function OpenNewAccount() {
   const [accountType, setAccountType] = useState("Savings");
-  var phoneNumber;
-  var customerId;
-  var data;
+
+  const [details,setDetails] = useState({
+    phoneNumber:"",
+    customerId:""
+  });
 
   useEffect(() => {
-    data = JSON.parse(window.sessionStorage.getItem("userCredentials"));
-    customerId = data["customerId"];
-    phoneNumber = data["phoneNumber"];
+    console.log("executed");
+    var data = JSON.parse(window.sessionStorage.getItem("userCredentials"));
+    setDetails({...details,phoneNumber:data["phoneNumber"], customerId: data["customerId"]});
   }, []);
-
   const baseURL =
-    "http://localhost:9080/account/saveAccountData/" + data["customerId"];
+    "http://localhost:9080/account/saveAccountData/" + details.customerId;
   const [isFormInvalid, setIsFormInvalid] = useState(false);
   const [accountBalance, setAccountBalance] = useState("");
   const navigate = useNavigate();
@@ -50,7 +51,7 @@ export default function OpenNewAccount() {
 
   function generateAccountNumber() {
     return (
-      phoneNumber +
+      details.phoneNumber +
       Math.floor(1000 + Math.random() * 9000).toString() +
       typeOfAccount(accountType)
     ).toString();
@@ -71,7 +72,6 @@ export default function OpenNewAccount() {
     e.preventDefault();
     if (!validateForm()) {
     } else {
-      console.log(phoneNumber);
       var pno = generateAccountNumber();
       axios
         .post(baseURL, {
@@ -115,7 +115,7 @@ export default function OpenNewAccount() {
                   fullWidth
                   label="User ID"
                   type="text"
-                  value={customerId}
+                  value={details.customerId}
                   margin="normal"
                   inputLabelProps={{ shrink: true }}
                   inputProps={{ readOnly: true }}

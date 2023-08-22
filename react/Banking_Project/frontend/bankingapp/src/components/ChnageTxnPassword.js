@@ -23,8 +23,7 @@ export default function ChangeTxnPassword() {
   const [confirmTxnPassword, setConfirmTxnPassword] = useState("");
   const [accounts, setAccounts] = useState([]);
   const [selectedAccount, setSelectedAccount] = useState("");
-
-  var customerId;
+  const [customerId,setCustomerId] = useState("");
 
   const handleConfirmTxnPassword = (e) => {
     setConfirmTxnPassword(e.target.value);
@@ -40,11 +39,10 @@ export default function ChangeTxnPassword() {
 
 
   useEffect(() => {
-    var dat = window.sessionStorage.getItem("userCredentials");
-    var data = JSON.parse(dat);
-    customerId = data["customerId"];
+    var data = JSON.parse(window.sessionStorage.getItem("userCredentials"));
+    setCustomerId(data["customerId"]);
     const baseURL1 =
-      "http://localhost:9080/customer/fetchCustomerAccounts/" + customerId;
+      "http://localhost:9080/customer/fetchCustomerAccounts/" + data["customerId"];
     axios
       .get(baseURL1)
       .then((response) => {
@@ -58,9 +56,9 @@ export default function ChangeTxnPassword() {
   const handleSubmit=(e)=> {
     e.preventDefault();
     const baseURL =
-      "http://localhost:9080/customer/fetchCustomerAccounts/" + customerId;
+      "http://localhost:9080/account/updatePassword/" + selectedAccount+"/"+txnPassword;
     axios
-      .put(baseURL, { password: txnPassword })
+      .put(baseURL)
       .then((response) => {
         alert("Password Changed Successfully");
       })

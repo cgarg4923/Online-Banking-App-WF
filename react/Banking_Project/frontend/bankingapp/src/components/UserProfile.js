@@ -23,7 +23,9 @@ const defaultTheme = createTheme({
 
 export default function UserProfile({}) {
 
-  var baseURL = "http://localhost:9080/customer/fetchCustomerProfile/";
+  const baseURL = "http://localhost:9080/customer/fetchCustomerProfile/";
+  const [customerId,setCustomerId] = useState("");
+
   const [details, setDetails] = useState({
     firstName: "",
     middleName: "",
@@ -53,9 +55,9 @@ export default function UserProfile({}) {
   
 
   React.useEffect(()=>{
-    var data = window.sessionStorage.getItem("userCredentials");
-    var customerId = JSON.parse(data)["customerId"];
-    axios.get(baseURL+customerId).then((response)=>{
+    var data = JSON.parse(window.sessionStorage.getItem("userCredentials"));
+    setCustomerId(data["customerId"]);
+    axios.get(baseURL+data["customerId"]).then((response)=>{
      var data1 = response.data[0];
      var address = data1["address"];
      console.log(data1);

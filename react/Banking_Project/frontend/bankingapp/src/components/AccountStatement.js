@@ -44,15 +44,17 @@ export default function AccountStatement() {
   const [transactions, setTransactions] = useState([]);
   const [accounts, setAccounts] = useState([]);
   const [selectedAccount, setSelectedAccount] = useState("");
+  const [customerId,setCustomerId] = useState("");
+  const [startDate,setStartDate] = useState("");
+  const [endDate,setEndDate] = useState("");
+ 
   var rows = [];
 
-  var customerId;
   useEffect(() => {
-    var dat = window.sessionStorage.getItem("userCredentials");
-    var data = JSON.parse(dat);
-    customerId = data["customerId"];
+    var data = JSON.parse(window.sessionStorage.getItem("userCredentials"));
+    setCustomerId(data["customerId"]);
     const baseURL =
-      "http://localhost:9080/customer/fetchCustomerAccounts/" + customerId;
+      "http://localhost:9080/customer/fetchCustomerAccounts/" + data["customerId"];
     axios
       .get(baseURL)
       .then((response) => {
@@ -67,8 +69,9 @@ export default function AccountStatement() {
     setSelectedAccount(e.target.value);
   };
 
-  React.useEffect(() => {
-    const baseURLTransaction = `http://localhost:9080/account/fetchTransactions/${selectedAccount}`;
+ const handleSubmit = () => {
+    rows = [];
+    const baseURLTransaction = `http://localhost:9080/account/fetchTransactions/${selectedAccount}/${startDate}/${endDate}`;
     axios
       .get(baseURLTransaction)
       .then((response) => {
@@ -79,11 +82,10 @@ export default function AccountStatement() {
       .catch((error) => {
         console.error(error);
       });
-      rows = [];
-  }, [selectedAccount]);
+      
+  };
 
   transactions.map((transaction) => {
-    console.log("Executed");
     if (transaction.senderAccountNo === selectedAccount) {
       rows.push(
         createData(
@@ -125,9 +127,10 @@ export default function AccountStatement() {
               <Grid item xs={4}>
                 <TextField
                   label="From Date"
-                  //value={fromAccount}
-                  //onChange={(e) => setFromAccount(e.target.value)}
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
                   fullWidth
+                  required
                   type="date"
                   InputLabelProps={{ shrink: true }}
                   style={{ padding: "10px" }}
@@ -136,9 +139,10 @@ export default function AccountStatement() {
               <Grid item xs={4}>
                 <TextField
                   label="To Date"
-                  //value={fromAccount}
-                  //onChange={(e) => setFromAccount(e.target.value)}
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
                   fullWidth
+                  required
                   InputLabelProps={{ shrink: true }}
                   type="date"
                   style={{ padding: "10px" }}
@@ -161,6 +165,7 @@ export default function AccountStatement() {
               </Grid>
             </Grid>
           </div>
+          <Button onClick={handleSubmit}>Go</Button>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>

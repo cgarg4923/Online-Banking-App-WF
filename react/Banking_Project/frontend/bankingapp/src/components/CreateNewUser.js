@@ -50,7 +50,7 @@ export default function CreateNewUser() {
     aadhar: "",
     grossAnnualIncome: 0,
     sourceOfIncome: "",
-    occupationType: "",
+    occupationType: ""
   });
 
   function handleDetails(e) {
@@ -68,7 +68,7 @@ export default function CreateNewUser() {
   }
 
   function validateForm() {
-    if(details.password.length() < 8){
+    if(details.password.length < 8){
       alert("Password must be atleast 8 characters long");
       return false;
     }
@@ -84,6 +84,7 @@ export default function CreateNewUser() {
     if(!validateForm()){return;}
     var cid = details.phoneNumber + "";
     cid = "U" + cid.split("").reverse().join("");
+    console.log(details);
     axios
       .post(baseURL, {
         customerId: cid,
@@ -120,11 +121,11 @@ export default function CreateNewUser() {
               ? details.permanantPincode
               : details.currentPincode,
             addressType: "permenant",
-          },
+          }
         ],
-        grossAnnualIncome: details.grossAnnualIncome,
+        grossAnnualIncome: parseFloat(details.grossAnnualIncome),
         sourceOfIncome: details.sourceOfIncome,
-        occupationType: details.occupationType,
+        occupationType: details.occupationType
       })
       .then((response) => {
         alert("Bank Account Added\n" + "Customer ID: " + cid);

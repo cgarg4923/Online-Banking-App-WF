@@ -24,6 +24,7 @@ export default function NetBankingRegistration() {
   const [transactionPassword, setTransactionPassword] = useState("");
   const [confirmTransactionPassword, setConfirmTransactionPassword] =
     useState("");
+const [customerId,setCustomerId] = useState("");
   function validateForm() {
     if (transactionPassword != confirmTransactionPassword) {
       setIsFormInvalid(true);
@@ -42,15 +43,12 @@ export default function NetBankingRegistration() {
     setSelectedAccount(e.target.value);
   };
   const handlerSubmit = (e) => {
-    var baseURL = "";
+    var baseURL =  "http://localhost:9080/account/updatePassword/" + selectedAccount+"/"+transactionPassword;;
     if (!validateForm()) {
     } else {
       alert("Successful");
       axios
-        .put(baseURL, {
-          accountNumber: selectedAccount,
-          transactionPassword: transactionPassword,
-        })
+        .put(baseURL)
         .then((e) => {
           alert("Successfuly registered for Internet Banking.");
         })
@@ -59,13 +57,11 @@ export default function NetBankingRegistration() {
     e.preventDefault();
   };
 
-  var customerId;
   useEffect(() => {
-    var dat = window.sessionStorage.getItem("userCredentials");
-    var data = JSON.parse(dat);
-    customerId = data["customerId"];
+    var data = JSON.parse(window.sessionStorage.getItem("userCredentials"));
+    setCustomerId(data["customerId"]);
     const baseURL1 =
-      "http://localhost:9080/customer/fetchCustomerAccounts/" + customerId;
+      "http://localhost:9080/customer/fetchCustomerAccounts/" + data["customerId"];
     axios
       .get(baseURL1)
       .then((response) => {

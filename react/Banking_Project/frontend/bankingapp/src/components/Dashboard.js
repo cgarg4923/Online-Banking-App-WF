@@ -14,12 +14,6 @@ const defaultTheme = createTheme({
   },
 });
 const Dashboard = () => {
-  var customerId;
-  useEffect(()=>{
-    var data = window.sessionStorage.getItem("userCredentials");
-    customerId = JSON.parse(data)["customerId"];
-    console.log(customerId);
-  },[]);
   return (
     <ThemeProvider theme={defaultTheme}>
       <AppDrawer />

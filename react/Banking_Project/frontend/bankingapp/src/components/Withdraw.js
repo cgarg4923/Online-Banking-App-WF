@@ -24,13 +24,13 @@ const Withdraw = () => {
   const [remark, setRemark] = useState("");
   const [accounts, setAccounts] = useState([]);
   const [selectedAccount, setSelectedAccount] = useState("");
-  var customerId;
+  const [customerId,setCustomerId] = useState("");
+
   useEffect(() => {
-    var dat = window.sessionStorage.getItem("userCredentials");
-    var data = JSON.parse(dat);
-    customerId = data["customerId"];
+    var data = JSON.parse(window.sessionStorage.getItem("userCredentials"));
+    setCustomerId(data["customerId"]);
     const baseURL =
-      "http://localhost:9080/customer/fetchCustomerAccounts/" + customerId;
+      "http://localhost:9080/customer/fetchCustomerAccounts/" + data["customerId"];
     axios
       .get(baseURL)
       .then((response) => {

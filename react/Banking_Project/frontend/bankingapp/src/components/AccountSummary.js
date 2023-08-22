@@ -33,6 +33,7 @@ export default function AccountSummary() {
   const [accountDetails, setAccountDetails] = useState({})
   const [pg, setpg] = React.useState(0);
   const [rpg, setrpg] = React.useState(3);
+  const [customerId,setCustomerId] = useState("");
 
   function handleChangePage(event, newpage) {
     setpg(newpage);
@@ -42,14 +43,11 @@ export default function AccountSummary() {
     setrpg(parseInt(event.target.value, 10));
     setpg(0);
   }
-  var customerId;
   let rows = [];
   useEffect(() => {
-    var dat = window.sessionStorage.getItem("userCredentials");
-    var data = JSON.parse(dat);
-    customerId = data["customerId"];
-    const baseURL = 'http://localhost:9080/customer/fetchCustomerAccounts/' + customerId;
-    //const baseURLGet = "http://localhost:3001/accounts"
+    var data = JSON.parse(window.sessionStorage.getItem("userCredentials"));
+    setCustomerId(data["customerId"]);
+    const baseURL = 'http://localhost:9080/customer/fetchCustomerAccounts/' + data["customerId"];
     axios.get(baseURL).then((response) => { setAccounts(response.data) }).catch((error) => { console.error(error) });
   }, [])
 
