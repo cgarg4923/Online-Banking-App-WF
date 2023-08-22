@@ -69,7 +69,7 @@ export default function AccountStatement() {
     setSelectedAccount(e.target.value);
   };
 
- const handleSubmit = () => {
+ useEffect(() => {
     rows = [];
     const baseURLTransaction = `http://localhost:9080/account/fetchTransactions/${selectedAccount}/${startDate}/${endDate}`;
     axios
@@ -83,7 +83,7 @@ export default function AccountStatement() {
         console.error(error);
       });
       
-  };
+  },[selectedAccount,startDate,endDate]);
 
   transactions.map((transaction) => {
     if (transaction.senderAccountNo === selectedAccount) {
@@ -165,7 +165,6 @@ export default function AccountStatement() {
               </Grid>
             </Grid>
           </div>
-          <Button onClick={handleSubmit}>Go</Button>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>

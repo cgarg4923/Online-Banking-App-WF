@@ -36,7 +36,7 @@ public class Benificiary {
     
     @ManyToOne
     @JoinColumn(name="customer_id")
-    //@JsonBackReference
+    @JsonBackReference
     private Customer cust;
 
     public Integer getId() {

@@ -60,7 +60,7 @@ export default function AccountSummary() {
     setTransactions([]);
     setAccountDetails({});
     console.log(selectedAccount);
-    const baseURLTrans = `http://localhost:9080/account/fetchTransactions/${selectedAccount}`;
+    const baseURLTrans = `http://localhost:9080/account/fetchStatement/${selectedAccount}`;
     const baseURLDetails = `http://localhost:9080/account/fetchAccountProfile/${selectedAccount}`;
     axios.get(baseURLTrans).then((response) => {
       if (typeof (response.data) == "string") {
