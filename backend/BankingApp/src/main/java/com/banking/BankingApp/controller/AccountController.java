@@ -43,6 +43,12 @@ public class AccountController {
 	{
 		return accService.fetchTransactions(accNo,from,to);
 	}
+
+	@GetMapping("/fetchStatement/{accountNo}")
+	public List<TransactionProjection> fetchStatement(@PathVariable("accountNo") String accNo)
+	{
+		return accService.fetchStatement(accNo);
+	}
 	
 	@PutMapping("/fundTransfer")
 	public String fundTransfer(@RequestBody WithdrawTransactionModel transInstance)

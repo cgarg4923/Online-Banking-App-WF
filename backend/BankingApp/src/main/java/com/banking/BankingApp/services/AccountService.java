@@ -56,6 +56,11 @@ public class AccountService {
 		return transRepo.findByTransactions(accNo,from,to);
 	}
 
+	
+	public List<TransactionProjection> fetchStatement(String accNo) {
+		return transRepo.fetchStatement(accNo);
+	}
+
 	@Transactional
 	public String fundTransfer(WithdrawTransactionModel transInstance) 
 	{
