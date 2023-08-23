@@ -13,6 +13,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import AdminAppDrawer from "./AdminDrawer";
 
 const defaultTheme = createTheme({
   palette: {
@@ -22,7 +23,7 @@ const defaultTheme = createTheme({
   },
 });
 
-export default function CreateNewUser() {
+export default function AddUser() {
   const [checked, setChecked] = useState(false);
   const navigate = useNavigate();
   const baseURL = "http://localhost:9080/customer/saveCustomerData";
@@ -130,22 +131,18 @@ export default function CreateNewUser() {
       })
       .then((response) => {
         alert("Bank Account Added\n" + "Customer ID: " + cid);
-        var item = {
-          customerId: cid,
-          phoneNumber: details.phoneNumber,
-        };
-        window.sessionStorage.setItem("userCredentials", JSON.stringify(item));
-        navigate("/Dashboard");
+        navigate("/AdminDashboard");
       });
   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
+        <AdminAppDrawer/>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 10,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",

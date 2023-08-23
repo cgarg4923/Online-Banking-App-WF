@@ -10,14 +10,15 @@ import {
 import MenuItem from "@mui/material/MenuItem";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import axios from "axios";
+import AppDrawer from "./Drawer";
 
 const defaultTheme = createTheme({
-  palette: {
-    primary: {
-      main: "#FF0000",
+    palette: {
+      primary: {
+        main: "#B04040",
+      },
     },
-  },
-});
+  });
 
 const Withdraw = () => {
   const [amount, setAmount] = useState("");
@@ -89,6 +90,7 @@ const Withdraw = () => {
 
   return (
     <ThemeProvider theme={defaultTheme}>
+        <AppDrawer/>
       <Container maxWidth="sm">
         <Paper elevation={3} style={{ padding: "20px", marginTop: "20%" }}>
           <Box

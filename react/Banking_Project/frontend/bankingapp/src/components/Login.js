@@ -55,12 +55,15 @@ export default function Login() {
       })
       .then(function (response) {
         alert(response.data);
+        if(response.data === "LOGGED IN SUCCESSFULLY !!"){
         var item = {
           customerId: name,
           password: password,
         };
         window.sessionStorage.setItem("userCredentials", JSON.stringify(item));
         navigate("/Dashboard");
+      }
+      else return;
       });
   };
 

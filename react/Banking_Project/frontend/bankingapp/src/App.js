@@ -18,6 +18,9 @@ import AddBeneficiary from './components/AddBeneficiary';
 import AdminLogin from './components/AdminLogin';
 import AdminDashboard from "./components/AdminDashboard";
 import SearchCustomer from './components/SearchCustomer';
+import SearchAccount from './components/searchAccount';
+import AddUser from './components/AddUser';
+import ChangeAdminPassword from './components/ChangeAdminPassword';
 
 function App() {
   const router = createBrowserRouter([
@@ -88,6 +91,18 @@ function App() {
     {
       path:"/SearchCustomer",
       element:<SearchCustomer/>
+    },
+    {
+      path:"/SearchAccount",
+      element:<SearchAccount/>
+    },
+    {
+      path:"/AddUser",
+      element:<AddUser/>
+    },
+    {
+      path:"/ChangeAdminPassword",
+      element:<ChangeAdminPassword/>
     }
   ]);
   return (

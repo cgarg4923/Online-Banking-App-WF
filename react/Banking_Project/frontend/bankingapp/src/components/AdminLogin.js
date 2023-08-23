@@ -24,7 +24,7 @@ const defaultTheme = createTheme({
 });
 
 export default function AdminLogin() {
-  const baseURL = "http://localhost:9080/customer/validateCustomerData";
+  const baseURL = "http://localhost:9080/admin/validateAdminData";
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -48,26 +48,17 @@ export default function AdminLogin() {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    var item = {
-        customerId: "admin",
-        password: "123",
-      };
-      window.sessionStorage.setItem("userCredentials", JSON.stringify(item));
-      navigate("/AdminDashboard");
-    // axios
-    //   .post(baseURL, {
-    //     customerId: name,
-    //     password: password,
-    //   })
-    //   .then(function (response) {
-    //     alert(response.data);
-    //     var item = {
-    //       customerId: "admin",
-    //       password: password,
-    //     };
-    //     window.sessionStorage.setItem("userCredentials", JSON.stringify(item));
-    //     navigate("/Dashboard");
-    //   });
+    axios
+      .post(baseURL, {
+        customerId: name,
+        password: password,
+      })
+      .then(function (response) {
+        alert(response.data);
+        if(response.data === "LOGGED IN SUCCESSFULLY !!")
+            navigate("/AdminDashboard");
+        else return;
+      });
   };
 
   return (

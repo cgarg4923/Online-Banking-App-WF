@@ -28,6 +28,7 @@ const defaultTheme = createTheme({
 
 export default function SearchCustomer() {
 
+  const baseURLStatusUser = "http://localhost:9080/admin/updateStatus/";
   const [searchText, setSearchText] = useState("");
   const [isClicked, setIsClicked] = useState(false);
   const [details, setDetails] = useState({
@@ -149,9 +150,9 @@ export default function SearchCustomer() {
       setDetails((prev) => {
         return { ...prev, ["grossAnnualIncome"]: data1["grossAnnualIncome"] };
       });
-      // setDetails((prev) => {
-      //   return { ...prev, ["status"]: data1["status"] };
-      // });
+      setDetails((prev) => {
+        return { ...prev, ["status"]: data1["status"] };
+      });
       setIsClicked(true);
 
     }).catch((error) => { console.error(error) });
@@ -212,6 +213,23 @@ export default function SearchCustomer() {
     details.permanantPincode,
 
   ];
+  const activateUser = ()=>{
+    axios.put(baseURLStatusUser+searchText+"/active").then((response)=>{
+      alert(response.data);
+      setDetails((prev) => {
+        return { ...prev, ["status"]: "active" };
+      });
+    }).catch((error)=>{console.error(error)})
+    
+  };
+  const deactivateUser = ()=>{
+    axios.put(baseURLStatusUser+searchText+"/disabled").then((response)=>{
+      alert(response.data);
+      setDetails((prev) => {
+        return { ...prev, ["status"]: "disabled" };
+      });
+    }).catch((error)=>{console.error(error)})
+  };
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -283,7 +301,7 @@ export default function SearchCustomer() {
                   </Grid>
                 </Grid>
                 <div style={{marginTop:"30px"}}>
-                {details.status === "active" ? <Button variant="contained">Deactivate User</Button> : <Button variant="contained">Activate User</Button>}</div>
+                {details.status === "active" ? <Button variant="contained" onClick={deactivateUser}>Deactivate User</Button> : <Button variant="contained" onClick={activateUser}>Activate User</Button>}</div>
               </React.Fragment>
             </Box>
           </Paper>

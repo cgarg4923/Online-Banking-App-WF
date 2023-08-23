@@ -153,32 +153,15 @@ export default function AdminAppDrawer() {
           <ListItemButton button href="/SearchCustomer">
             <ListItemText primary="Search Customer" />
           </ListItemButton>
-          {/* <ListItemButton button href="/AccountStatement">
-            <ListItemText primary="Account Statement" />
+          <ListItemButton button href="/SearchAccount">
+            <ListItemText primary="Search Account" />
           </ListItemButton>
-          <ListItemButton button href="/OpenNewAccount">
-            <ListItemText primary="Open New Account" />
+          <ListItemButton button href="/AddUser">
+            <ListItemText primary="Add Customer" />
           </ListItemButton>
-          <ListItemButton button href="/NetBanking">
-            <ListItemText primary="Register For Netbanking" />
+          <ListItemButton button href="/ChangeAdminPassword">
+            <ListItemText primary="Change Password" />
           </ListItemButton>
-          <Divider />
-          <ListItemButton button href="/FundTransfer">
-            <ListItemText primary="Funds Transfer" />
-          </ListItemButton>
-          <ListItemButton button href="/Withdraw">
-            <ListItemText primary="Withdraw" />
-          </ListItemButton>
-          <Divider />
-          <ListItemButton button href="/profile">
-            <ListItemText primary="User Profile" />
-          </ListItemButton>
-          <ListItemButton button href="/ChangeLoginPassword">
-            <ListItemText primary="Change Login Password" />
-          </ListItemButton>
-          <ListItemButton button href="/ChangeTransactionPassword">
-            <ListItemText primary="Change Transaction Password" />
-          </ListItemButton> */}
         </List>
         <Divider />
       </Drawer>
