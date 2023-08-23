@@ -50,11 +50,19 @@ public class CustomerService {
 
 		if (cust == null) {
 			result = "NO CUSTOMER FOUND WITH GIVEN CUSTOMERID " + "\n" + " PLEASE ENTER VALID CREDENTIALS !!!";
-		} else {
-			if (checkCust.getPassword().equals(cust.getPassword())) {
-				result = "LOGGED IN SUCCESSFULLY !!";
-			} else {
-				result = "INCORRECT PASSWORD, TRY AGAIN !!! ";
+		} 
+		else {
+			if(cust.getStatus()=="disabled")
+			{
+				result="Login not allowed "+"\n"+"Please contact admin";
+			}
+			else{
+				if (checkCust.getPassword().equals(cust.getPassword())) {
+					result = "LOGGED IN SUCCESSFULLY !!";
+				} 
+				else {
+					result = "INCORRECT PASSWORD, TRY AGAIN !!! ";
+				}
 			}
 		}
 

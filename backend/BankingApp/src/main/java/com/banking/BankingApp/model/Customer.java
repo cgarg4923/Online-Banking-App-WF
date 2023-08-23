@@ -89,6 +89,8 @@ public class Customer
 	@JoinColumn(name="customerId",referencedColumnName="cid")
 	private List<Address> address;
 	
+	@Column(name="Status")
+	private String status;
 	
 	@OneToMany(mappedBy="cust")
 	private List<Benificiary> benificiaryAccount;
@@ -205,6 +207,12 @@ public class Customer
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 }
