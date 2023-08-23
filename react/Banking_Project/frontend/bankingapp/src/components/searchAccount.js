@@ -5,18 +5,17 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import CssBaseline from '@mui/material/CssBaseline';
 import Paper from '@mui/material/Paper';
 import axios from 'axios';
-import { useState, useEffect } from "react";
-import MenuItem from "@mui/material/MenuItem";
-import { Container, TextField, Grid, Typography, TablePagination } from '@mui/material';
+import { useState } from "react";
+import { Container, Grid, Typography, TablePagination } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Box from "@mui/material/Box";
 import AdminAppDrawer from "./AdminDrawer";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import InputBase from "@mui/material/InputBase";
+import Button from "@mui/material/Button";
 
 const defaultTheme = createTheme({
   palette: {
@@ -30,9 +29,12 @@ function createData(transactionType, senderAccountNo, receiverAccountNo, transac
 }
 
 export default function SearchAccount() {
+
+    const baseURLStatus = "http://localhost:9080/admin/updateAccountStatus/"
   const [transactions, setTransactions] = useState([]);
   const [selectedAccount, setSelectedAccount] = useState('');
   const [accountDetails, setAccountDetails] = useState({})
+  const [status,setStatus] = useState("");
   const [pg, setpg] = React.useState(0);
   const [rpg, setrpg] = React.useState(3);
   const [isClicked,setIsClicked] = useState(true);
@@ -53,6 +55,17 @@ export default function SearchAccount() {
     setrpg(parseInt(event.target.value, 10));
     setpg(0);
   }
+
+const handleActivation = ()=>{
+    axios.put(baseURLStatus+searchText+"/active").then((response)=>{alert(response.data); setStatus("active");}).catch((error)=>{console.error(error)});
+
+};
+
+const handleDeactivation = ()=>{
+    axios.put(baseURLStatus+searchText+"/disabled").then((response)=>{alert(response.data); setStatus("disabled");}).catch((error)=>{console.error(error)});
+
+};
+
   let rows = [];
 
   function handleSearch () {
@@ -72,7 +85,8 @@ export default function SearchAccount() {
     axios.get(baseURLDetails).then((response) => {
       if (typeof (response.data) == "string") {
       } else {
-        setAccountDetails(response.data[0])
+        setAccountDetails(response.data[0]);
+        setStatus(response.data[0].status);
       }
       setIsClicked(true);
       setSelectedAccount(searchText);
@@ -113,9 +127,12 @@ export default function SearchAccount() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          marginTop:"100px"
+          marginTop:"50px"
         }}>
-         
+            <div style={{marginBottom:"30px"}}>
+         {accountDetails.balance < 1000 && <Button variant="contained" onClick={handleDeactivation}>Disable</Button>}
+         {accountDetails.balance >= 1000 && status === "disbled" && <Button variant="contained" onClick={handleActivation}>Activate</Button>}
+         </div>
           <Grid sx={{ marginBottom: 2 }} container spacing={2}>
             <Grid item sm={4}>
               <Paper elevation={3} sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
@@ -163,7 +180,7 @@ export default function SearchAccount() {
                               {row.transactionType}
                             </TableCell>
                             <TableCell align="right">{row.senderAccountNo}</TableCell>
-                            <TableCell align="right">{row.receiverAccountNo}</TableCell>
+                            <TableCell align="right">{row.transactionType === "withdraw"?"...............":row.receiverAccountNo}</TableCell>
                             <TableCell align="right">{row.transactionAmount}</TableCell>
                             <TableCell align="right">{row.transactionDate}</TableCell>
                             <TableCell align="right">{row.type}</TableCell>

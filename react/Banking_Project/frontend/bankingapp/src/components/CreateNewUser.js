@@ -70,10 +70,30 @@ export default function CreateNewUser() {
   function validateForm() {
     if(details.password.length < 8){
       alert("Password must be atleast 8 characters long");
+      setDetails((prev) => {
+        return { ...prev, ["password"]: "" ,["confirmPassword"]: ""};
+      });
       return false;
     }
     if (details.password != details.confirmPassword) {
       alert("Password does not match!");
+      setDetails((prev) => {
+        return { ...prev, ["confirmPassword"]: ""};
+      });
+      return false;
+    }
+    if(details.phoneNumber.length != 10){
+      alert("Phone Number must be 10 digits long");
+      setDetails((prev) => {
+        return { ...prev, ["phoneNumber"]: ""};
+      });
+      return false;
+    }
+    if(details.aadhar.length != 12){
+      alert("Aadhar Number must be 12 digits long");
+      setDetails((prev) => {
+        return { ...prev, ["aadhar"]: ""};
+      });
       return false;
     }
     return true;
@@ -222,6 +242,7 @@ export default function CreateNewUser() {
                   fullWidth
                   id="email"
                   label="Email Address"
+                  type="email"
                   name="email"
                   autoComplete="email"
                   onChange={handleDetails}
@@ -244,6 +265,8 @@ export default function CreateNewUser() {
                 <TextField
                   required
                   fullWidth
+                  inputProps={{maxLength:12}}
+                  type="number"
                   name="aadhar"
                   label="Aadhar Card"
                   id="aadhar"
@@ -255,9 +278,11 @@ export default function CreateNewUser() {
                 <TextField
                   required
                   fullWidth
+                  inputProps={{maxLength:10}}
                   name="phoneNumber"
                   label="Contact Number"
                   id="phoneNumber"
+                  type="number"
                   onChange={handleDetails}
                   value={details.phoneNumber}
                 />

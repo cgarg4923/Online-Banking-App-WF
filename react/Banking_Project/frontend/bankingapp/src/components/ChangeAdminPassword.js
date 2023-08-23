@@ -37,10 +37,25 @@ export default function ChangeAdminPassword() {
   };
 
 
+  function validateForm(){
+    if(adminPassword.length < 8){
+      alert("Password must be atleast 8 characters long");
+      setAdminPassword("");
+      setConfirmAdminPassword("");
+      return false;
+    }
+    if (adminPassword != confirmAdminPassword) {
+      alert("Password does not match!");
+      setConfirmAdminPassword("");
+      return false;
+    }
+    return true;
+  }
   
 
   const handleSubmit= (e) =>{
     e.preventDefault();
+    if(!validateForm()) return;
     axios
       .put(baseURL+adminId+"/"+adminPassword)
       .then((response) => {

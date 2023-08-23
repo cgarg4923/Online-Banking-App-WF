@@ -24,6 +24,7 @@ const defaultTheme = createTheme({
 });
 
 export default function Login() {
+  
   const baseURL = "http://localhost:9080/customer/validateCustomerData";
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -31,6 +32,7 @@ export default function Login() {
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
   const navigate = useNavigate();
+
 
   function validateForm() {
     if (name.length == 0) {
@@ -55,15 +57,15 @@ export default function Login() {
       })
       .then(function (response) {
         alert(response.data);
-        if(response.data === "LOGGED IN SUCCESSFULLY !!"){
-        var item = {
-          customerId: name,
-          password: password,
-        };
-        window.sessionStorage.setItem("userCredentials", JSON.stringify(item));
-        navigate("/Dashboard");
-      }
-      else return;
+        if (response.data === "LOGGED IN SUCCESSFULLY !!") {
+          var item = {
+            customerId: name,
+            password: password,
+          };
+          window.sessionStorage.setItem("userCredentials", JSON.stringify(item));
+          navigate("/Dashboard");
+        }
+        else return;
       });
   };
 

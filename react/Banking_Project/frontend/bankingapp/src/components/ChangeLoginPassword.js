@@ -17,7 +17,7 @@ const defaultTheme = createTheme({
 });
 
 export default function ChangeLoginPassword() {
-  //const [isFormInvalid, setIsFormInvalid] = useState(false);
+  
   const [loginPassword, setLoginPassword] = useState("");
   const [confirmLoginPassword, setConfirmLoginPassword] = useState("");
   const [customerId,setCustomerId] = useState("");
@@ -32,18 +32,32 @@ export default function ChangeLoginPassword() {
     setLoginPassword(e.target.value);
   };
 
-
+  function validateForm(){
+    if(loginPassword.length < 8){
+      alert("Password must be atleast 8 characters long");
+      setLoginPassword("");
+      setConfirmLoginPassword("");
+      return false;
+    }
+    if (loginPassword != confirmLoginPassword) {
+      alert("Password does not match!");
+      setConfirmLoginPassword("");
+      return false;
+    }
+    return true;
+  }
   
 
   const handleSubmit= (e) =>{
     e.preventDefault();
+    if(!validateForm()) return;
     var data = JSON.parse(window.sessionStorage.getItem("userCredentials"));
     setCustomerId(data["customerId"]);
     baseURL = baseURL+data["customerId"]+"/"+loginPassword;
     axios
       .put(baseURL)
       .then((response) => {
-        alert("Password Changed Successfully");
+        alert(response.data);
       })
       .catch((e) => {
         console.error(e);

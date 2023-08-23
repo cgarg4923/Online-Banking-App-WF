@@ -99,7 +99,7 @@ const FundTransferComponent = () => {
       transactionDate: transactionTime,
       transactionType: paymentMode,
       transactionAmount: parseFloat(amount)
-    }).then((res) => { alert("success"+selectedBeneficiaryAccount); console.log(res); }).catch((error) => { console.error(error) });
+    }).then((response) => { alert(response.data);}).catch((error) => { console.error(error) });
   };
 
   return (

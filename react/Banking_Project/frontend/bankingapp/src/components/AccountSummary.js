@@ -154,7 +154,7 @@ export default function AccountSummary() {
                               {row.transactionType}
                             </TableCell>
                             <TableCell align="right">{row.senderAccountNo}</TableCell>
-                            <TableCell align="right">{row.receiverAccountNo}</TableCell>
+                            <TableCell align="right">{row.transactionType === "withdraw"?"...............":row.receiverAccountNo}</TableCell>
                             <TableCell align="right">{row.transactionAmount}</TableCell>
                             <TableCell align="right">{row.transactionDate}</TableCell>
                             <TableCell align="right">{row.type}</TableCell>

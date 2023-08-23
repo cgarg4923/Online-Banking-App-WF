@@ -55,16 +55,32 @@ export default function ChangeTxnPassword() {
 
   const handleSubmit=(e)=> {
     e.preventDefault();
+    if(!validateForm()) return;
     const baseURL =
       "http://localhost:9080/account/updatePassword/" + selectedAccount+"/"+txnPassword;
     axios
       .put(baseURL)
       .then((response) => {
-        alert("Password Changed Successfully");
+        alert(response.data);
       })
       .catch((e) => {
         console.error(e);
       });
+  }
+
+  function validateForm(){
+    if(txnPassword.length < 8){
+      alert("Password must be atleast 8 characters long");
+      setTxnPassword("");
+      setConfirmTxnPassword("");
+      return false;
+    }
+    if (txnPassword != confirmTxnPassword) {
+      alert("Password does not match!");
+      setConfirmTxnPassword("");
+      return false;
+    }
+    return true;
   }
 
   return (

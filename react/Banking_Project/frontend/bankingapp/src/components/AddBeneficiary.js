@@ -46,8 +46,7 @@ const AddBeneficiary = () => {
     };
     axios.post(baseURL,{
       accountNo:accountNumber
-    }).then((response)=>{alert("success"); console.log(response.data)}).catch((e)=>{console.error(e)});
-    console.log("Beneficiary Information:", beneficiaryInfo);
+    }).then((response)=>{alert(response.data);}).catch((e)=>{console.error(e)});
   };
 
   return (<ThemeProvider theme={defaultTheme}>

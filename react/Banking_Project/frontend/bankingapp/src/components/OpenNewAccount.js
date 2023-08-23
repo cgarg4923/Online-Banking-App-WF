@@ -78,6 +78,7 @@ export default function OpenNewAccount() {
           accountNo: pno,
           accountType: accountType,
           balance: accountBalance,
+          status: "active"
         })
         .then((e) => {
           alert("Successful!\nAccount Number: " + pno);
