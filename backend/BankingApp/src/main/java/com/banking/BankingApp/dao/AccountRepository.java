@@ -39,4 +39,9 @@ public interface AccountRepository extends JpaRepository<Account,String> {
     @Transactional 
 	@Query("update Account acc set acc.transactionPassword=?2 where acc.accountNo=?1 ")
     public int updatePassword(String accNo, String pass);
+
+	@Modifying
+    @Transactional 
+	@Query("update Account acc set acc.status=?2 where acc.accountNo=?1 ")
+    public int updateAccountStatus(String accNo, String status);
 }

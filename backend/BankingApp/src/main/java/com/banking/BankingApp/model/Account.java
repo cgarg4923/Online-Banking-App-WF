@@ -44,6 +44,9 @@ public class Account {
 	@Length(min=8, max=16, message = "Password Length must be between 8 and 16 characters")
 	@Column(name="password",length=20)
 	private String transactionPassword;
+
+	@Column(name="status")
+	private String status;
 	
 	public String getTransactionPassword() {
 		return transactionPassword;
@@ -80,6 +83,12 @@ public class Account {
 	}
 	public void setBalance(Float balance) {
 		this.balance = balance;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 }

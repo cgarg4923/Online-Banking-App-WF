@@ -60,6 +60,13 @@ public class AdminController {
 		return result;
 	}
 
+	@PutMapping("/updateAccountStatus/{accountNo}/{status}")
+	public String updateAccountStatus(@PathVariable("accountNo") String accNo,@PathVariable("status") String status)
+	{
+		String result = adminService.updateAccountStatus(accNo,status);
+		return result;
+	}
+
 	@PutMapping("/updatePassword/{adminId}/{password}")
 	public String updatePassword(@PathVariable("adminId") String adminId,@PathVariable("password") String pass)
 	{

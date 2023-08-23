@@ -33,6 +33,9 @@ public class AdminService {
     @Autowired
     CustomerRepository custRepo;
 
+    @Autowired 
+    AccountRepository accRepo;
+
     public Admin saveAdmin(Admin adm) {
 		Admin obj = adminRepo.save(adm);
 		return obj;
@@ -116,6 +119,29 @@ public class AdminService {
 					res="Try again to change password";
 				}
 			}
+		}
+		return res;
+	}
+
+    public String updateAccountStatus(String accNo, String status) {
+		String res="";
+		Account acc = accRepo.findById(accNo).get();
+		if(acc==null)
+		{
+			res="Account doesn't exist";
+		}
+		else
+		{
+			if(status.equals("disabled"))
+			{
+				res="Account disabled";
+			}
+			else
+			{
+                res="Account activated";
+			}
+            acc.setStatus(status);
+			int rowsAffected = accRepo.updateAccountStatus(accNo,status);
 		}
 		return res;
 	}

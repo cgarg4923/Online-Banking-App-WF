@@ -1,5 +1,6 @@
 package com.banking.BankingApp.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.banking.BankingApp.dao.AccountRepository;
+import com.banking.BankingApp.model.Account;
 import com.banking.BankingApp.model.Customer;
 import com.banking.BankingApp.model.LoginModel;
 import com.banking.BankingApp.model.WithdrawTransactionModel;
@@ -25,6 +28,9 @@ public class CustomerController {
 	
 	@Autowired
 	CustomerService custService;
+
+	@Autowired
+	AccountRepository accRepo;
 	
 	@PostMapping("/saveCustomerData")
 	public Customer saveCustomerData(@RequestBody Customer cust)
@@ -44,7 +50,17 @@ public class CustomerController {
 	public List<String> fetchAccounts(@PathVariable("customerId") String custId)
 	{
 		List<String> accountList = custService.fetchAccounts(custId);
-		return accountList;
+		List<String> accList= new ArrayList<>();
+		for(String str:accountList)
+		{
+			Account acc=accRepo.findById(str).get();
+			String status=acc.getStatus(); 
+			if(status.equals("active"))
+			{
+				accList.add(str);
+			}
+		}
+		return accList;
 	}
 
 	@PutMapping("/withdraw")
