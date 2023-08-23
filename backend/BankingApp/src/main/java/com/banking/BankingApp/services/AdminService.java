@@ -30,6 +30,9 @@ public class AdminService {
     @Autowired 
     TransactionRepository transRepo;
 
+    @Autowired
+    CustomerRepository custRepo;
+
     public Admin saveAdmin(Admin adm) {
 		Admin obj = adminRepo.save(adm);
 		return obj;
@@ -64,4 +67,26 @@ public class AdminService {
 		return transRepo.fetchAccountStatement(accNo);
 	}
 
+    public String updateStatus(String custId, String status) {
+		String res="";
+		Customer cust = custRepo.findById(custId).get();
+		if(cust==null)
+		{
+			res="Customer doesn't exist";
+		}
+		else
+		{
+			if(status.equals("disabled"))
+			{
+				res="Customer disabled";
+			}
+			else
+			{
+                res="Customer activated";
+			}
+            cust.setStatus(status);
+			int rowsAffected = custRepo.updateStatus(custId,status);
+		}
+		return res;
+	}
 }

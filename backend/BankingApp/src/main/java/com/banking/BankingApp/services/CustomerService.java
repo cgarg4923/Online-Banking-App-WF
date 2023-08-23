@@ -52,9 +52,9 @@ public class CustomerService {
 			result = "NO CUSTOMER FOUND WITH GIVEN CUSTOMERID " + "\n" + " PLEASE ENTER VALID CREDENTIALS !!!";
 		} 
 		else {
-			if(cust.getStatus()=="disabled")
+			if(cust.getStatus().equals("disabled"))
 			{
-				result="Login not allowed "+"\n"+"Please contact admin";
+				result="Account disabled login not allowed "+"\n"+"Please contact admin";
 			}
 			else{
 				if (checkCust.getPassword().equals(cust.getPassword())) {

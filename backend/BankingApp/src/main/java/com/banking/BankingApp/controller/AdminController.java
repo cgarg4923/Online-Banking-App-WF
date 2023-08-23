@@ -52,4 +52,12 @@ public class AdminController {
 	{
 		return adminService.fetchAccountStatement(accNo);
 	}
+
+	@PutMapping("/updateStatus/{customerId}/{status}")
+	public String updateStatus(@PathVariable("customerId") String custId,@PathVariable("status") String status)
+	{
+		String result = adminService.updateStatus(custId,status);
+		return result;
+	}
+
 }
