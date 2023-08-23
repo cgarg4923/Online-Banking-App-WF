@@ -89,4 +89,34 @@ public class AdminService {
 		}
 		return res;
 	}
+
+    public String updatePassword(String adminId, String pass) {
+		String res="";
+		Admin adm = adminRepo.findById(adminId).get();
+		if(adm==null)
+		{
+			res="Admin doesn't exist";
+		}
+		else
+		{
+			if(adm.getPassword()==pass)
+			{
+				res="Password matches with old password";
+			}
+			else
+			{
+				adm.setPassword(pass);
+				int rowsAffected = adminRepo.updatePassword(adminId,pass);
+				if(rowsAffected>0)
+				{
+					res="Passsword updated Succewssfully";
+				}
+				else
+				{
+					res="Try again to change password";
+				}
+			}
+		}
+		return res;
+	}
 }

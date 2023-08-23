@@ -15,5 +15,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AdminRepository extends JpaRepository<Admin,String> {
-    
+    @Modifying
+    @Transactional 
+	@Query("update Admin adm set adm.password=?2 where adm.adminId=?1 ")
+    public int updatePassword(String admId, String pass);
 }
