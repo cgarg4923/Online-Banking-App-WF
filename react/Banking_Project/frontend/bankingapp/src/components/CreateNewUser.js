@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -13,6 +13,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Alert, Snackbar } from "@mui/material";
 
 const defaultTheme = createTheme({
   palette: {
@@ -24,6 +25,11 @@ const defaultTheme = createTheme({
 
 export default function CreateNewUser() {
   const [checked, setChecked] = useState(false);
+  const [age, setAge] = useState(0);
+  const [errorOpen, setErrorOpen] = useState(false);
+  const [successOpen, setSuccessOpen] = useState(false);
+  const [successMessage, setSuccessMessage]=useState("Success")
+  const [errorMessage,setErrorMessage]=useState("Error");
   const navigate = useNavigate();
   const baseURL = "http://localhost:9080/customer/saveCustomerData";
 
@@ -50,8 +56,20 @@ export default function CreateNewUser() {
     aadhar: "",
     grossAnnualIncome: 0,
     sourceOfIncome: "",
-    occupationType: ""
+    occupationType: "",
   });
+
+  const handleErrorClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setErrorOpen(false);
+  };
+
+  const handleSuccessClose = (event, reason) => {
+    navigate("/Dashboard");
+  };
 
   function handleDetails(e) {
     const { name, value } = e.target;
@@ -67,33 +85,29 @@ export default function CreateNewUser() {
     return new Date(parts[0], parts[1] - 1, parts[2]);
   }
 
+  useEffect(() => {
+    var parts = details.dateOfBirth.split("-");
+    var today = new Date();
+    var birthDate = new Date(parts[0], parts[1] - 1, parts[2]);
+    var age_now = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age_now--;
+    }
+    setAge(parseInt(age_now));
+  }, [details.dateOfBirth]);
+
   function validateForm() {
-    if(details.password.length < 8){
-      alert("Password must be atleast 8 characters long");
-      setDetails((prev) => {
-        return { ...prev, ["password"]: "" ,["confirmPassword"]: ""};
-      });
-      return false;
-    }
     if (details.password != details.confirmPassword) {
-      alert("Password does not match!");
-      setDetails((prev) => {
-        return { ...prev, ["confirmPassword"]: ""};
-      });
+      setErrorMessage("Please Fill in the Forms Details Correctly")
+      setErrorOpen(true);
+      document.getElementById("confirmPassword").focus();
       return false;
     }
-    if(details.phoneNumber.length != 10){
-      alert("Phone Number must be 10 digits long");
-      setDetails((prev) => {
-        return { ...prev, ["phoneNumber"]: ""};
-      });
-      return false;
-    }
-    if(details.aadhar.length != 12){
-      alert("Aadhar Number must be 12 digits long");
-      setDetails((prev) => {
-        return { ...prev, ["aadhar"]: ""};
-      });
+    if (age < 18) {
+      setErrorMessage("Please Fill in the Forms Details Correctly")
+      setErrorOpen(true);
+      document.getElementById("dateOfBirth").focus();
       return false;
     }
     return true;
@@ -101,7 +115,9 @@ export default function CreateNewUser() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if(!validateForm()){return;}
+    if (!validateForm()) {
+      return;
+    }
     var cid = details.phoneNumber + "";
     cid = "U" + cid.split("").reverse().join("");
     console.log(details);
@@ -113,7 +129,7 @@ export default function CreateNewUser() {
         lastName: details.lastName,
         emailId: details.email,
         phoneNumber: details.phoneNumber,
-        aadharNumber:details.aadhar,
+        aadharNumber: details.aadhar,
         fatherName: details.fatherName,
         dateOfBirth: getDateOfBirth(details.dateOfBirth),
         password: details.password,
@@ -133,15 +149,13 @@ export default function CreateNewUser() {
             addressLine2: checked
               ? details.permanantAddressLine2
               : details.currentAddressLine2,
-            state: checked
-              ? details.permanantState
-              : details.currentState,
+            state: checked ? details.permanantState : details.currentState,
             city: checked ? details.permanantCity : details.currentCity,
             pincode: checked
               ? details.permanantPincode
               : details.currentPincode,
             addressType: "permenant",
-          }
+          },
         ],
         grossAnnualIncome: parseFloat(details.grossAnnualIncome),
         sourceOfIncome: details.sourceOfIncome,
@@ -149,13 +163,13 @@ export default function CreateNewUser() {
         status:"active"
       })
       .then((response) => {
-        alert("Bank Account Added\n" + "Customer ID: " + cid);
+        // alert("Bank Account Added\n" + "Customer ID: " + cid);
         var item = {
           customerId: cid,
-          phoneNumber: details.phoneNumber,
         };
         window.sessionStorage.setItem("userCredentials", JSON.stringify(item));
-        navigate("/Dashboard");
+        setSuccessMessage("Bank Account Added with" + "Customer ID: " + cid)
+        setSuccessOpen(true);
       });
   };
 
@@ -183,11 +197,7 @@ export default function CreateNewUser() {
           <div>
             <b>Personal Details</b>
           </div>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            sx={{ mt: 3 }}
-          >
+          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -235,6 +245,12 @@ export default function CreateNewUser() {
                   InputLabelProps={{ shrink: true }}
                   onChange={handleDetails}
                   value={details.dateOfBirth}
+                  error={age < 18}
+                  helperText={
+                    age < 18
+                      ? "You must be atleast 18 years old to Register As User"
+                      : ""
+                  }
                 />
               </Grid>
               <Grid item xs={12}>
@@ -265,26 +281,45 @@ export default function CreateNewUser() {
                 <TextField
                   required
                   fullWidth
-                  inputProps={{maxLength:12}}
-                  type="number"
                   name="aadhar"
                   label="Aadhar Card"
                   id="aadhar"
                   onChange={handleDetails}
                   value={details.aadhar}
+                  helperText={
+                    details.aadhar.length != 12
+                      ? "Aadhar Number Should Be 12 Digits Long"
+                      : /^[0-9]{12}$/.test(details.aadhar)
+                      ? ""
+                      : "Aadhar Number Should Only Contain Numeric Characters"
+                  }
+                  inputProps={{
+                    pattern: "[0-9]{12}",
+                    title: "Enter a Valid Aadhar Number",
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  inputProps={{maxLength:10}}
                   name="phoneNumber"
                   label="Contact Number"
                   id="phoneNumber"
                   type="number"
                   onChange={handleDetails}
                   value={details.phoneNumber}
+                  helperText={
+                    details.phoneNumber.length != 10
+                      ? "Phone Number Should Be 10 Digits Long"
+                      : /^[0-9]{10}$/.test(details.phoneNumber)
+                      ? ""
+                      : "Phone Number Should Only Contain Numeric Characters"
+                  }
+                  inputProps={{
+                    pattern: "[0-9]{10}",
+                    title: "Enter a Valid Phone Number",
+                  }}
                 />
               </Grid>
 
@@ -302,6 +337,20 @@ export default function CreateNewUser() {
                   id="password"
                   onChange={handleDetails}
                   value={details.password}
+                  helperText={
+                    (details.password.length < 8) |
+                    (details.password.length > 16)
+                      ? "Password must be between 8-16 characters and \nMust contain at least one  number and one uppercase and lowercase letter"
+                      : /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$/.test(
+                          details.password
+                        )
+                      ? ""
+                      : "Password Must contain at least one  number and one uppercase and lowercase letter"
+                  }
+                  inputProps={{
+                    pattern: "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,16}",
+                    title: "Enter a Valid Password",
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -314,6 +363,12 @@ export default function CreateNewUser() {
                   id="confirmPassword"
                   onChange={handleDetails}
                   value={details.confirmPassword}
+                  error={details.confirmPassword != details.password}
+                  helperText={
+                    details.confirmPassword != details.password
+                      ? "Passwords Don't Match"
+                      : ""
+                  }
                 />
               </Grid>
               <Grid item xs={12}>
@@ -507,6 +562,24 @@ export default function CreateNewUser() {
                 </Link>
               </Grid>
             </Grid>
+            <Snackbar anchorOrigin={{vertical:"top",horizontal:"right"}} open={errorOpen} autoHideDuration={6000} onClose={handleErrorClose}>
+              <Alert
+                onClose={handleErrorClose}
+                severity="error"
+                sx={{ width: "100%" }}
+              >
+                {errorMessage}
+              </Alert>
+            </Snackbar>
+            <Snackbar anchorOrigin={{vertical:"top",horizontal:"right"}} open={successOpen} onClose={handleSuccessClose}>
+              <Alert
+                onClose={handleSuccessClose}
+                severity="success"
+                sx={{ width: "100%" }}
+              >
+                {successMessage+". Close to Redirect."}
+              </Alert>
+            </Snackbar>
           </Box>
         </Box>
       </Container>

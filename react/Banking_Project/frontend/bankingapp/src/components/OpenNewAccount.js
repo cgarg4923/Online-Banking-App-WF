@@ -17,6 +17,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Link from "@mui/material/Link";
 import MenuItem from "@mui/material/MenuItem";
 import { useNavigate } from "react-router-dom";
+import { Alert, Snackbar } from "@mui/material";
 
 const defaultTheme = createTheme({
   palette: {
@@ -28,16 +29,30 @@ const defaultTheme = createTheme({
 
 export default function OpenNewAccount() {
   const [accountType, setAccountType] = useState("Savings");
-
   const [details,setDetails] = useState({
-    phoneNumber:"",
     customerId:""
   });
+  const [errorOpen, setErrorOpen] = useState(false);
+  const [successOpen, setSuccessOpen] = useState(false);
+  const [successMessage, setSuccessMessage]=useState("Success")
+  const [errorMessage,setErrorMessage]=useState("Error");
+
+  const handleErrorClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setErrorOpen(false);
+  };
+
+  const handleSuccessClose = (event, reason) => {
+    navigate("/Dashboard");
+  };
 
   useEffect(() => {
     console.log("executed");
     var data = JSON.parse(window.sessionStorage.getItem("userCredentials"));
-    setDetails({...details,phoneNumber:data["phoneNumber"], customerId: data["customerId"]});
+    setDetails({...details, customerId: data["customerId"]});
   }, []);
   const baseURL =
     "http://localhost:9080/account/saveAccountData/" + details.customerId;
@@ -51,10 +66,14 @@ export default function OpenNewAccount() {
 
   function generateAccountNumber() {
     return (
-      details.phoneNumber +
+      details.customerId.split("").reverse().join("").substring(0,details.customerId.length-1) +
       Math.floor(1000 + Math.random() * 9000).toString() +
       typeOfAccount(accountType)
     ).toString();
+    //   details.phoneNumber +
+    //   Math.floor(1000 + Math.random() * 9000).toString() +
+    //   typeOfAccount(accountType)
+    // ).toString();
   }
 
   function typeOfAccount(value) {
@@ -80,9 +99,16 @@ export default function OpenNewAccount() {
           balance: accountBalance,
           status: "active"
         })
-        .then((e) => {
-          alert("Successful!\nAccount Number: " + pno);
-          navigate("/Dashboard");
+        .then((response) => {
+          if (response.data==="Account created Successfully!") {
+            setSuccessMessage("Successful! Account Number: " + pno)
+            setSuccessOpen(true);
+          } else {
+            setErrorMessage(response.data)
+            setErrorOpen(true);
+          }
+          // alert("Successful!\nAccount Number: " + pno);
+          // navigate("/Dashboard");
         })
         .catch((e) => console.error(e));
     }
@@ -172,6 +198,24 @@ export default function OpenNewAccount() {
                 </Link>
               </Grid>
             </Grid>
+            <Snackbar anchorOrigin={{vertical:"top",horizontal:"right"}} open={errorOpen} autoHideDuration={6000} onClose={handleErrorClose}>
+              <Alert
+                onClose={handleErrorClose}
+                severity="error"
+                sx={{ width: "100%" }}
+              >
+                {errorMessage}
+              </Alert>
+            </Snackbar>
+            <Snackbar anchorOrigin={{vertical:"top",horizontal:"right"}} open={successOpen} onClose={handleSuccessClose}>
+              <Alert
+                onClose={handleSuccessClose}
+                severity="success"
+                sx={{ width: "100%" }}
+              >
+                {successMessage+". Close to Redirect."}
+              </Alert>
+            </Snackbar>
           </Box>
         </Box>
       </Container>

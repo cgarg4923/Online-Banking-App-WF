@@ -100,6 +100,19 @@ public class CustomerService {
 		{
 			res = "Transaction Successful  !!!\nNOTICE : Your balance is dropped below the Minimum Account Balance limit !";
 			int rowsAffected = accRepo.updateBalance(accNo, transInstance.getTransactionAmount());
+			if(rowsAffected>0)
+			{
+				String result = "";
+			
+				Transaction transobj = new Transaction();
+				transobj.setAmount(transInstance.getTransactionAmount());
+				transobj.setDestinationAccount(senderAcc);
+				transobj.setSourceAccount(senderAcc);
+				transobj.setTimeStamp(transInstance.getTransactionDate());
+				transobj.setTransactionType(transInstance.getTransactionType());
+
+				Transaction obj = transRepo.save(transobj);
+			}
 		}
 		else 
 		{

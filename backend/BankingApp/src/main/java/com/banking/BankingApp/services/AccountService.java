@@ -77,9 +77,23 @@ public class AccountService {
 		} 
 		else if (balance - transInstance.getTransactionAmount() < 1000)
 		{
-			res = "Transaction Successful  !!!\nNOTICE : Your balance is dropped below the Minimum Account Balance limit !";
+			
 			int rowsAffected = accRepo.updateSenderBalance(senderAccNo, transInstance.getTransactionAmount());
 			int row_sAffected = accRepo.updateReceiverBalance(receiverAccNo, transInstance.getTransactionAmount());
+			if(rowsAffected>0 && row_sAffected>0)
+			{
+				String result = "";
+			
+				Transaction transobj = new Transaction();
+				transobj.setAmount(transInstance.getTransactionAmount());
+				transobj.setDestinationAccount(receiverAcc);
+				transobj.setSourceAccount(senderAcc);
+				transobj.setTimeStamp(transInstance.getTransactionDate());
+				transobj.setTransactionType(transInstance.getTransactionType());
+
+				Transaction obj = transRepo.save(transobj);
+			}
+			res = "Transaction Successful  !!!\nNOTICE : Your balance is dropped below the Minimum Account Balance limit !";
 		}
 		else 
 		{

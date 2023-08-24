@@ -7,6 +7,8 @@ import { Container, Grid, TextField, Typography } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import AppDrawer from "./Drawer";
 import axios from "axios";
+import { Alert, Snackbar } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const defaultTheme = createTheme({
   palette: {
@@ -17,10 +19,30 @@ const defaultTheme = createTheme({
 });
 
 export default function ChangeLoginPassword() {
-  
+  //const [isFormInvalid, setIsFormInvalid] = useState(false);
   const [loginPassword, setLoginPassword] = useState("");
   const [confirmLoginPassword, setConfirmLoginPassword] = useState("");
   const [customerId,setCustomerId] = useState("");
+  const [errorOpen, setErrorOpen] = useState(false);
+  const [successOpen, setSuccessOpen] = useState(false);
+  const [successMessage, setSuccessMessage]=useState("Success")
+  const [errorMessage,setErrorMessage]=useState("Error");
+  const navigate = useNavigate();
+
+  const handleErrorClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setErrorOpen(false);
+  };
+
+  const handleSuccessClose = (event, reason) => {
+   
+
+    setSuccessOpen(false);
+    navigate("/Dashboard");
+  };
   var baseURL =
       "http://localhost:9080/customer/updatePassword/";
 
@@ -31,33 +53,35 @@ export default function ChangeLoginPassword() {
   const handleLoginPassword = (e) => {
     setLoginPassword(e.target.value);
   };
-
-  function validateForm(){
-    if(loginPassword.length < 8){
-      alert("Password must be atleast 8 characters long");
-      setLoginPassword("");
-      setConfirmLoginPassword("");
-      return false;
-    }
+  function validateForm() {
     if (loginPassword != confirmLoginPassword) {
-      alert("Password does not match!");
-      setConfirmLoginPassword("");
+      setErrorMessage("Please Fill in the Forms Details Correctly")
+      setErrorOpen(true);
+      document.getElementById("confirmPassword").focus();
       return false;
     }
     return true;
   }
   
-
   const handleSubmit= (e) =>{
     e.preventDefault();
-    if(!validateForm()) return;
+    if (!validateForm()) {
+      return;
+    }
     var data = JSON.parse(window.sessionStorage.getItem("userCredentials"));
     setCustomerId(data["customerId"]);
     baseURL = baseURL+data["customerId"]+"/"+loginPassword;
     axios
       .put(baseURL)
       .then((response) => {
-        alert(response.data);
+        if (response.data==="Passsword updated Succewssfully") {
+          setSuccessMessage(response.data)
+          setSuccessOpen(true);
+        } else {
+          setErrorMessage(response.data)
+          setErrorOpen(true);
+        }
+        // alert("Password Changed Successfully");
       })
       .catch((e) => {
         console.error(e);
@@ -78,17 +102,16 @@ export default function ChangeLoginPassword() {
           }}
         >
           <img
-            style={{ width: "150px" }}
+            style={{ width: "100px" }}
             src={
               "https://cdn-icons-png.flaticon.com/512/6357/6357048.png"
             }
           ></img>
           <Box
-           
-            sx={{ mt: 3, width: 500 }}
-           
+           component="form"
+           sx={{ mt: 3, width: 500 }}
+           onSubmit={handleSubmit}
           >
-            <form  onSubmit={handleSubmit}>
             <Typography
               component="h1"
               variant="h5"
@@ -110,7 +133,21 @@ export default function ChangeLoginPassword() {
                   onChange={handleLoginPassword}
                   value={loginPassword}
                   margin="normal"
-                  style={{ paddingLeft: "10px", paddingRight: "10px" }}
+                  helperText={
+                    (loginPassword.length < 8) |
+                    (loginPassword.length > 16)
+                      ? "Password must be between 8-16 characters and \nMust contain at least one  number and one uppercase and lowercase letter"
+                      : /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$/.test(
+                          loginPassword
+                        )
+                      ? ""
+                      : "Password Must contain at least one  number and one uppercase and lowercase letter"
+                  }
+                  inputProps={{
+                    pattern: "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,16}",
+                    title: "Enter a Valid Password",
+                  }}
+                  // style={{ paddingLeft: "10px", paddingRight: "10px" }}
                 ></TextField>
               </Grid>
             </Grid>
@@ -122,6 +159,7 @@ export default function ChangeLoginPassword() {
                   label="Confirm Login Password"
                   type="password"
                   placeholder="Confirm New Login Password"
+                  id="confirmPassword"
                   onChange={handleConfirmLoginPassword}
                   value={confirmLoginPassword}
                   margin="normal"
@@ -131,7 +169,7 @@ export default function ChangeLoginPassword() {
                       : ""
                   }
                   error={loginPassword != confirmLoginPassword}
-                  style={{ paddingLeft: "10px", paddingRight: "10px" }}
+                  // style={{ paddingLeft: "10px", paddingRight: "10px" }}
                 ></TextField>
               </Grid>
             </Grid>
@@ -148,7 +186,24 @@ export default function ChangeLoginPassword() {
                 </Button>
               </Grid>
             </Grid>
-            </form>
+            <Snackbar anchorOrigin={{vertical:"top",horizontal:"right"}} open={errorOpen} autoHideDuration={6000} onClose={handleErrorClose}>
+              <Alert
+                onClose={handleErrorClose}
+                severity="error"
+                sx={{ width: "100%" }}
+              >
+                {errorMessage}
+              </Alert>
+            </Snackbar>
+            <Snackbar anchorOrigin={{vertical:"top",horizontal:"right"}} open={successOpen} onClose={handleSuccessClose} autoHideDuration={6000}>
+              <Alert
+                onClose={handleSuccessClose}
+                severity="success"
+                sx={{ width: "100%" }}
+              >
+                {successMessage}
+              </Alert>
+            </Snackbar>
           </Box>
         </Box>
       </Container>

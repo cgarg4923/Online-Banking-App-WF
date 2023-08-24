@@ -14,6 +14,8 @@ import axios from "axios";
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import Grid from "@mui/material/Grid";
+import { useNavigate } from "react-router-dom";
+import { Alert, Snackbar } from "@mui/material";
 
 const defaultTheme = createTheme({
   palette: {
@@ -35,6 +37,26 @@ const FundTransferComponent = () => {
   const [beneficiaryAccounts, setBeneficiaryAccounts] = useState([]);
   const [selectedBeneficiaryAccount, setSelectedBeneficiaryAccount] =
     useState("");
+    const [errorOpen, setErrorOpen] = useState(false);
+    const [successOpen, setSuccessOpen] = useState(false);
+    const [warningOpen, setWarningOpen] = useState(false);
+    const [successMessage, setSuccessMessage]=useState("Success")
+    const [errorMessage,setErrorMessage]=useState("Error");
+    const [warningMessage,setWarningMessage]=useState("Warning");
+    const navigate = useNavigate();
+
+    const handleErrorClose = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+  
+      setErrorOpen(false);
+    };
+  
+    const handleSuccessClose = (event, reason) => {
+      navigate("/Dashboard");
+    };
+  
 
   useEffect(() => {
     var data = JSON.parse(window.sessionStorage.getItem("userCredentials"));
@@ -99,7 +121,21 @@ const FundTransferComponent = () => {
       transactionDate: transactionTime,
       transactionType: paymentMode,
       transactionAmount: parseFloat(amount)
-    }).then((response) => { alert(response.data);}).catch((error) => { console.error(error) });
+    }).then((response) => {
+      if (response.data==="Transaction successful  !!!") {
+        setSuccessMessage(response.data);
+        setSuccessOpen(true);
+      } else if(response.data==="Transaction Successful  !!!\nNOTICE : Your balance is dropped below the Minimum Account Balance limit !") {
+        setWarningMessage(response.data)
+        setWarningOpen(true);
+      } else {
+        setErrorMessage(response.data);
+        setErrorOpen(true);
+      }
+
+      // alert(response.data);
+    })
+    .catch((error) => { console.error(error) });
   };
 
   return (
@@ -207,6 +243,33 @@ const FundTransferComponent = () => {
                 Submit
               </Button>
             </form>
+            <Snackbar anchorOrigin={{vertical:"top",horizontal:"right"}} open={errorOpen} autoHideDuration={6000} onClose={handleErrorClose}>
+              <Alert
+                onClose={handleErrorClose}
+                severity="error"
+                sx={{ width: "100%" }}
+              >
+                {errorMessage}
+              </Alert>
+            </Snackbar>
+            <Snackbar anchorOrigin={{vertical:"top",horizontal:"right"}} open={successOpen} onClose={handleSuccessClose}>
+              <Alert
+                onClose={handleSuccessClose}
+                severity="success"
+                sx={{ width: "100%" }}
+              >
+                {successMessage+". Close to Redirect."}
+              </Alert>
+            </Snackbar>
+            <Snackbar anchorOrigin={{vertical:"top",horizontal:"right"}} open={warningOpen} onClose={handleSuccessClose}>
+              <Alert
+                onClose={handleSuccessClose}
+                severity="warning"
+                sx={{ width: "100%" }}
+              >
+                {warningMessage+". Close to Redirect."}
+              </Alert>
+            </Snackbar>
           </Box>
         </Paper>
       </Container>

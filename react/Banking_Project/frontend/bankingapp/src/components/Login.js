@@ -14,6 +14,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Alert, Snackbar } from "@mui/material";
 
 const defaultTheme = createTheme({
   palette: {
@@ -24,15 +25,17 @@ const defaultTheme = createTheme({
 });
 
 export default function Login() {
-  
   const baseURL = "http://localhost:9080/customer/validateCustomerData";
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [successOpen, setSuccessOpen] = useState(false);
+  const [errorOpen, setErrorOpen] = useState(false);
+  const [errorMessage,setErrorMessage]=useState("Error");
+  const [successMessage,setSuccessMessage]=useState("Success");
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
   const navigate = useNavigate();
-
 
   function validateForm() {
     if (name.length == 0) {
@@ -56,19 +59,33 @@ export default function Login() {
         password: password,
       })
       .then(function (response) {
-        alert(response.data);
-        if (response.data === "LOGGED IN SUCCESSFULLY !!") {
-          var item = {
-            customerId: name,
-            password: password,
-          };
-          window.sessionStorage.setItem("userCredentials", JSON.stringify(item));
-          navigate("/Dashboard");
+        //alert(response.data);
+        if (response.data==="LOGGED IN SUCCESSFULLY !!") {
+          setSuccessMessage(response.data)
+          setSuccessOpen(true);
+        } else {
+          setErrorMessage(response.data)
+          setErrorOpen(true);
         }
-        else return;
+        var item = {
+          customerId: name,
+          password: password,
+        };
+        window.sessionStorage.setItem("userCredentials", JSON.stringify(item));
+        // navigate("/Dashboard");
       });
   };
+  const handleErrorClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
 
+    setErrorOpen(false);
+  };
+
+  const handleSuccessClose = (event, reason) => {
+    navigate("/Dashboard");
+  };
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: "100vh" }}>
@@ -150,6 +167,24 @@ export default function Login() {
                   </Link>
                 </Grid>
               </Grid>
+              <Snackbar anchorOrigin={{vertical:"top",horizontal:"right"}} open={errorOpen} autoHideDuration={6000} onClose={handleErrorClose}>
+              <Alert
+                onClose={handleErrorClose}
+                severity="error"
+                sx={{ width: "100%" }}
+              >
+                {errorMessage}
+              </Alert>
+            </Snackbar>
+              <Snackbar anchorOrigin={{vertical:"top",horizontal:"right"}} open={successOpen} onClose={handleSuccessClose}>
+              <Alert
+                onClose={handleSuccessClose}
+                severity="success"
+                sx={{ width: "100%" }}
+              >
+                {successMessage+". Close to Redirect."}
+              </Alert>
+            </Snackbar>
             </Box>
           </Box>
         </Grid>

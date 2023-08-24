@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,7 +28,7 @@ public class Transaction {
 	private Account sourceAccount;
 
 	@ManyToOne
-	//@JsonBackReference
+	@JsonIgnore
 	private Account destinationAccount;
 
 	@Column(name="type",length=20)

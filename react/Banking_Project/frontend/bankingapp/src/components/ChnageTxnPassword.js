@@ -8,6 +8,7 @@ import AppDrawer from "./Drawer";
 import axios from "axios";
 import MenuItem from "@mui/material/MenuItem";
 import Box from "@mui/material/Box";
+import { useNavigate } from "react-router-dom";
 
 const defaultTheme = createTheme({
   palette: {
@@ -24,6 +25,7 @@ export default function ChangeTxnPassword() {
   const [accounts, setAccounts] = useState([]);
   const [selectedAccount, setSelectedAccount] = useState("");
   const [customerId,setCustomerId] = useState("");
+  const navigate = useNavigate();
 
   const handleConfirmTxnPassword = (e) => {
     setConfirmTxnPassword(e.target.value);
@@ -62,6 +64,13 @@ export default function ChangeTxnPassword() {
       .put(baseURL)
       .then((response) => {
         alert(response.data);
+        if(response.data === "Password updated Succewssfully"){
+          navigate("/Dashboard");
+        }
+        else{
+          setTxnPassword("");
+          setConfirmTxnPassword("");
+        }
       })
       .catch((e) => {
         console.error(e);
