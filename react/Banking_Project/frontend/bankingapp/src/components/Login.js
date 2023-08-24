@@ -33,8 +33,6 @@ export default function Login() {
   const [errorOpen, setErrorOpen] = useState(false);
   const [errorMessage,setErrorMessage]=useState("Error");
   const [successMessage,setSuccessMessage]=useState("Success");
-  const handleClickShowPassword = () => setShowPassword(!showPassword);
-  const handleMouseDownPassword = () => setShowPassword(!showPassword);
   const navigate = useNavigate();
 
   function validateForm() {
@@ -67,12 +65,6 @@ export default function Login() {
           setErrorMessage(response.data)
           setErrorOpen(true);
         }
-        var item = {
-          customerId: name,
-          password: password,
-        };
-        window.sessionStorage.setItem("userCredentials", JSON.stringify(item));
-        // navigate("/Dashboard");
       });
   };
   const handleErrorClose = (event, reason) => {
@@ -84,6 +76,15 @@ export default function Login() {
   };
 
   const handleSuccessClose = (event, reason) => {
+    var item = {
+      isLoggedIn:true,
+      role:"user"
+    };
+    window.sessionStorage.setItem("loginStatus",JSON.stringify(item));
+    item = {
+      customerId: name,
+    };
+    window.sessionStorage.setItem("userCredentials", JSON.stringify(item));
     navigate("/Dashboard");
   };
   return (
@@ -156,11 +157,6 @@ export default function Login() {
                 Login
               </Button>
               <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
                 <Grid item>
                   <Link href="/SignUp" variant="body2">
                     {"Don't have an account? Create One"}

@@ -68,6 +68,11 @@ export default function CreateNewUser() {
   };
 
   const handleSuccessClose = (event, reason) => {
+    var item = {
+      isLoggedIn:true,
+      role:"user"
+    };
+    window.sessionStorage.setItem("loginStatus",JSON.stringify(item));
     navigate("/Dashboard");
   };
 
@@ -163,14 +168,13 @@ export default function CreateNewUser() {
         status:"active"
       })
       .then((response) => {
-        // alert("Bank Account Added\n" + "Customer ID: " + cid);
         var item = {
           customerId: cid,
         };
         window.sessionStorage.setItem("userCredentials", JSON.stringify(item));
         setSuccessMessage("Bank Account Added with" + "Customer ID: " + cid)
         setSuccessOpen(true);
-      });
+      }).catch((error)=>{console.error(error)});
   };
 
   return (

@@ -18,6 +18,7 @@ import Link from "@mui/material/Link";
 import MenuItem from "@mui/material/MenuItem";
 import { useNavigate } from "react-router-dom";
 import { Alert, Snackbar } from "@mui/material";
+import AppDrawer from "./Drawer";
 
 const defaultTheme = createTheme({
   palette: {
@@ -115,19 +116,18 @@ export default function OpenNewAccount() {
   };
   return (
     <ThemeProvider theme={defaultTheme}>
+      <AppDrawer/>
       <Container component="main">
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 12,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
+          <img style={{width:"100px"}} src={"https://cdn0.iconfinder.com/data/icons/finance-and-banking-color/64/Finance_deposit_account-1024.png"}></img>
           <Box
             component="form"
             sx={{ mt: 3, width: 500 }}

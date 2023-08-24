@@ -7,29 +7,12 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
-// import "./wells.png"
 import mainLogo from "./wells.png";
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
 
-const cards = [1, 2];
-
-// TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme({
   palette: {
     primary: {
@@ -42,13 +25,30 @@ const defaultTheme = createTheme({
 });
 
 export default function HomePage() {
+
+  const onUserClick = ()=>{
+    var item = {
+      isLoggedIn:false,
+      role:"user"
+    };
+    window.sessionStorage.setItem("loginStatus",JSON.stringify(item));
+  };
+
+  const onAdminClick = ()=>{
+    var item = {
+      isLoggedIn:false,
+      role:"admin"
+    };
+    window.sessionStorage.setItem("loginStatus",JSON.stringify(item));
+  };
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
       <AppBar position="relative">
         <Toolbar style={{justifyContent:"space-between"}}>
           <img src={mainLogo} style={{ width: "70px", padding: "2px" }} />
-          <IconButton href="/AdminLogin" color="secondary">
+          <IconButton href="/AdminLogin" color="secondary" onClick={onAdminClick}>
           <AdminPanelSettingsIcon ></AdminPanelSettingsIcon>
           </IconButton>
         </Toolbar>
@@ -98,13 +98,14 @@ export default function HomePage() {
               spacing={2}
               justifyContent="center"
             >
-              <Button variant="contained" href="/SignUp">
+              <Button variant="contained" href="/SignUp" onClick={onUserClick}>
                 Create Profile
               </Button>
               <Button
                 variant="outlined"
                 style={{ padding: "10px" }}
                 href="/login"
+                onClick={onUserClick}
               >
                 Login
               </Button>
@@ -112,22 +113,6 @@ export default function HomePage() {
           </Container>
         </Box>
       </main>
-      {/* Footer */}
-      <Box sx={{ bgcolor: "background.paper", p: 6 }} component="footer">
-        <Typography variant="h6" align="center" gutterBottom>
-          Footer
-        </Typography>
-        <Typography
-          variant="subtitle1"
-          align="center"
-          color="text.secondary"
-          component="p"
-        >
-          Something here to give the footer a purpose!
-        </Typography>
-        <Copyright />
-      </Box>
-      {/* End footer */}
     </ThemeProvider>
   );
 }

@@ -8,7 +8,6 @@ import AccountStatement from './components/AccountStatement';
 import Dashboard from './components/Dashboard';
 import Withdraw from './components/Withdraw';
 import FundTransferComponent from './components/FundTransfer';
-import AccountStatementTest from './components/testfile';
 import UserProfile from './components/UserProfile';
 import NetBankingRegistration from './components/NetBanking';
 import ChangeLoginPassword from './components/ChangeLoginPassword';
@@ -21,6 +20,7 @@ import SearchCustomer from './components/SearchCustomer';
 import SearchAccount from './components/searchAccount';
 import AddUser from './components/AddUser';
 import ChangeAdminPassword from './components/ChangeAdminPassword';
+import Protected from './components/Protected';
 
 function App() {
   const router = createBrowserRouter([
@@ -30,79 +30,79 @@ function App() {
     },
     {
       path: "/login",
-      element: <Login />
+      element: <Protected Component={Login} />
     },
     {
       path: "/OpenNewAccount",
-      element: <OpenNewAccount />
+      element: <Protected Component={OpenNewAccount} />
     },
     {
       path:"/SignUp",
-      element:<CreateNewUser/>
+      element:<Protected Component={CreateNewUser}/>
     },
     {
       path:"/Dashboard",
-      element:<Dashboard/>
+      element:<Protected Component={Dashboard}/>
     },
     {
       path:"/Withdraw",
-      element:<Withdraw/>
+      element:<Protected Component={Withdraw}/>
     },
     {
       path:"/FundTransfer",
-      element:<FundTransferComponent/>
+      element:<Protected Component={FundTransferComponent}/>
     },
     {
       path:"AccountStatement",
-      element:<AccountStatement/>
+      element:<Protected Component={AccountStatement}/>
     },
     {
       path:"/profile",
-      element:<UserProfile/>
+      element:<Protected Component={UserProfile}/>
     },
     {
       path:"/NetBanking",
-      element:<NetBankingRegistration/>
+      element:<Protected Component={NetBankingRegistration}/>
     },
     {
       path:"/ChangeLoginPassword",
-      element:<ChangeLoginPassword/>
+      element:<Protected Component={ChangeLoginPassword}/>
     },
     {
       path:"/ChangeTransactionPassword",
-      element:<ChangeTxnPassword/>
+      element:<Protected Component={ChangeTxnPassword}/>
     },
     {
       path:"/AccountSummary",
-      element:<AccountSummary/>
+      element:<Protected Component={AccountSummary}/>
     },
     {
       path:"/AddBeneficiary",
-      element:<AddBeneficiary/>
+      element:<Protected Component={AddBeneficiary}/>
     },
     {
       path:"/AdminLogin",
-      element:<AdminLogin/>
+      element:<Protected Component={AdminLogin}/>
     },
     {
       path:"/AdminDashboard",
-      element:<AdminDashboard/>
+      element:<Protected Component={AdminDashboard}/>
     },
     {
       path:"/SearchCustomer",
-      element:<SearchCustomer/>
+      element:<Protected Component={SearchCustomer}/>
     },
     {
       path:"/SearchAccount",
-      element:<SearchAccount/>
+      element:<Protected Component={SearchAccount}/>
     },
     {
       path:"/AddUser",
-      element:<AddUser/>
+      element:<Protected Component={AddUser}/>
     },
     {
       path:"/ChangeAdminPassword",
-      element:<ChangeAdminPassword/>
+      element:<Protected Component={ChangeAdminPassword}/>
     }
   ]);
   return (
