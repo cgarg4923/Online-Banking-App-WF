@@ -1,5 +1,6 @@
 package com.banking.BankingApp.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,6 +11,8 @@ import com.banking.BankingApp.dao.AccountRepository;
 import com.banking.BankingApp.dao.BenificiaryRepository;
 import com.banking.BankingApp.dao.CustomerRepository;
 import com.banking.BankingApp.dao.TransactionRepository;
+import com.banking.BankingApp.exception.NoDataFoundException;
+import com.banking.BankingApp.exception.ResourceNotFoundException;
 import com.banking.BankingApp.model.Account;
 import com.banking.BankingApp.model.Customer;
 import com.banking.BankingApp.model.LoginModel;
@@ -38,18 +41,18 @@ public class CustomerService {
 		return obj;
 	}
 
-	public String validateCustomerCredentials(LoginModel checkCust) {
+	public String validateCustomerCredentials(LoginModel checkCust) throws ResourceNotFoundException {
 		String result = "";
-		Customer cust = null;
+		Customer cust = custRepo.findById(checkCust.getCustomerId()).orElse(null);
 
-		Optional<Customer> obj = custRepo.findById(checkCust.getCustomerId());
+		//Optional<Customer> obj = custRepo.findById(checkCust.getCustomerId());
 
-		if (obj.isPresent()) {
-			cust = obj.get();
-		}
+		// if (obj.isPresent()) {
+		// 	cust = obj.get();
+		// }
 
 		if (cust == null) {
-			result = "NO CUSTOMER FOUND WITH GIVEN CUSTOMERID " + "\n" + " PLEASE ENTER VALID CREDENTIALS !!!";
+			throw new  ResourceNotFoundException("Customer not found");
 		} 
 		else {
 			if(cust.getStatus().equals("disabled"))
@@ -163,6 +166,15 @@ public class CustomerService {
 			}
 		}
 		return res;
+	}
+
+	public List<Customer> fetchAllCustomers() throws NoDataFoundException{
+		List<Customer> custList=new ArrayList<>();
+		if(custList.size()==0)
+		{
+			throw new NoDataFoundException("No customer");
+		}
+		return custRepo.findAll();
 	}
 
 }

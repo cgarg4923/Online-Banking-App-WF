@@ -1,7 +1,7 @@
 package com.banking.BankingApp.model;
 
 import java.math.BigInteger;
-import java.sql.Date;
+import java.util.Date;
 import java.sql.Timestamp;
 import java.util.List;
 

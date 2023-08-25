@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.banking.BankingApp.dao.AccountRepository;
+import com.banking.BankingApp.exception.NoDataFoundException;
+import com.banking.BankingApp.exception.ResourceNotFoundException;
 import com.banking.BankingApp.model.Account;
 import com.banking.BankingApp.model.Customer;
 import com.banking.BankingApp.model.LoginModel;
@@ -40,10 +42,16 @@ public class CustomerController {
 	}
 	
 	@PostMapping("/validateCustomerData")
-	public String validateCustomerData(@RequestBody LoginModel checkCust)
+	public String validateCustomerData(@RequestBody LoginModel checkCust) throws ResourceNotFoundException
 	{
 		String output = custService.validateCustomerCredentials(checkCust);
 		return output;
+	}
+
+	@GetMapping("/fetchAllCustomers")
+	public List<Customer> fetchAllCustomers() throws NoDataFoundException
+	{
+		return custService.fetchAllCustomers();
 	}
 	
 	@GetMapping("/fetchCustomerAccounts/{customerId}")
