@@ -72,8 +72,23 @@ public class CustomerService {
 		return result;
 	}
 
-	public List<String> fetchAccounts(String custId) {
-		return accRepo.findByAccounts(custId);
+	public List<String> fetchAccounts(String custId) throws NoDataFoundException {
+		List<String> accountList=accRepo.findByAccounts(custId);
+		if(accountList.size()==0)
+		{
+			throw new NoDataFoundException("No accounts exist");
+		}
+		List<String> accList=new ArrayList<>();
+		for(String str:accountList)
+			{
+			  	Account acc=accRepo.findById(str).get();
+				String status=acc.getStatus(); 
+				if(status.equals("active"))
+				{
+					accList.add(str);
+				}
+			}
+		return accList;
 	}
 
 	
@@ -169,12 +184,12 @@ public class CustomerService {
 	}
 
 	public List<Customer> fetchAllCustomers() throws NoDataFoundException{
-		List<Customer> custList=new ArrayList<>();
+		List<Customer> custList=custRepo.findAll();
 		if(custList.size()==0)
 		{
-			throw new NoDataFoundException("No customer");
+			throw new NoDataFoundException("No customers exist");
 		}
-		return custRepo.findAll();
+		return  custList;
 	}
 
 }

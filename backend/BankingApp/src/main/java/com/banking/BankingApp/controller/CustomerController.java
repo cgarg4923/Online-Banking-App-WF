@@ -55,19 +55,9 @@ public class CustomerController {
 	}
 	
 	@GetMapping("/fetchCustomerAccounts/{customerId}")
-	public List<String> fetchAccounts(@PathVariable("customerId") String custId)
+	public List<String> fetchAccounts(@PathVariable("customerId") String custId) throws NoDataFoundException
 	{
-		List<String> accountList = custService.fetchAccounts(custId);
-		List<String> accList= new ArrayList<>();
-		for(String str:accountList)
-		{
-			Account acc=accRepo.findById(str).get();
-			String status=acc.getStatus(); 
-			if(status.equals("active"))
-			{
-				accList.add(str);
-			}
-		}
+		List<String> accList = custService.fetchAccounts(custId);
 		return accList;
 	}
 
