@@ -57,10 +57,10 @@ public class CustomerController {
 	}
 	
 	@GetMapping("/fetchCustomerAccounts/{customerId}")
-	public List<String> fetchAccounts(@PathVariable("customerId") String custId) throws ResourceNotFoundException
+	public List<String> fetchAccounts(@PathVariable("customerId") String custId) throws NoDataFoundException
 	{
-		List<String> accountList = custService.fetchAccounts(custId);
-		return accountList;
+		List<String> accList = custService.fetchAccounts(custId);
+		return accList;
 	}
 
 	@PutMapping("/withdraw")
