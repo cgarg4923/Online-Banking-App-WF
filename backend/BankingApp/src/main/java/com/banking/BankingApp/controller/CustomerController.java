@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.banking.BankingApp.dao.AccountRepository;
+import com.banking.BankingApp.exception.AlreadyExistsException;
+import com.banking.BankingApp.exception.NegativeTransactionAmountException;
 import com.banking.BankingApp.exception.NoDataFoundException;
 import com.banking.BankingApp.exception.ResourceNotFoundException;
 import com.banking.BankingApp.model.Account;
@@ -35,7 +37,7 @@ public class CustomerController {
 	AccountRepository accRepo;
 	
 	@PostMapping("/saveCustomerData")
-	public Customer saveCustomerData(@RequestBody Customer cust)
+	public Customer saveCustomerData(@RequestBody Customer cust) throws AlreadyExistsException
 	{
 		Customer c = custService.saveCustomer(cust);
 		return c;
@@ -55,24 +57,14 @@ public class CustomerController {
 	}
 	
 	@GetMapping("/fetchCustomerAccounts/{customerId}")
-	public List<String> fetchAccounts(@PathVariable("customerId") String custId)
+	public List<String> fetchAccounts(@PathVariable("customerId") String custId) throws ResourceNotFoundException
 	{
 		List<String> accountList = custService.fetchAccounts(custId);
-		List<String> accList= new ArrayList<>();
-		for(String str:accountList)
-		{
-			Account acc=accRepo.findById(str).get();
-			String status=acc.getStatus(); 
-			if(status.equals("active"))
-			{
-				accList.add(str);
-			}
-		}
-		return accList;
+		return accountList;
 	}
 
 	@PutMapping("/withdraw")
-	public String withdrawTransaction(@RequestBody WithdrawTransactionModel transInstance)
+	public String withdrawTransaction(@RequestBody WithdrawTransactionModel transInstance) throws NegativeTransactionAmountException
 	{
 		String result = custService.withdrawTransaction(transInstance);
 		return result;
@@ -85,14 +77,14 @@ public class CustomerController {
 		return result;
 	}
 
-	@GetMapping("/fetchCustomerProfile/{customerId}")
+	@GetMapping("/fetchCustomerProfile/{customerId}") 
 	public List<Customer> fetchProfileData(@PathVariable("customerId") String custId)
 	{
 		return custService.fetchProfileData(custId);
 	}
 	
-	@GetMapping("/fetchBenificiary/{customerId}")
-	public List<String> fetchBenificiary(@PathVariable("customerId") String custId)
+	@GetMapping("/fetchBenificiary/{customerId}") 
+	public List<String> fetchBenificiary(@PathVariable("customerId") String custId) throws ResourceNotFoundException
 	{
 		List<String> accountList = custService.fetchBenificiary(custId);
 		return accountList;

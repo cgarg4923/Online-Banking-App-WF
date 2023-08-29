@@ -26,16 +26,18 @@ import com.banking.BankingApp.dao.CustomerRepository;
 import com.banking.BankingApp.dao.TransactionRepository;
 import com.banking.BankingApp.model.Account;
 import com.banking.BankingApp.model.Address;
+import com.banking.BankingApp.model.Admin;
 import com.banking.BankingApp.model.Benificiary;
 import com.banking.BankingApp.model.Customer;
 import com.banking.BankingApp.services.CustomerService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 
 //@RunWith(SpringRunner.class)
 //@WebMvcTest
-public class CustomerControllerTest extends BankingAppApplicationTests{
+public class AdminControllerTest extends BankingAppApplicationTests{
   /*  @Autowired
     private MockMvc mvc;
     
@@ -85,39 +87,22 @@ public class CustomerControllerTest extends BankingAppApplicationTests{
 //    }
 
     @Test
-    public void testSaveCustomer() throws Exception{
-        Customer cust=new Customer();
-        List<Account> accList=new ArrayList<>();
-        List<Address> addList=new ArrayList<>();
-        Address add=new Address();
-        List<Benificiary> benList=new ArrayList<>();
-        Benificiary ben=new Benificiary();
-        Account acc=new Account();
-        accList.add(acc);
-        addList.add(add);
-        benList.add(ben);
-        cust.setCustomerId("123456");
-        cust.setPassword("admin1234");
-        cust.setAadharNumber("123456781234");
-        cust.setFatherName("Bk");
-        cust.setFirstName("raj");
-        cust.setEmailId("abc@gmail.com");
-        cust.setAddress(addList);
-        cust.setBenificiaryAccount(benList);
-        cust.setDateOfBirth(new Date());
-        cust.setAccountList(accList);
-        List<Customer> custList=new ArrayList<>();
-        custList.add(cust);
-        Mockito.when(custService.saveCustomer(ArgumentMatchers.any())).thenReturn(cust);
-        String json=mapper.writeValueAsString(cust);
-        MvcResult requestResult=mvc.perform(MockMvcRequestBuilders.post("/customer/saveCustomerData").contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8").content(json)
+    public void testSaveAdmin() throws Exception{
+    	Admin adm=new Admin();
+        adm.setAdminId("123456");
+        adm.setPassword("admin1234");
+        List<Admin> adminList=new ArrayList<>();
+        adminList.add(adm);
+        Mockito.when(adminService.saveAdmin(ArgumentMatchers.any())).thenReturn(adm);
+        String json=mapper.writeValueAsString(adm);
+        MvcResult requestResult=mvc.perform(MockMvcRequestBuilders.post("/admin/saveAdminData").contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8").content(json)
         		.accept(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
       // String result=requestResult.getResponse().getContentAsString();
        // assertEquals(result,"User inserted");
        
     }
 
-	@Test
+	/*@Test
     public void testFetchCustomer() throws Exception {
         Customer cust=new Customer();
         List<Account> accList=new ArrayList<>();
@@ -155,7 +140,7 @@ public class CustomerControllerTest extends BankingAppApplicationTests{
        // assertEquals(result,"User inserted");
         
        
-    }
+    }*/
 
 }
 

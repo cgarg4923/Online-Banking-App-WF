@@ -11,6 +11,8 @@ import com.banking.BankingApp.dao.BenificiaryRepository;
 import com.banking.BankingApp.dao.CustomerRepository;
 import com.banking.BankingApp.dao.TransactionRepository;
 import com.banking.BankingApp.dto.TransactionProjection;
+import com.banking.BankingApp.exception.DateException;
+import com.banking.BankingApp.exception.NegativeTransactionAmountException;
 import com.banking.BankingApp.model.Account;
 import com.banking.BankingApp.model.Customer;
 import com.banking.BankingApp.model.Transaction;
@@ -52,7 +54,11 @@ public class AccountService {
 	}
 
 
-	public List<TransactionProjection> fetchTransactions(String accNo,Date from,Date to) {
+	public List<TransactionProjection> fetchTransactions(String accNo,Date from,Date to)throws DateException{
+		if(from.after(to))
+		{
+			throw new DateException("From date should be before to date");
+		}
 		return transRepo.findByTransactions(accNo,from,to);
 	}
 
@@ -62,8 +68,12 @@ public class AccountService {
 	}
 
 	@Transactional
-	public String fundTransfer(WithdrawTransactionModel transInstance) 
+	public String fundTransfer(WithdrawTransactionModel transInstance) throws NegativeTransactionAmountException
 	{
+		if(transInstance.getTransactionAmount()<0)
+		{
+			throw new NegativeTransactionAmountException("Transaction amount can't be negative");
+		}
 		String res = "";
 		Account senderAcc = accRepo.findById(transInstance.getSenderAccountNo()).get();
 		Account receiverAcc = accRepo.findById(transInstance.getReceiverAccountNo()).get();

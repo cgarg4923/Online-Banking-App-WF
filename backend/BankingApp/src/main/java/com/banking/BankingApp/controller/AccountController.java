@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.banking.BankingApp.dto.TransactionProjection;
+import com.banking.BankingApp.exception.DateException;
+import com.banking.BankingApp.exception.NegativeTransactionAmountException;
 import com.banking.BankingApp.model.Account;
 import com.banking.BankingApp.model.Customer;
 import com.banking.BankingApp.model.WithdrawTransactionModel;
@@ -39,7 +41,7 @@ public class AccountController {
 		return c;
 	}
 	@GetMapping("/fetchTransactions/{accountNo}/{from}/{to}")
-	public List<TransactionProjection> fetchTransactions(@PathVariable("accountNo") String accNo,@PathVariable("from") Date from,@PathVariable("to") Date to)
+	public List<TransactionProjection> fetchTransactions(@PathVariable("accountNo") String accNo,@PathVariable("from") Date from,@PathVariable("to") Date to) throws DateException
 	{
 		return accService.fetchTransactions(accNo,from,to);
 	}
@@ -50,8 +52,8 @@ public class AccountController {
 		return accService.fetchStatement(accNo);
 	}
 	
-	@PutMapping("/fundTransfer")
-	public String fundTransfer(@RequestBody WithdrawTransactionModel transInstance)
+	@PutMapping("/fundTransfer") 
+	public String fundTransfer(@RequestBody WithdrawTransactionModel transInstance)throws NegativeTransactionAmountException
 	{
 		String result = accService.fundTransfer(transInstance);
 		return result;

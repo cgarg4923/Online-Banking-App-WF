@@ -11,6 +11,8 @@ import com.banking.BankingApp.dao.AccountRepository;
 import com.banking.BankingApp.dao.BenificiaryRepository;
 import com.banking.BankingApp.dao.CustomerRepository;
 import com.banking.BankingApp.dao.TransactionRepository;
+import com.banking.BankingApp.exception.AlreadyExistsException;
+import com.banking.BankingApp.exception.NegativeTransactionAmountException;
 import com.banking.BankingApp.exception.NoDataFoundException;
 import com.banking.BankingApp.exception.ResourceNotFoundException;
 import com.banking.BankingApp.model.Account;
@@ -36,7 +38,12 @@ public class CustomerService {
 	@Autowired
 	BenificiaryRepository benRepo;
 
-	public Customer saveCustomer(Customer cust) {
+	public Customer saveCustomer(Customer cust)  throws AlreadyExistsException {
+		Customer customer=custRepo.findByAadhar(cust.getAadharNumber());
+		if(cust!=null)
+		{
+			throw new AlreadyExistsException("Customer with given aadhar already exists, Please contact admin");
+		}
 		Customer obj = custRepo.save(cust);
 		return obj;
 	}
@@ -72,13 +79,33 @@ public class CustomerService {
 		return result;
 	}
 
-	public List<String> fetchAccounts(String custId) {
-		return accRepo.findByAccounts(custId);
+	public List<String> fetchAccounts(String custId) throws ResourceNotFoundException {
+		List<String> accountList= accRepo.findByAccounts(custId);
+		if(accountList.size()==0)
+		{
+			throw new ResourceNotFoundException("No accounts exist");
+		}
+		List<String> accList= new ArrayList<>();
+		for(String str:accountList)
+		{
+			Account acc=accRepo.findById(str).get();
+			String status=acc.getStatus(); 
+			if(status.equals("active"))
+			{
+				accList.add(str);
+			}
+		}
+		return accList;
 	}
 
 	
-	public List<String> fetchBenificiary(String custId) {
-		return benRepo.fetchBenificiary(custId);
+	public List<String> fetchBenificiary(String custId) throws ResourceNotFoundException {
+		List<String> benList= benRepo.fetchBenificiary(custId);
+		if(benList.size()==0)
+		{
+			throw new ResourceNotFoundException("No benificiary accounts added");
+		}
+		return benList;
 	}
 
 	public List<Customer> fetchProfileData(String custId)
@@ -87,8 +114,12 @@ public class CustomerService {
 	}
 
 	@Transactional
-	public String withdrawTransaction(WithdrawTransactionModel transInstance) 
+	public String withdrawTransaction(WithdrawTransactionModel transInstance) throws NegativeTransactionAmountException
 	{
+		if(transInstance.getTransactionAmount()<0)
+		{
+			throw new NegativeTransactionAmountException("Transaction amount can't be negative");
+		}
 		String res = "";
 		Account senderAcc = accRepo.findById(transInstance.getSenderAccountNo()).get();
 		Account receiverAcc = accRepo.findById(transInstance.getReceiverAccountNo()).get();
@@ -170,11 +201,12 @@ public class CustomerService {
 
 	public List<Customer> fetchAllCustomers() throws NoDataFoundException{
 		List<Customer> custList=new ArrayList<>();
+		custList = custRepo.findAll();
 		if(custList.size()==0)
 		{
 			throw new NoDataFoundException("No customer");
 		}
-		return custRepo.findAll();
+		return custList;
 	}
 
 }

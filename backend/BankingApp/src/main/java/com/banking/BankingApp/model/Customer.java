@@ -52,7 +52,7 @@ public class Customer
 	@Column(name="email",length=20)
 	private String emailId;
 
-	@Size(min=10,max=10)
+	//@Size(min=10,max=10)
 	@Column(name="contact")
 	@Length(min=10, max=10, message = "Enter Valid 10 digit Mobile Number")
 	private String phoneNumber;
