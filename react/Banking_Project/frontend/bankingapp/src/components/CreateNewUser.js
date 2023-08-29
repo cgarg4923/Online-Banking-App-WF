@@ -78,7 +78,6 @@ export default function CreateNewUser() {
 
   function handleDetails(e) {
     const { name, value } = e.target;
-    console.log(details);
     setDetails((prev) => {
       return { ...prev, [name]: value };
     });
@@ -125,7 +124,6 @@ export default function CreateNewUser() {
     }
     var cid = details.phoneNumber + "";
     cid = "U" + cid.split("").reverse().join("");
-    console.log(details);
     axios
       .post(baseURL, {
         customerId: cid,
@@ -174,7 +172,10 @@ export default function CreateNewUser() {
         window.sessionStorage.setItem("userCredentials", JSON.stringify(item));
         setSuccessMessage("Bank Account Added with" + "Customer ID: " + cid)
         setSuccessOpen(true);
-      }).catch((error)=>{console.error(error)});
+      }).catch((error)=>{
+        setErrorMessage(error.response.data.statusCode +" "+error.response.data.message);
+        setErrorOpen(true);
+      });
   };
 
   return (
@@ -310,7 +311,6 @@ export default function CreateNewUser() {
                   name="phoneNumber"
                   label="Contact Number"
                   id="phoneNumber"
-                  type="number"
                   onChange={handleDetails}
                   value={details.phoneNumber}
                   helperText={

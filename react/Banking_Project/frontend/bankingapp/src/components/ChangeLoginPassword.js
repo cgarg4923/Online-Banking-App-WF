@@ -81,7 +81,6 @@ export default function ChangeLoginPassword() {
           setErrorMessage(response.data)
           setErrorOpen(true);
         }
-        // alert("Password Changed Successfully");
       })
       .catch((e) => {
         console.error(e);
@@ -109,7 +108,7 @@ export default function ChangeLoginPassword() {
           ></img>
           <Box
            component="form"
-           sx={{ mt: 3, width: 500 }}
+           sx={{ mt: 3, width: '50%' }}
            onSubmit={handleSubmit}
           >
             <Typography

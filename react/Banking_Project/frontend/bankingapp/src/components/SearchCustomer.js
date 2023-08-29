@@ -17,6 +17,7 @@ import Container from "@mui/material/Container";
 import axios from "axios";
 import profile from "./profile.png";
 import Button from "@mui/material/Button";
+import { Snackbar,Alert } from "@mui/material";
 
 const defaultTheme = createTheme({
   palette: {
@@ -57,13 +58,31 @@ export default function SearchCustomer() {
     occupationType: "",
     status: "active"
   });
+  const [errorOpen, setErrorOpen] = useState(false);
+  const [errorMessage,setErrorMessage]=useState("Error");
+  const [successOpen, setSuccessOpen] = useState(false);
+  const [successMessage, setSuccessMessage]=useState("Success");
+  
+  const handleErrorClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setErrorOpen(false);
+  };
+  const handleSuccessClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSuccessOpen(false);
+  };
 
   const handleSearchTextChange = (e) => {
     setSearchText(e.target.value);
   };
 
   const handleSearchClick = () => {
-    console.log(searchText);
     fetchUserData();
   };
 
@@ -72,7 +91,6 @@ export default function SearchCustomer() {
     axios.get(baseURL + searchText).then((response) => {
       var data1 = response.data[0];
       var address = data1["address"];
-      console.log(data1);
       setDetails((prev) => {
         return { ...prev, ["firstName"]: data1["firstName"] };
       });
@@ -155,7 +173,12 @@ export default function SearchCustomer() {
       });
       setIsClicked(true);
 
-    }).catch((error) => { console.error(error) });
+    }).catch((error) => { 
+      setErrorMessage("No User Found. Please enter a valid User ID.");
+      setErrorOpen(true);
+      setIsClicked(false);
+      console.error(error) 
+    });
   }
 
   const products = [
@@ -182,7 +205,7 @@ export default function SearchCustomer() {
     },
     {
       name: "Date of Birth",
-      price: details.dateOfBirth,
+      price: details.dateOfBirth.substring(0,10),
     },
     {
       name: "Source of Income",
@@ -215,7 +238,8 @@ export default function SearchCustomer() {
   ];
   const activateUser = ()=>{
     axios.put(baseURLStatusUser+searchText+"/active").then((response)=>{
-      alert(response.data);
+      setSuccessMessage(response.data);
+      setSuccessOpen(true);
       setDetails((prev) => {
         return { ...prev, ["status"]: "active" };
       });
@@ -224,7 +248,8 @@ export default function SearchCustomer() {
   };
   const deactivateUser = ()=>{
     axios.put(baseURLStatusUser+searchText+"/disabled").then((response)=>{
-      alert(response.data);
+      setSuccessMessage(response.data);
+      setSuccessOpen(true);
       setDetails((prev) => {
         return { ...prev, ["status"]: "disabled" };
       });
@@ -306,6 +331,24 @@ export default function SearchCustomer() {
             </Box>
           </Paper>
         </Container>}
+        <Snackbar anchorOrigin={{vertical:"bottom",horizontal:"left"}} open={successOpen} autoHideDuration={6000} onClose={handleSuccessClose}>
+              <Alert
+                onClose={handleSuccessClose}
+                severity="success"
+                sx={{ width: "100%" }}
+              >
+                {successMessage}
+              </Alert>
+            </Snackbar>
+        <Snackbar anchorOrigin={{vertical:"bottom",horizontal:"left"}} open={errorOpen} autoHideDuration={6000} onClose={handleErrorClose}>
+              <Alert
+                onClose={handleErrorClose}
+                severity="error"
+                sx={{ width: "100%" }}
+              >
+                {errorMessage}
+              </Alert>
+            </Snackbar>
     </ThemeProvider>
   );
 }

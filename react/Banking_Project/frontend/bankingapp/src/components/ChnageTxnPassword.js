@@ -51,7 +51,7 @@ export default function ChangeTxnPassword() {
         setAccounts(response.data);
       })
       .catch((error) => {
-        console.error(error);
+        console.error(error.response.status+ " " +error.response.data.message);
       });
   }, []);
 
@@ -111,7 +111,7 @@ export default function ChangeTxnPassword() {
           ></img>
           <Box
             component="form"
-            sx={{ mt: 3, width: 500 }}
+            sx={{ mt: 3, width: "50%" }}
             onSubmit={handleSubmit}
           >
             <Typography

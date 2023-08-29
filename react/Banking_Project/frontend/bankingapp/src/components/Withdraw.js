@@ -60,9 +60,8 @@ const Withdraw = () => {
         setAccounts(response.data);
       })
       .catch((error) => {
-        console.error(error);
+        console.error(error.response.status+ " " +error.response.data.message)
       });
-    console.log(accounts);
   }, []);
 
   function getSqlDate() {
@@ -82,17 +81,22 @@ const Withdraw = () => {
   const handleSelectAccount = (e) => {
     setSelectedAccount(e.target.value);
   };
+
+function validateForm(){
+  if(amount<0){
+    setErrorMessage("Amount cannot be negative");
+    setErrorOpen(true);
+    setAmount(0);
+    return false;
+  }
+  return true;
+}
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    if(!validateForm()) return;
     const baseURLAccount = "http://localhost:9080/customer/withdraw";
     const transactionTime = getSqlDate();
-
-    const transferInfo = {
-      amount,
-      selectedAccount,
-      remark,
-      transactionTime,
-    };
     axios
       .put(baseURLAccount, {
         senderAccountNo: selectedAccount,
@@ -112,10 +116,10 @@ const Withdraw = () => {
           setErrorMessage(response.data);
           setErrorOpen(true);
         }
-        // alert(response.data);
       })
-      .catch((e) => {
-        console.error(e);
+      .catch((error) => {
+        setErrorMessage(error.response.data.statusCode +" "+error.response.data.message)
+        setErrorOpen(true);;
       });
   };
 
@@ -123,7 +127,7 @@ const Withdraw = () => {
     <ThemeProvider theme={defaultTheme}>
         <AppDrawer/>
       <Container maxWidth="sm">
-        <Paper elevation={3} style={{ padding: "20px", marginTop: "20%" }}>
+        <Paper elevation={3} style={{ padding: "20px", marginTop: "40%" }}>
           <Box
             sx={{
               mt: 6,
@@ -163,6 +167,7 @@ const Withdraw = () => {
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 fullWidth
+                type="number"
                 required
                 style={{ padding: "10px" }}
               />

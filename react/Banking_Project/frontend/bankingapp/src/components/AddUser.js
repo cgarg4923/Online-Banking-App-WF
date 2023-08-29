@@ -56,7 +56,6 @@ export default function AddUser() {
 
   function handleDetails(e) {
     const { name, value } = e.target;
-    console.log(details);
     setDetails((prev) => {
       return { ...prev, [name]: value };
     });
@@ -85,7 +84,6 @@ export default function AddUser() {
     if(!validateForm()){return;}
     var cid = details.phoneNumber + "";
     cid = "U" + cid.split("").reverse().join("");
-    console.log(details);
     axios
       .post(baseURL, {
         customerId: cid,

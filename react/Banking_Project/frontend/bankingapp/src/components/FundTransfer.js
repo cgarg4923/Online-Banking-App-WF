@@ -27,7 +27,7 @@ const defaultTheme = createTheme({
 
 const FundTransferComponent = () => {
   const [paymentMode, setPaymentMode] = useState("");
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState(0);
   const [remark, setRemark] = useState("");
   const [customerId,setCustomerId] = useState("");
 
@@ -68,7 +68,7 @@ const FundTransferComponent = () => {
         setAccounts(response.data);
       })
       .catch((error) => {
-        console.error(error);
+        console.error(error.response.status+ " " +error.response.data.message);
       });
     const baseURL2 = 'http://localhost:9080/customer/fetchBenificiary/' + data["customerId"];
     axios.get(baseURL2).then((response) => { setBeneficiaryAccounts(response.data) }).catch((error) => { console.error(error) });
@@ -94,16 +94,25 @@ const FundTransferComponent = () => {
 
   const handleSelectAccount = (e) => {
     setSelectedAccount(e.target.value);
-    console.log("hello");
   };
 
   const handleSelectBeneficiaryAccount = (e) => {
     setSelectedBeneficiaryAccount(e.target.value);
   };
 
+  function validateForm(){
+    // if(amount < 0){
+    //   setErrorMessage("Amount cannot be negative");
+    //   setErrorOpen(true);
+    //   setAmount(0);
+    //   return false;
+    // }
+    return true;
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    if(!validateForm()) return;
     const transactionTime = getSqlDate();
 
     const transferInfo = {
@@ -128,14 +137,16 @@ const FundTransferComponent = () => {
       } else if(response.data==="Transaction Successful  !!!\nNOTICE : Your balance is dropped below the Minimum Account Balance limit !") {
         setWarningMessage(response.data)
         setWarningOpen(true);
-      } else {
+      }
+      else {
         setErrorMessage(response.data);
         setErrorOpen(true);
       }
-
-      // alert(response.data);
     })
-    .catch((error) => { console.error(error) });
+    .catch((error) => {
+      setErrorMessage(error.response.data.statusCode +" "+error.response.data.message)
+      setErrorOpen(true);
+    });
   };
 
   return (
@@ -177,8 +188,8 @@ const FundTransferComponent = () => {
                   <MenuItem value={account}>{account}</MenuItem>
                 ))}
               </TextField>
-              <Grid container sm={12} alignItems="flex-start">
-                <Grid item>
+              <Grid container sm={12} alignItems="flex-start" justifyContent="space-between">
+                <Grid item flex={1}>
                   <TextField
                     fullWidth
                     value={selectedBeneficiaryAccount}
@@ -186,14 +197,14 @@ const FundTransferComponent = () => {
                     label="Choose Beneficiary Account"
                     select
                     helperText="Choose a Beneficiary"
-                    style={{ padding: "10px", width: "320px" }}
+                    style={{ padding: "10px" }}
                   >
                     {beneficiaryAccounts.map((account, index) => (
                       <MenuItem value={account}>{account}</MenuItem>
                     ))}
                   </TextField>
                 </Grid>
-                <Grid item>
+                <Grid item sx={{marginTop:2}}>
                   <Fab size="small" color="primary" aria-label="add" href="/AddBeneficiary">
                     <AddIcon />
                   </Fab>
@@ -205,6 +216,7 @@ const FundTransferComponent = () => {
                 onChange={(e) => setAmount(e.target.value)}
                 fullWidth
                 required
+                type="number"
                 style={{ padding: "10px" }}
               />
               <TextField

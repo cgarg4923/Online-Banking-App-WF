@@ -48,7 +48,9 @@ export default function AccountSummary() {
     var data = JSON.parse(window.sessionStorage.getItem("userCredentials"));
     setCustomerId(data["customerId"]);
     const baseURL = 'http://localhost:9080/customer/fetchCustomerAccounts/' + data["customerId"];
-    axios.get(baseURL).then((response) => { setAccounts(response.data) }).catch((error) => { console.error(error) });
+    axios.get(baseURL)
+    .then((response) => { setAccounts(response.data) })
+    .catch((error) => { console.error(error.response.status+ " " +error.response.data.message) });
   }, [])
 
   const handleSelectAccount = (e) => {
@@ -59,7 +61,7 @@ export default function AccountSummary() {
     rows = [];
     setTransactions([]);
     setAccountDetails({});
-    console.log(selectedAccount);
+
     const baseURLTrans = `http://localhost:9080/account/fetchStatement/${selectedAccount}`;
     const baseURLDetails = `http://localhost:9080/account/fetchAccountProfile/${selectedAccount}`;
     axios.get(baseURLTrans).then((response) => {
@@ -70,7 +72,6 @@ export default function AccountSummary() {
     }).catch((error) => { console.error(error) });
 
     axios.get(baseURLDetails).then((response) => {
-      console.log(response.data)
       if (typeof (response.data) == "string") {
       } else {
         setAccountDetails(response.data[0])
@@ -97,7 +98,7 @@ export default function AccountSummary() {
         }}>
           <AppDrawer />
           <Grid container sx={{ marginBottom: 2 }}>
-            <Grid item xs={4}>
+            <Grid item xs={12} md={4}>
               <TextField autoFocus fullWidth value={selectedAccount} onChange={handleSelectAccount} label="Choose Account" select helperText="Choose an account for transaction">
                 {
                   accounts.map((account, index) => (
@@ -109,19 +110,19 @@ export default function AccountSummary() {
             </Grid>
           </Grid>
           <Grid sx={{ marginBottom: 2 }} container spacing={2}>
-            <Grid item sm={4}>
+            <Grid item xs={12} md={4}>
               <Paper elevation={3} sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
                 <Typography primary variant='h6' sx={{ padding: 2, paddingRight: 10, color: "primary.main" }}>Account Balance</Typography>
                 <Typography primary variant='h5' sx={{ paddingLeft: 2, paddingBottom: 2 }}>{accountDetails.balance}</Typography>
               </Paper>
             </Grid>
-            <Grid item sm={4}>
+            <Grid item xs={12} md={4}>
               <Paper elevation={3} sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
                 <Typography primary variant='h6' sx={{ padding: 2, paddingRight: 10, color: "primary.main" }}>Account Number</Typography>
                 <Typography primary variant='h5' sx={{ paddingLeft: 2, paddingBottom: 2 }}>{accountDetails.accountNo}</Typography>
               </Paper>
             </Grid>
-            <Grid item sm={4}>
+            <Grid item xs={12} md={4}>
               <Paper elevation={3} sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
                 <Typography primary variant='h6' sx={{ padding: 2, paddingRight: 10, color: "primary.main" }}>Account Type</Typography>
                 <Typography primary variant='h5' sx={{ paddingLeft: 2, paddingBottom: 2 }}>{accountDetails.accountType}</Typography>
@@ -133,7 +134,7 @@ export default function AccountSummary() {
               <Paper elevation={3}>
                 <Typography inline align="left" primary variant='h6' sx={{ padding: 2, color: "primary.main" }}>Recent Transactions</Typography>
                 <TableContainer sx={{ paddingLeft: 2, paddingRight: 2 }}>
-                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                  <Table aria-label="simple table">
                     <TableHead>
                       <TableRow>
                         <TableCell>Mode</TableCell>

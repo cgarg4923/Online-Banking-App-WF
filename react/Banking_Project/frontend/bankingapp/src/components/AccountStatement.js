@@ -15,6 +15,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import AppDrawer from "./Drawer";
 import { useNavigate } from "react-router-dom";
+import { Alert, Snackbar } from "@mui/material";
 
 const defaultTheme = createTheme({
   palette: {
@@ -50,6 +51,11 @@ export default function AccountStatement() {
   const [endDate,setEndDate] = useState("");
   const [pg, setpg] = React.useState(0);
   const [rpg, setrpg] = React.useState(5);
+  const [isStartDateSelected,setIsStartDateSelected] = useState(false); 
+  const [isEndDateSelected,setIsEndDateSelected] = useState(false); 
+  const [isAccountSelected,setIsAccountSelected] = useState(false);
+  const [errorOpen, setErrorOpen] = useState(false);
+  const [errorMessage,setErrorMessage]=useState("Error");
   const navigate = useNavigate();
  
   function handleChangePage(event, newpage) {
@@ -60,6 +66,15 @@ export default function AccountStatement() {
     setrpg(parseInt(event.target.value, 10));
     setpg(0);
   }
+
+  const handleErrorClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setErrorOpen(false);
+  };
+
   var rows = [];
 
   useEffect(() => {
@@ -73,19 +88,21 @@ export default function AccountStatement() {
             setAccounts(response.data);
           })
           .catch((error) => {
-            console.error(error);
+            console.error(error.response.status+ " " +error.response.data.message);
           });
    
   }, []);
 
   const handleSelectAccount = (e) => {
     setSelectedAccount(e.target.value);
+    setIsAccountSelected(true);
   };
 
  useEffect(() => {
     rows = [];
     const baseURLTransaction = `http://localhost:9080/account/fetchTransactions/${selectedAccount}/${startDate}/${endDate}`;
-    axios
+    if(isStartDateSelected && isEndDateSelected && isAccountSelected){
+      axios
       .get(baseURLTransaction)
       .then((response) => {
        
@@ -93,9 +110,10 @@ export default function AccountStatement() {
         else setTransactions(response.data);
       })
       .catch((error) => {
-        console.error(error);
+        setErrorMessage(error.response.data.statusCode +" "+error.response.data.message)
+        setErrorOpen(true);
       });
-      
+    }  
   },[selectedAccount,startDate,endDate]);
 
   transactions.map((transaction) => {
@@ -137,11 +155,11 @@ export default function AccountStatement() {
           <AppDrawer />
           <div style={{ marginTop: "100px" }}>
             <Grid container spacing={2}>
-              <Grid item xs={4}>
+              <Grid item xs={12} sm={6} md={4}>
                 <TextField
                   label="From Date"
                   value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
+                  onChange={(e) => {setStartDate(e.target.value); setIsStartDateSelected(true);}}
                   fullWidth
                   required
                   type="date"
@@ -149,11 +167,11 @@ export default function AccountStatement() {
                   style={{ padding: "10px" }}
                 />
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={12} sm={6} md={4}>
                 <TextField
                   label="To Date"
                   value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
+                  onChange={(e) => {setEndDate(e.target.value); setIsEndDateSelected(true);}}
                   fullWidth
                   required
                   InputLabelProps={{ shrink: true }}
@@ -161,7 +179,7 @@ export default function AccountStatement() {
                   style={{ padding: "10px" }}
                 />
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={12} md={4}>
                 <TextField
                   fullWidth
                   value={selectedAccount}
@@ -179,7 +197,7 @@ export default function AccountStatement() {
             </Grid>
           </div>
           <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <Table sx={{ minWidth: 400 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
                   <TableCell>Mode</TableCell>
@@ -220,6 +238,15 @@ export default function AccountStatement() {
                   onRowsPerPageChange={handleChangeRowsPerPage}></TablePagination>
         </Box>
       </Container>
+      <Snackbar anchorOrigin={{vertical:"top",horizontal:"right"}} open={errorOpen} autoHideDuration={6000} onClose={handleErrorClose}>
+              <Alert
+                onClose={handleErrorClose}
+                severity="error"
+                sx={{ width: "100%" }}
+              >
+                {errorMessage}
+              </Alert>
+            </Snackbar>
     </ThemeProvider>
   );
 }

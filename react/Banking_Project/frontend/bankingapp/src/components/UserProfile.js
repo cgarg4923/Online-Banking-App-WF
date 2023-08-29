@@ -60,7 +60,6 @@ export default function UserProfile({}) {
     axios.get(baseURL+data["customerId"]).then((response)=>{
      var data1 = response.data[0];
      var address = data1["address"];
-     console.log(data1);
       setDetails((prev) => {
         return { ...prev, ["firstName"]: data1["firstName"] };
       });
@@ -160,7 +159,7 @@ export default function UserProfile({}) {
     },
     {
       name: "Date of Birth",
-      price: details.dateOfBirth,
+      price: details.dateOfBirth.substring(0,10),
     },
   ];
 

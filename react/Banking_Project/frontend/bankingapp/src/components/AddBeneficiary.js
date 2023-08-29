@@ -10,6 +10,9 @@ import {
 import axios from "axios";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import AppDrawer from "./Drawer";
+import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { Alert, Snackbar } from "@mui/material";
 
 const defaultTheme = createTheme({
   palette: {
@@ -25,6 +28,22 @@ const AddBeneficiary = () => {
   const [accountNumber, setAccountNumber] = useState("");
   const [reEnteredAccountNumber, setReEnteredAccountNumber] = useState("");
   const [nickName, setNickName] = useState("");
+  const navigate = useNavigate();
+  const [errorOpen, setErrorOpen] = useState(false);
+  const [errorMessage,setErrorMessage]=useState("Error");
+  const [successOpen, setSuccessOpen] = useState(false);
+  const [successMessage, setSuccessMessage]=useState("Success");
+  const handleErrorClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setErrorOpen(false);
+  };
+  const handleSuccessClose = (event, reason) => {
+    setSuccessOpen(false);
+    navigate("/fundTransfer")
+  };
 
 
   const handleSubmit = (e) => {
@@ -46,7 +65,15 @@ const AddBeneficiary = () => {
     };
     axios.post(baseURL,{
       accountNo:accountNumber
-    }).then((response)=>{alert(response.data);}).catch((e)=>{console.error(e)});
+    }).then((response)=>{
+      if (response.data==="Benificiary added Successfully!") {
+        setSuccessOpen(true);
+        setSuccessMessage(response.data)
+      } else {
+        setErrorOpen(true);
+        setErrorMessage(response.data)
+      }
+    }).catch((e)=>{console.error(e)});
   };
 
   return (<ThemeProvider theme={defaultTheme}>
@@ -107,6 +134,24 @@ const AddBeneficiary = () => {
             </Grid>
           </Grid>
         </form>
+        <Snackbar anchorOrigin={{vertical:"top",horizontal:"right"}} open={errorOpen} autoHideDuration={6000} onClose={handleErrorClose}>
+              <Alert
+                onClose={handleErrorClose}
+                severity="error"
+                sx={{ width: "100%" }}
+              >
+                {errorMessage}
+              </Alert>
+            </Snackbar>
+            <Snackbar anchorOrigin={{vertical:"top",horizontal:"right"}} open={successOpen} onClose={handleSuccessClose}>
+              <Alert
+                onClose={handleSuccessClose}
+                severity="success"
+                sx={{ width: "100%" }}
+              >
+                {successMessage+". Close to Redirect."}
+              </Alert>
+            </Snackbar>
       </Paper>
     </Container>
     </ThemeProvider>

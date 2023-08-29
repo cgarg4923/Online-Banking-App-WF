@@ -21,6 +21,7 @@ import SearchAccount from './components/searchAccount';
 import AddUser from './components/AddUser';
 import ChangeAdminPassword from './components/ChangeAdminPassword';
 import Protected from './components/Protected';
+import NotFound from './components/NotFound';
 
 function App() {
   const router = createBrowserRouter([
@@ -38,7 +39,7 @@ function App() {
     },
     {
       path:"/SignUp",
-      element:<Protected Component={CreateNewUser}/>
+      element:< CreateNewUser/>
     },
     {
       path:"/Dashboard",
@@ -103,6 +104,10 @@ function App() {
     {
       path:"/ChangeAdminPassword",
       element:<Protected Component={ChangeAdminPassword}/>
+    },
+    {
+      path:"*",
+      element:<NotFound/>
     }
   ]);
   return (

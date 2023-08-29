@@ -26,14 +26,14 @@ const Dashboard = () => {
         style={{
           fontFamily: "Bitter, serif",
           marginTop: "100px",
-          marginLeft: "100px",
+          marginLeft: "10%",
         }}
       >
         <b>Hi, Welcome!</b>
        
       </Typography>
       <img
-        style={{ width: "500px", marginTop: "8%" }}
+        style={{ width: "50%", marginTop: "7%" }}
         src={
           "https://logosmarcas.net/wp-content/uploads/2020/11/Wells-Fargo-Emblema.png"
         }

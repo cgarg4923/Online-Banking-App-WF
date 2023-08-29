@@ -12,8 +12,6 @@ import Box from "@mui/material/Box";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import axios from "axios";
-import Avatar from "@mui/material/Avatar";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Link from "@mui/material/Link";
 import MenuItem from "@mui/material/MenuItem";
 import { useNavigate } from "react-router-dom";
@@ -38,6 +36,7 @@ export default function OpenNewAccount() {
   const [successMessage, setSuccessMessage]=useState("Success")
   const [errorMessage,setErrorMessage]=useState("Error");
 
+
   const handleErrorClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -51,7 +50,6 @@ export default function OpenNewAccount() {
   };
 
   useEffect(() => {
-    console.log("executed");
     var data = JSON.parse(window.sessionStorage.getItem("userCredentials"));
     setDetails({...details, customerId: data["customerId"]});
   }, []);
@@ -71,10 +69,6 @@ export default function OpenNewAccount() {
       Math.floor(1000 + Math.random() * 9000).toString() +
       typeOfAccount(accountType)
     ).toString();
-    //   details.phoneNumber +
-    //   Math.floor(1000 + Math.random() * 9000).toString() +
-    //   typeOfAccount(accountType)
-    // ).toString();
   }
 
   function typeOfAccount(value) {
@@ -108,8 +102,6 @@ export default function OpenNewAccount() {
             setErrorMessage(response.data)
             setErrorOpen(true);
           }
-          // alert("Successful!\nAccount Number: " + pno);
-          // navigate("/Dashboard");
         })
         .catch((e) => console.error(e));
     }
@@ -121,7 +113,7 @@ export default function OpenNewAccount() {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 12,
+            marginTop: 20,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -130,7 +122,7 @@ export default function OpenNewAccount() {
           <img style={{width:"100px"}} src={"https://cdn0.iconfinder.com/data/icons/finance-and-banking-color/64/Finance_deposit_account-1024.png"}></img>
           <Box
             component="form"
-            sx={{ mt: 3, width: 500 }}
+            sx={{ mt: 3, width: "50%"}}
             onSubmit={handlerSubmit}
           >
             <Typography component="h1" variant="h5">

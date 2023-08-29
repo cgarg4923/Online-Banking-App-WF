@@ -40,7 +40,7 @@ public class CustomerService {
 
 	public Customer saveCustomer(Customer cust)  throws AlreadyExistsException {
 		Customer customer=custRepo.findByAadhar(cust.getAadharNumber());
-		if(cust!=null)
+		if(customer!=null)
 		{
 			throw new AlreadyExistsException("Customer with given aadhar already exists, Please contact admin");
 		}

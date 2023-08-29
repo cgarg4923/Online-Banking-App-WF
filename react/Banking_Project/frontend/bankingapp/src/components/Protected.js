@@ -8,7 +8,7 @@ export default function Protected(props) {
     useEffect(()=>{
         var data = JSON.parse(window.sessionStorage.getItem("loginStatus"));
         if(data === null){
-            console.log("hello");
+            
             navigate("/");
         }
         if(data !== null && data["role"] === "user" && !data["isLoggedIn"]){

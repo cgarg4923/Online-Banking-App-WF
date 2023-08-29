@@ -16,6 +16,7 @@ import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import InputBase from "@mui/material/InputBase";
 import Button from "@mui/material/Button";
+import { Snackbar,Alert } from "@mui/material";
 
 const defaultTheme = createTheme({
   palette: {
@@ -37,9 +38,27 @@ export default function SearchAccount() {
   const [status,setStatus] = useState("");
   const [pg, setpg] = React.useState(0);
   const [rpg, setrpg] = React.useState(3);
-  const [isClicked,setIsClicked] = useState(true);
+  const [isClicked,setIsClicked] = useState(false);
   const [searchText, setSearchText] = useState("");
+  const [errorOpen, setErrorOpen] = useState(false);
+  const [errorMessage,setErrorMessage]=useState("Error");
+  const [successOpen, setSuccessOpen] = useState(false);
+  const [successMessage, setSuccessMessage]=useState("Success");
+  
+  const handleErrorClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
 
+    setErrorOpen(false);
+  };
+  const handleSuccessClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSuccessOpen(false);
+  };
   function handleChangePage(event, newpage) {
     setpg(newpage);
   }
@@ -48,7 +67,6 @@ export default function SearchAccount() {
   };
 
   const handleSearchClick = () => {
-    console.log(searchText);
     handleSearch();
   };
   function handleChangeRowsPerPage(event) {
@@ -57,12 +75,18 @@ export default function SearchAccount() {
   }
 
 const handleActivation = ()=>{
-    axios.put(baseURLStatus+searchText+"/active").then((response)=>{alert(response.data); setStatus("active");}).catch((error)=>{console.error(error)});
+    axios.put(baseURLStatus+searchText+"/active").then((response)=>{
+      setSuccessMessage(response.data);
+      setSuccessOpen(true);
+      setStatus("active");}).catch((error)=>{console.error(error)});
 
 };
 
 const handleDeactivation = ()=>{
-    axios.put(baseURLStatus+searchText+"/disabled").then((response)=>{alert(response.data); setStatus("disabled");}).catch((error)=>{console.error(error)});
+    axios.put(baseURLStatus+searchText+"/disabled").then((response)=>{
+      setSuccessMessage(response.data);
+      setSuccessOpen(true);
+      setStatus("disabled");}).catch((error)=>{console.error(error)});
 
 };
 
@@ -72,7 +96,6 @@ const handleDeactivation = ()=>{
     rows = [];
     setTransactions([]);
     setAccountDetails({});
-    console.log(selectedAccount);
     const baseURLTrans = `http://localhost:9080/admin/fetchStatement/${searchText}`;
     const baseURLDetails = `http://localhost:9080/account/fetchAccountProfile/${searchText}`;
     axios.get(baseURLTrans).then((response) => {
@@ -80,17 +103,24 @@ const handleDeactivation = ()=>{
       } else {
         setTransactions(response.data)
       }
-    }).catch((error) => { console.error(error) });
+    }).catch((error) => {
+      console.error(error) });
 
     axios.get(baseURLDetails).then((response) => {
       if (typeof (response.data) == "string") {
       } else {
         setAccountDetails(response.data[0]);
         setStatus(response.data[0].status);
+        setIsClicked(true);
+        setSelectedAccount(searchText);
       }
-      setIsClicked(true);
-      setSelectedAccount(searchText);
-    }).catch((error) => { console.error(error) });
+      
+    }).catch((error) => {
+      setErrorMessage("No Account found. Please enter a valid Account No.");
+      setErrorOpen(true);
+      setIsClicked(false);
+      console.error(error) 
+    });
 
   };
   transactions.map(
@@ -130,23 +160,23 @@ const handleDeactivation = ()=>{
           marginTop:"50px"
         }}>
             <div style={{marginBottom:"30px"}}>
-         {accountDetails.balance < 1000 && <Button variant="contained" onClick={handleDeactivation}>Disable</Button>}
-         {accountDetails.balance >= 1000 && status === "disbled" && <Button variant="contained" onClick={handleActivation}>Activate</Button>}
+         {status === "active" && accountDetails.balance < 1000 && <Button variant="contained" onClick={handleDeactivation}>Disable</Button>}
+         {status === "disabled" && <Button variant="contained" onClick={handleActivation}>Activate</Button>}
          </div>
           <Grid sx={{ marginBottom: 2 }} container spacing={2}>
-            <Grid item sm={4}>
+            <Grid item xs={12} md={4}>
               <Paper elevation={3} sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
                 <Typography primary variant='h6' sx={{ padding: 2, paddingRight: 10, color: "primary.main" }}>Account Balance</Typography>
                 <Typography primary variant='h5' sx={{ paddingLeft: 2, paddingBottom: 2 }}>{accountDetails.balance}</Typography>
               </Paper>
             </Grid>
-            <Grid item sm={4}>
+            <Grid item xs={12} md={4}>
               <Paper elevation={3} sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
                 <Typography primary variant='h6' sx={{ padding: 2, paddingRight: 10, color: "primary.main" }}>Account Number</Typography>
                 <Typography primary variant='h5' sx={{ paddingLeft: 2, paddingBottom: 2 }}>{accountDetails.accountNo}</Typography>
               </Paper>
             </Grid>
-            <Grid item sm={4}>
+            <Grid item xs={12} md={4}>
               <Paper elevation={3} sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
                 <Typography primary variant='h6' sx={{ padding: 2, paddingRight: 10, color: "primary.main" }}>Account Type</Typography>
                 <Typography primary variant='h5' sx={{ paddingLeft: 2, paddingBottom: 2 }}>{accountDetails.accountType}</Typography>
@@ -158,7 +188,7 @@ const handleDeactivation = ()=>{
               <Paper elevation={3}>
                 <Typography inline align="left" primary variant='h6' sx={{ padding: 2, color: "primary.main" }}>Recent Transactions</Typography>
                 <TableContainer sx={{ paddingLeft: 2, paddingRight: 2 }}>
-                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                  <Table aria-label="simple table">
                     <TableHead>
                       <TableRow>
                         <TableCell>Mode</TableCell>
@@ -202,6 +232,24 @@ const handleDeactivation = ()=>{
           </Grid>
         </Box>}
       </Container>
+      <Snackbar anchorOrigin={{vertical:"bottom",horizontal:"left"}} open={successOpen} autoHideDuration={6000} onClose={handleSuccessClose}>
+              <Alert
+                onClose={handleSuccessClose}
+                severity="success"
+                sx={{ width: "100%" }}
+              >
+                {successMessage}
+              </Alert>
+            </Snackbar>
+      <Snackbar anchorOrigin={{vertical:"bottom",horizontal:"left"}} open={errorOpen} autoHideDuration={6000} onClose={handleErrorClose}>
+              <Alert
+                onClose={handleErrorClose}
+                severity="error"
+                sx={{ width: "100%" }}
+              >
+                {errorMessage}
+              </Alert>
+            </Snackbar>
     </ThemeProvider>
   );
 }

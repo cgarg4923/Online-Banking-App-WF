@@ -57,7 +57,6 @@ export default function Login() {
         password: password,
       })
       .then(function (response) {
-        //alert(response.data);
         if (response.data==="LOGGED IN SUCCESSFULLY !!") {
           setSuccessMessage(response.data)
           setSuccessOpen(true);
@@ -65,6 +64,9 @@ export default function Login() {
           setErrorMessage(response.data)
           setErrorOpen(true);
         }
+      }).catch((error)=>{
+        setErrorMessage(error.response.data.message)
+          setErrorOpen(true);
       });
   };
   const handleErrorClose = (event, reason) => {
